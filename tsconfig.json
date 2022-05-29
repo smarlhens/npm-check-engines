@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "module": "commonjs",
+    "outDir": "./dist",
+    "sourceMap": false,
+    "declaration": false,
+    "removeComments": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "target": "es2017",
+    "typeRoots": ["node_modules/@types"],
+    "types": ["node", "yargs", "jest"],
+    "lib": ["es2020", "dom"],
+    "baseUrl": ".",
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "bin/nce.ts"
+  ]
+}

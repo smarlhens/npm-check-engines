@@ -1,0 +1,11 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "description": "A package.json example.",
+  "license": "MIT",
+  "author": {
+    "name": "Samuel MARLHENS",
+    "email": "samuel.marlhens@gmail.com",
+    "url": "https://github.com/smarlhens"
+  }
+}

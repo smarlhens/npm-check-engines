@@ -1,0 +1,4 @@
+# compiled output
+.husky/
+dist/
+node_modules/
