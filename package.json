@@ -1,0 +1,96 @@
+{
+  "name": "@smarlhens/npm-check-engines",
+  "version": "0.0.0",
+  "description": "Node.JS engines constraint checker written in TypeScript.",
+  "keywords": [
+    "node",
+    "npm",
+    "engines",
+    "typescript"
+  ],
+  "homepage": "https://github.com/smarlhens/npm-check-engines#readme",
+  "bugs": {
+    "url": "https://github.com/smarlhens/npm-check-engines/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smarlhens/npm-check-engines.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Samuel MARLHENS",
+    "email": "samuel.marlhens@gmail.com",
+    "url": "https://github.com/smarlhens"
+  },
+  "main": "lib/index.js",
+  "bin": {
+    "nce": "dist/bin/nce.js",
+    "npm-check-engines": "dist/bin/nce.js"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "dev": "ts-node bin/nce.ts",
+    "postinstall": "npm run sort-package-json",
+    "lint": "npm run prettier:check",
+    "lint-staged": "lint-staged",
+    "precommit": "npm run lint-staged && npm run build",
+    "prepare": "husky install",
+    "prettier:check": "prettier --check ./**/*.ts",
+    "prettier:write": "prettier --write ./**/*.ts",
+    "sort-package-json": "sort-package-json",
+    "test": "jest --watchAll=false",
+    "test:ci": "npm run test:coverage",
+    "test:coverage": "npm run test -- --coverage",
+    "test:e2e": "npm run test -- --selectProjects e2e",
+    "test:e2e:coverage": "npm run test:e2e -- --coverage",
+    "test:unit": "npm run test -- --selectProjects unit",
+    "test:unit:coverage": "npm run test:unit -- --coverage",
+    "test:watch": "jest"
+  },
+  "dependencies": {
+    "ajv": "8.11.0",
+    "ajv-draft-04": "1.0.0",
+    "ajv-formats": "2.1.1",
+    "colorette": "2.0.16",
+    "debug": "4.3.4",
+    "fs-extra": "10.1.0",
+    "listr2": "4.0.5",
+    "lodash": "4.17.21",
+    "rimraf": "3.0.2",
+    "semver": "7.3.7",
+    "sort-package-json": "1.57.0",
+    "tslib": "2.4.0",
+    "yargs": "17.5.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.18.2",
+    "@babel/preset-env": "7.18.2",
+    "@babel/preset-typescript": "7.17.12",
+    "@commitlint/cli": "17.0.1",
+    "@commitlint/config-conventional": "17.0.0",
+    "@types/debug": "4.1.7",
+    "@types/fs-extra": "9.0.13",
+    "@types/jest": "27.5.1",
+    "@types/lodash": "4.14.182",
+    "@types/node": "17.0.36",
+    "@types/semver": "7.3.9",
+    "@types/yargs": "17.0.10",
+    "babel-jest": "28.1.0",
+    "cz-conventional-changelog": "3.3.0",
+    "execa": "5.1.1",
+    "husky": "8.0.1",
+    "jest": "28.1.0",
+    "lint-staged": "12.4.2",
+    "prettier": "2.6.2",
+    "ts-node": "10.8.0",
+    "typescript": "4.7.2"
+  },
+  "engines": {
+    "node": "^14.17.0 || ^16.10.0 || ^18.0.0"
+  },
+  "overrides": {
+    "minimist": "1.2.6",
+    "lodash": "4.17.21"
+  }
+}

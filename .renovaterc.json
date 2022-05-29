@@ -1,0 +1,22 @@
+{
+  "extends": ["config:base", "schedule:daily", ":automergeMinor"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["lint-staged", "prettier"],
+      "labels": ["linting"]
+    },
+    {
+      "matchPackagePatterns": ["husky", "commitizen", "^@commitlint", "cz-conventional-changelog"],
+      "labels": ["hooks"]
+    },
+    {
+      "matchPackagePatterns": ["^@semantic-release", "semantic-release"],
+      "labels": ["ci/cd"]
+    },
+    {
+      "matchDepTypes": ["optionalDependencies"],
+      "addLabels": ["optional"]
+    }
+  ]
+}
