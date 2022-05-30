@@ -38,7 +38,6 @@
     "prepublishOnly": "copyfiles package.json LICENSE README.md CHANGELOG.md dist",
     "prettier:check": "prettier --check ./**/*.{ts,json,yml}",
     "prettier:write": "prettier --write ./**/*.{ts,json,yml}",
-    "publish": "npm publish dist --access public",
     "sort-package-json": "sort-package-json",
     "test": "jest --watchAll=false",
     "test:ci": "npm run test:coverage",
