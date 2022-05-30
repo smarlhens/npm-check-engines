@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.1.4](https://github.com/smarlhens/npm-check-engines/compare/v0.1.3...v0.1.4) (2022-05-30)
+
+
+### Miscellaneous
+
+* **npm:** remove npmignore ([0b4662f](https://github.com/smarlhens/npm-check-engines/commit/0b4662f9a50b967edfcc68b8bd57364f3a0dbb2f))
+* **publish:** revert publish script, move to release ci job ([a6288d3](https://github.com/smarlhens/npm-check-engines/commit/a6288d3a3882b09d34f18c1ddff5380fdbf2c027))
+
 ### [0.1.3](https://github.com/smarlhens/npm-check-engines/compare/v0.1.2...v0.1.3) (2022-05-30)
 
 
