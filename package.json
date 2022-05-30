@@ -22,7 +22,6 @@
     "email": "samuel.marlhens@gmail.com",
     "url": "https://github.com/smarlhens"
   },
-  "main": "lib/index.js",
   "bin": {
     "nce": "dist/bin/nce.js",
     "npm-check-engines": "dist/bin/nce.js"
@@ -88,6 +87,9 @@
   },
   "engines": {
     "node": "^14.17.0 || ^16.10.0 || ^18.0.0"
+  },
+  "publishConfig": {
+    "tag": "latest"
   },
   "overrides": {
     "minimist": "1.2.6",
