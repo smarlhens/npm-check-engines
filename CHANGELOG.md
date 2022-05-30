@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.5](https://github.com/smarlhens/npm-check-engines/compare/v0.1.4...v0.1.5) (2022-05-30)
+
+
+### Bug Fixes
+
+* **npm:** remove latest changes regarding publish ([1f9c0d1](https://github.com/smarlhens/npm-check-engines/commit/1f9c0d15931d5696889ec4a50fd990276b676d6f))
+
 ### [0.1.4](https://github.com/smarlhens/npm-check-engines/compare/v0.1.3...v0.1.4) (2022-05-30)
 
 
