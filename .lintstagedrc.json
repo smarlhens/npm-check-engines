@@ -1,8 +1,4 @@
 {
-  "./**/*.ts": [
-    "prettier --write"
-  ],
-  "package.json": [
-    "sort-package-json"
-  ]
+  "./**/*.ts": ["prettier --write"],
+  "package.json": ["sort-package-json"]
 }

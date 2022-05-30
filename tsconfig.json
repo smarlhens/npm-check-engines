@@ -20,7 +20,5 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "include": [
-    "bin/nce.ts"
-  ]
+  "include": ["bin/nce.ts"]
 }
