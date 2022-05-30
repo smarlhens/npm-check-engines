@@ -1,5 +1,21 @@
 # Changelog
 
+### [0.1.2](https://github.com/smarlhens/npm-check-engines/compare/v0.1.1...v0.1.2) (2022-05-30)
+
+
+### Bug Fixes
+
+* **npm:** provide NODE_AUTH_TOKEN ([1ce6ddc](https://github.com/smarlhens/npm-check-engines/commit/1ce6ddcc5872af3d179b9cc6ac925f1827c61d76))
+* **npm:** publish config, auth, remove main entry ([09bf0ab](https://github.com/smarlhens/npm-check-engines/commit/09bf0aba33f1559ec200da491ed93fd62b9d4ad3))
+* **npm:** registry auth ([bcfc95c](https://github.com/smarlhens/npm-check-engines/commit/bcfc95cc5a0436414f588919ae0fc0e022981134))
+
+
+### Miscellaneous
+
+* **CHANGELOG:** enhance commit description ([bb6c5ac](https://github.com/smarlhens/npm-check-engines/commit/bb6c5acad40999afcd28bd7adc3bb2ede2f1cf91))
+* **gh-actions:** escaped colon char not interpreted as expected ([40b3242](https://github.com/smarlhens/npm-check-engines/commit/40b3242cd0a778a4f23f89cb193dc23909cd29f4))
+* **gh-actions:** provide NPM_TOKEN ([fb9a53c](https://github.com/smarlhens/npm-check-engines/commit/fb9a53c7063de588eef75311e7a7c5fb4b177ed2))
+
 ### [0.1.1](https://github.com/smarlhens/npm-check-engines/compare/v0.1.0...v0.1.1) (2022-05-30)
 
 
