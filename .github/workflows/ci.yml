@@ -39,33 +39,13 @@ jobs:
         run: npm run build
       - name: Prepare release
         uses: google-github-actions/release-please-action@v3
-        if: "! startsWith(github.event.head_commit.message, 'chore(main): release')"
         with:
           release-type: node
           package-name: '@smarlhens/npm-check-engines'
           bump-minor-pre-major: true
           bump-patch-for-minor-pre-major: true
           changelog-path: CHANGELOG.md
-          command: release-pr
+          command: ${{ startsWith(github.event.head_commit.message, 'chore(main)&#58; release') && 'github-release' || 'release-pr' }}
           token: ${{ secrets.PAT }}
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false},{"type":"refactor","section":"Miscellaneous","hidden":false},{"type":"docs","section":"Miscellaneous","hidden":false},{"type":"ci","section":"Miscellaneous","hidden":false},{"type":"test","section":"Miscellaneous","hidden":false},{"type":"build","section":"Miscellaneous","hidden":false}]'
           signoff: 'Samuel MARLHENS <samuel.marlhens@gmail.com>'
-      - name: Release
-        if: "startsWith(github.event.head_commit.message, 'chore(main): release')"
-        id: release
-        uses: google-github-actions/release-please-action@v3
-        with:
-          release-type: node
-          package-name: '@smarlhens/npm-check-engines'
-          bump-minor-pre-major: true
-          bump-patch-for-minor-pre-major: true
-          changelog-path: CHANGELOG.md
-          command: github-release
-          token: ${{ secrets.PAT }}
-          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false},{"type":"refactor","section":"Miscellaneous","hidden":false},{"type":"docs","section":"Miscellaneous","hidden":false},{"type":"ci","section":"Miscellaneous","hidden":false},{"type":"test","section":"Miscellaneous","hidden":false},{"type":"build","section":"Miscellaneous","hidden":false}]'
-          signoff: 'Samuel MARLHENS <samuel.marlhens@gmail.com>'
-      - name: Publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        if: ${{ steps.release.outputs.release_created }}
