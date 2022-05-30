@@ -1,5 +1,17 @@
 # Changelog
 
+### [0.1.3](https://github.com/smarlhens/npm-check-engines/compare/v0.1.2...v0.1.3) (2022-05-30)
+
+
+### Bug Fixes
+
+* **npm:** update publish script, bin path ([5e65712](https://github.com/smarlhens/npm-check-engines/commit/5e65712ba43b9aa5a5c6b519bffffb80ba075fc3))
+
+
+### Miscellaneous
+
+* **gh-actions:** provide registry-url to setup-node ([14d4428](https://github.com/smarlhens/npm-check-engines/commit/14d4428ae4b185557b49b468350969ce19b5fdf5))
+
 ### [0.1.2](https://github.com/smarlhens/npm-check-engines/compare/v0.1.1...v0.1.2) (2022-05-30)
 
 
