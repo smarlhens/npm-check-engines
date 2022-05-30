@@ -23,19 +23,18 @@
     "url": "https://github.com/smarlhens"
   },
   "bin": {
-    "nce": "bin/nce.js",
-    "npm-check-engines": "bin/nce.js"
+    "nce": "./dist/bin/nce.js",
+    "npm-check-engines": "./dist/bin/nce.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "dev": "ts-node bin/nce.ts",
+    "dev": "ts-node ./bin/nce.ts",
     "postinstall": "npm run sort-package-json",
     "lint": "npm run prettier:check",
     "lint-staged": "lint-staged",
     "precommit": "npm run lint-staged && npm run build",
     "prepare": "husky install",
-    "prepublishOnly": "copyfiles package.json LICENSE README.md CHANGELOG.md dist",
     "prettier:check": "prettier --check ./**/*.{ts,json,yml}",
     "prettier:write": "prettier --write ./**/*.{ts,json,yml}",
     "sort-package-json": "sort-package-json",
@@ -77,7 +76,6 @@
     "@types/semver": "7.3.9",
     "@types/yargs": "17.0.10",
     "babel-jest": "28.1.0",
-    "copyfiles": "2.4.1",
     "cz-conventional-changelog": "3.3.0",
     "execa": "5.1.1",
     "husky": "8.0.1",
