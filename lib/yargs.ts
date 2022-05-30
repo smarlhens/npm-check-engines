@@ -33,19 +33,19 @@ export const cli: Promise<CLIArgs> = yargs(hideBin(process.argv))
       boolean: true,
       alias: 'q',
       default: false,
-      description: 'Hide the computed engine constraints.',
+      description: 'Enable quiet mode.',
     },
     debug: {
       boolean: true,
       alias: 'd',
       default: false,
-      description: 'Enable debug mode.',
+      description: 'Enable debug mode. Can be used with environment variable DEBUG=nce.',
     },
     verbose: {
       boolean: true,
       alias: 'v',
       default: false,
-      description: 'Output of all found engines constraints.',
+      description: 'A little more detailed than the default output.',
     },
     update: {
       boolean: true,
