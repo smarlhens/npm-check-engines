@@ -3,5 +3,13 @@
   "arrowParens": "avoid",
   "endOfLine": "auto",
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
 }
