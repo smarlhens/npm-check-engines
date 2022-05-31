@@ -22,6 +22,9 @@ export type PackageLockJSONSchema = JTDDataType<typeof packageLockJSONSchema> & 
     [k: string]: LockPackage;
   };
 };
+export const EngineConstraintKeys = ['node'] as const;
+export type EngineConstraintKeysType = typeof EngineConstraintKeys;
+export type EngineConstraintKey = EngineConstraintKeysType[number];
 export type CLIContext = {
   path: string;
   update: boolean;
@@ -30,7 +33,7 @@ export type CLIContext = {
   verbose: boolean;
   debug: boolean;
   packageLockObject?: PackageLockJSONSchema;
-  mostRestrictiveRange?: Range;
-  simplifiedComputedRange?: string;
+  ranges?: Map<EngineConstraintKey, Range | undefined>;
+  rangesSimplified?: Map<EngineConstraintKey, string | undefined>;
 };
 export type CheckCommandContext = CLIContext;
