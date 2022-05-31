@@ -14,6 +14,7 @@ import {
   EngineConstraintKeys,
   LockPackage,
   LockPackageEngines,
+  LockPackageEnginesObject,
   PackageJSONSchema,
   PackageLockJSONSchema,
 } from './types';
@@ -166,7 +167,7 @@ export const getConstraintFromEngines = (
   constraintKey: EngineConstraintKey,
 ): string | undefined => {
   if (typeof engines === 'object' && constraintKey in engines) {
-    return engines.node;
+    return (engines as LockPackageEnginesObject)[constraintKey];
   } else if (isArray(engines) && engines.some(constraint => constraint.includes(constraintKey))) {
     return engines.find(constraint => constraint.includes(constraintKey))?.replace(constraintKey, '');
   }
@@ -222,11 +223,12 @@ export const computeEnginesConstraint = ({
     }
   }
 
-  if (!mrr) {
-    throw new Error(`Computed engine range constraint is not defined.`);
+  if (mrr) {
+    debugConstraint(`${white(`Final computed engine range constraint:`)} ${blue(mrr.raw)}`);
+  } else {
+    debugConstraint(`${white(`No computed engine range constraint`)}`);
   }
 
-  debugConstraint(`${white(`Final computed engine range constraint:`)} ${blue(mrr.raw)}`);
   return mrr;
 };
 
