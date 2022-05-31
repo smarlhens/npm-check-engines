@@ -32,6 +32,7 @@ export type CLIContext = {
   workingDir: string;
   verbose: boolean;
   debug: boolean;
+  engines?: string[];
   packageLockObject?: PackageLockJSONSchema;
   ranges?: Map<EngineConstraintKey, Range | undefined>;
   rangesSimplified?: Map<EngineConstraintKey, string | undefined>;
