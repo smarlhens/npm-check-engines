@@ -8,9 +8,10 @@ import { Range } from 'semver';
 /**
  * Info props is inferred manually because Ajv JTDDataType: https://ajv.js.org/guide/typescript.html#utility-type-for-jtd-data-type
  */
-export type LockPackageEnginesObject = {
-  node: string;
-};
+export const EngineConstraintKeys = ['node', 'npm'] as const;
+export type EngineConstraintKeysType = typeof EngineConstraintKeys;
+export type EngineConstraintKey = EngineConstraintKeysType[number];
+export type LockPackageEnginesObject = Partial<Record<EngineConstraintKey, string>>;
 export type LockPackageEnginesArray = string[];
 export type LockPackageEngines = LockPackageEnginesObject | LockPackageEnginesArray;
 export type LockPackage = {
@@ -22,9 +23,6 @@ export type PackageLockJSONSchema = JTDDataType<typeof packageLockJSONSchema> & 
     [k: string]: LockPackage;
   };
 };
-export const EngineConstraintKeys = ['node'] as const;
-export type EngineConstraintKeysType = typeof EngineConstraintKeys;
-export type EngineConstraintKey = EngineConstraintKeysType[number];
 export type CLIContext = {
   path: string;
   update: boolean;

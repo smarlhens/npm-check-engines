@@ -283,72 +283,6 @@ describe('tasks', () => {
       }
     });
 
-    it('should throw error if packages is empty', () => {
-      const ctx: CheckCommandContext = { packageLockObject: { packages: {} } } as CheckCommandContext;
-      expect.assertions(1);
-      try {
-        computeEnginesConstraints({
-          ctx,
-          task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
-          parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
-        });
-      } catch (e) {
-        expect(e).toEqual(new Error('Computed engine range constraint is not defined.'));
-      }
-    });
-
-    it('should throw error if pkg engines is undefined', () => {
-      const ctx: CheckCommandContext = {
-        packageLockObject: { packages: { foo: {} as LockPackage } } as PackageLockJSONSchema,
-      } as CheckCommandContext;
-      expect.assertions(1);
-      try {
-        computeEnginesConstraints({
-          ctx,
-          task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
-          parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
-        });
-      } catch (e) {
-        expect(e).toEqual(new Error('Computed engine range constraint is not defined.'));
-      }
-    });
-
-    it('should throw error if pkg engines is empty', () => {
-      const ctx: CheckCommandContext = {
-        packageLockObject: { packages: { foo: { engines: {} } as LockPackage } } as PackageLockJSONSchema,
-      } as CheckCommandContext;
-      expect.assertions(1);
-      try {
-        computeEnginesConstraints({
-          ctx,
-          task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
-          parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
-        });
-      } catch (e) {
-        expect(e).toEqual(new Error('Computed engine range constraint is not defined.'));
-      }
-    });
-
-    it('should throw error if pkg engines is empty array', () => {
-      const ctx: CheckCommandContext = {
-        packageLockObject: { packages: { foo: { engines: [] } } } as PackageLockJSONSchema,
-      } as CheckCommandContext;
-      expect.assertions(1);
-      try {
-        computeEnginesConstraints({
-          ctx,
-          task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
-          parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
-        });
-      } catch (e) {
-        expect(e).toEqual(new Error('Computed engine range constraint is not defined.'));
-      }
-    });
-
     it('should set mrr in ctx using engines obj', () => {
       const ctx: CheckCommandContext = {
         packageLockObject: {
@@ -406,6 +340,26 @@ describe('tasks', () => {
       } catch (e) {
         expect(e).toEqual(new Error('No valid constraint key(s).'));
       }
+    });
+
+    it('should set mrr in ctx using engines node & npm', () => {
+      const ctx: CheckCommandContext = {
+        engines: ['node', 'npm'],
+        packageLockObject: {
+          packages: { foo: { engines: { node: '>=12.22.0' } } },
+        } as PackageLockJSONSchema,
+      } as CheckCommandContext;
+      computeEnginesConstraints({
+        ctx,
+        task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
+        parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
+        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+      });
+      expect(ctx).toEqual(
+        expect.objectContaining({
+          ranges: new Map([['node', new Range('>=12.22.0', rangeOptions)]]),
+        }),
+      );
     });
 
     it('should set mrr in ctx using engines arr', () => {
