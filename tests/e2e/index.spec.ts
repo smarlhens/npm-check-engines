@@ -1,7 +1,6 @@
 import { nce } from '../../lib/index';
 import { CLIArgs } from '../../lib/yargs';
 import SpyInstance = jest.SpyInstance;
-const debug = require('debug');
 
 describe('index', () => {
   let consoleInfoSpy: SpyInstance;
@@ -26,7 +25,25 @@ describe('index', () => {
 
     expect(res).toEqual(
       expect.objectContaining({
-        simplifiedComputedRange: '^14.17.0 || ^16.10.0 || >=17.0.0',
+        rangesSimplified: new Map([['node', '^14.17.0 || ^16.10.0 || >=17.0.0']]),
+      }),
+    );
+  });
+
+  it('should run w/ path, debug', async () => {
+    cliArgs = {
+      $0: 'nce',
+      path: 'examples',
+      p: 'examples',
+      debug: true,
+      d: true,
+    };
+
+    const res = await nce(Promise.resolve(cliArgs));
+
+    expect(res).toEqual(
+      expect.objectContaining({
+        rangesSimplified: new Map([['node', '^14.17.0 || ^16.10.0 || >=17.0.0']]),
       }),
     );
   });

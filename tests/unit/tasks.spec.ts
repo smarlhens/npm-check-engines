@@ -17,6 +17,7 @@ import { ListrRenderer, ListrTaskWrapper } from 'listr2';
 import { CheckCommandContext, LockPackage, PackageLockJSONSchema } from '../../lib/types';
 import SpyInstance = jest.SpyInstance;
 import * as utils from '../../lib/utils';
+import { blue, yellow } from 'colorette';
 const fsExtra = require('fs-extra');
 
 describe('tasks', () => {
@@ -178,11 +179,11 @@ describe('tasks', () => {
         task: expect.any(Function),
       }),
       expect.objectContaining({
-        title: 'Compute node engines constraints...',
+        title: 'Compute engines range constraints...',
         task: expect.any(Function),
       }),
       expect.objectContaining({
-        title: 'Output computed node engines constraints...',
+        title: 'Output computed engines range constraints...',
         task: expect.any(Function),
       }),
       expect.objectContaining({
@@ -197,7 +198,7 @@ describe('tasks', () => {
       expect.objectContaining({
         tasks: [
           expect.objectContaining({
-            title: 'Checking npm package node engines constraints in package-lock.json file...',
+            title: 'Checking npm package engines range constraints in package-lock.json file...',
             task: expect.any(Function),
           }),
         ],
@@ -214,16 +215,16 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
         });
       } catch (e) {
-        expect(e).toEqual(new Error('Simplified node engines range constraint is not defined.'));
+        expect(e).toEqual(new Error('Computed engines range constraints are not defined.'));
       }
     });
 
     it('should simplifiedComputedRange in ctx', () => {
       const ctx: CheckCommandContext = {
-        mostRestrictiveRange: new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0'),
+        ranges: new Map([['node', new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0')]]),
       } as CheckCommandContext;
       const parent = {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>;
       Object.defineProperty(parent, 'title', {
@@ -236,12 +237,16 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent,
-        debug: jest.fn() as unknown as Debugger,
+        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
       });
-      expect(spyOnTitle).toHaveBeenCalledWith('Computed node engines range: ^14.17.0 || ^16.10.0');
+      expect(spyOnTitle).toHaveBeenCalledWith(
+        expect.stringContaining(
+          `Computed engines range constraints:\n  - ${yellow('node')}: ${blue('^14.17.0 || ^16.10.0')}`,
+        ),
+      );
       expect(ctx).toEqual(
         expect.objectContaining({
-          simplifiedComputedRange: '^14.17.0 || ^16.10.0',
+          rangesSimplified: new Map([['node', '^14.17.0 || ^16.10.0']]),
         }),
       );
     });
@@ -256,7 +261,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package-lock.json data is not defined.'));
@@ -271,7 +276,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package-lock.json does not contain packages property.'));
@@ -286,10 +291,10 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
         });
       } catch (e) {
-        expect(e).toEqual(new Error('Computed node engines range constraint is not defined.'));
+        expect(e).toEqual(new Error('Computed engine range constraint is not defined.'));
       }
     });
 
@@ -303,10 +308,10 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
         });
       } catch (e) {
-        expect(e).toEqual(new Error('Computed node engines range constraint is not defined.'));
+        expect(e).toEqual(new Error('Computed engine range constraint is not defined.'));
       }
     });
 
@@ -320,10 +325,10 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
         });
       } catch (e) {
-        expect(e).toEqual(new Error('Computed node engines range constraint is not defined.'));
+        expect(e).toEqual(new Error('Computed engine range constraint is not defined.'));
       }
     });
 
@@ -337,10 +342,10 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
         });
       } catch (e) {
-        expect(e).toEqual(new Error('Computed node engines range constraint is not defined.'));
+        expect(e).toEqual(new Error('Computed engine range constraint is not defined.'));
       }
     });
 
@@ -354,11 +359,11 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: jest.fn() as unknown as Debugger,
+        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
-          mostRestrictiveRange: new Range('>=12.22.0', rangeOptions),
+          ranges: new Map([['node', new Range('>=12.22.0', rangeOptions)]]),
         }),
       );
     });
@@ -373,11 +378,11 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: jest.fn() as unknown as Debugger,
+        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
-          mostRestrictiveRange: new Range('>=12.22.0', rangeOptions),
+          ranges: new Map([['node', new Range('>=12.22.0', rangeOptions)]]),
         }),
       );
     });
@@ -396,11 +401,11 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: jest.fn() as unknown as Debugger,
+        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
-          mostRestrictiveRange: new Range('>=14.17.0', rangeOptions),
+          ranges: new Map([['node', new Range('>=14.17.0', rangeOptions)]]),
         }),
       );
     });
@@ -420,11 +425,11 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: jest.fn() as unknown as Debugger,
+        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
-          mostRestrictiveRange: new Range('>=14.17.0', rangeOptions),
+          ranges: new Map([['node', new Range('>=14.17.0', rangeOptions)]]),
         }),
       );
     });
@@ -555,13 +560,13 @@ describe('tasks', () => {
           debug: jest.fn() as unknown as Debugger,
         });
       } catch (e) {
-        expect(e).toEqual(new Error('Simplified computed node engines range constraint is not defined.'));
+        expect(e).toEqual(new Error('Simplified computed engines range constraints are not defined.'));
       }
     });
 
     it('should throw error if read json throw error', async () => {
       const ctx: CheckCommandContext = {
-        simplifiedComputedRange: '^14.17.0',
+        rangesSimplified: new Map([['node', '^14.17.0']]),
         path: '',
         workingDir: 'foo',
       } as CheckCommandContext;
@@ -581,7 +586,7 @@ describe('tasks', () => {
 
     it('should throw error if json is undefined', async () => {
       const ctx: CheckCommandContext = {
-        simplifiedComputedRange: '^14.17.0',
+        rangesSimplified: new Map([['node', '^14.17.0']]),
         path: '',
         workingDir: 'foo',
       } as CheckCommandContext;
@@ -601,7 +606,7 @@ describe('tasks', () => {
 
     it('should throw error if json is malformed', async () => {
       const ctx: CheckCommandContext = {
-        simplifiedComputedRange: '^14.17.0',
+        rangesSimplified: new Map([['node', '^14.17.0']]),
         path: '',
         workingDir: 'foo',
       } as CheckCommandContext;
@@ -621,7 +626,7 @@ describe('tasks', () => {
 
     it('should write json', async () => {
       const ctx: CheckCommandContext = {
-        simplifiedComputedRange: '^14.17.0',
+        rangesSimplified: new Map([['node', '^14.17.0']]),
         path: '',
         workingDir: 'foo',
       } as CheckCommandContext;

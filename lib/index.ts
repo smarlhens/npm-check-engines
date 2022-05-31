@@ -19,8 +19,9 @@ export const nce = async (args: Promise<CLIArgs>): Promise<CLIContext> => {
 
   const options = { ...renderer({ quiet: context.quiet, debug: context.debug, verbose: context.verbose }) };
 
+  const debugNamespaces = namespaces();
   if (context.debug) {
-    enableNamespaces(namespaces());
+    enableNamespaces(debugNamespaces);
   }
 
   const cmd = cliCommandTask(options, debug);
