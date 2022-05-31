@@ -10,6 +10,7 @@ export type CLIArgs = {
   quiet?: boolean;
   verbose?: boolean;
   debug?: boolean;
+  engines?: string[];
   _?: Array<string | number>;
   $0?: string;
 };
@@ -46,6 +47,11 @@ export const cli: Promise<CLIArgs> = yargs(hideBin(process.argv))
       alias: 'v',
       default: false,
       description: 'A little more detailed than the default output.',
+    },
+    engines: {
+      array: true,
+      alias: 'e',
+      description: 'Select engines to check. Default will check all engines defined.',
     },
     update: {
       boolean: true,

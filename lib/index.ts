@@ -15,6 +15,7 @@ export const nce = async (args: Promise<CLIArgs>): Promise<CLIContext> => {
     verbose: cliArgs.verbose || false,
     quiet: cliArgs.quiet || false,
     debug: cliArgs.debug || false,
+    engines: cliArgs.engines,
   };
 
   const options = { ...renderer({ quiet: context.quiet, debug: context.debug, verbose: context.verbose }) };

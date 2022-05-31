@@ -11,6 +11,7 @@ import {
 import {
   CheckCommandContext,
   EngineConstraintKey,
+  EngineConstraintKeys,
   LockPackage,
   LockPackageEngines,
   PackageJSONSchema,
@@ -230,7 +231,7 @@ export const computeEnginesConstraint = ({
 };
 
 export const computeEnginesConstraints: CheckCommandTask = ({ ctx, debug }): void => {
-  const { packageLockObject } = ctx;
+  const { packageLockObject, engines } = ctx;
 
   if (!packageLockObject) {
     throw new Error(`${packageLockJSONFilename} data is not defined.`);
@@ -240,10 +241,19 @@ export const computeEnginesConstraints: CheckCommandTask = ({ ctx, debug }): voi
     throw new Error(`${packageLockJSONFilename} does not contain packages property.`);
   }
 
+  const filterEngineConstraintKey = (key: string): key is EngineConstraintKey =>
+    -1 !== EngineConstraintKeys.indexOf(key as EngineConstraintKey);
   const packages = Object.entries(packageLockObject.packages);
   const ranges = new Map<EngineConstraintKey, Range | undefined>();
-  let constraintKey: EngineConstraintKey = 'node';
-  ranges.set(constraintKey, computeEnginesConstraint({ packages, constraintKey, debug }));
+  const constraintKeys: EngineConstraintKey[] = engines?.filter(filterEngineConstraintKey) || [...EngineConstraintKeys];
+
+  if (0 === constraintKeys.length) {
+    throw new Error(`No valid constraint key(s).`);
+  }
+
+  for (const constraintKey of constraintKeys) {
+    ranges.set(constraintKey, computeEnginesConstraint({ packages, constraintKey, debug }));
+  }
 
   ctx.ranges = ranges;
 };
