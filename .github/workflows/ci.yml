@@ -42,8 +42,6 @@ jobs:
         with:
           release-type: node
           package-name: '@smarlhens/npm-check-engines'
-          bump-minor-pre-major: true
-          bump-patch-for-minor-pre-major: true
           changelog-path: CHANGELOG.md
           command: |
             ${{ startsWith(github.event.head_commit.message, 'chore(main): release') && 'github-release' || 'release-pr' }}

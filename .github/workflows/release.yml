@@ -40,8 +40,6 @@ jobs:
         with:
           release-type: node
           package-name: '@smarlhens/npm-check-engines'
-          bump-minor-pre-major: true
-          bump-patch-for-minor-pre-major: true
           changelog-path: CHANGELOG.md
           command: github-release
           token: ${{ secrets.PAT }}
