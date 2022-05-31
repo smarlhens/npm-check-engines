@@ -8,7 +8,7 @@ import { Range } from 'semver';
 /**
  * Info props is inferred manually because Ajv JTDDataType: https://ajv.js.org/guide/typescript.html#utility-type-for-jtd-data-type
  */
-export const EngineConstraintKeys = ['node', 'npm'] as const;
+export const EngineConstraintKeys = ['node', 'npm', 'yarn'] as const;
 export type EngineConstraintKeysType = typeof EngineConstraintKeys;
 export type EngineConstraintKey = EngineConstraintKeysType[number];
 export type LockPackageEnginesObject = Partial<Record<EngineConstraintKey, string>>;
