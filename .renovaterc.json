@@ -11,10 +11,6 @@
       "labels": ["hooks"]
     },
     {
-      "matchPackagePatterns": ["^@semantic-release", "semantic-release"],
-      "labels": ["ci/cd"]
-    },
-    {
       "matchDepTypes": ["optionalDependencies"],
       "addLabels": ["optional"]
     }
