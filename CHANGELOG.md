@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.3.0](https://github.com/smarlhens/npm-check-engines/compare/v0.2.0...v0.3.0) (2022-05-31)
+
+
+### Features
+
+* prepare multiple engines support ([c4a26f5](https://github.com/smarlhens/npm-check-engines/commit/c4a26f58bb9df197a6cf15992c7317cbdcba7e1f))
+
+
+### Miscellaneous
+
+* **deps:** update dependency lint-staged to v12.4.3 ([ad00280](https://github.com/smarlhens/npm-check-engines/commit/ad002805f1abbf27d7058a5364a1ada300cf6a6a))
+* **deps:** update dependency lint-staged to v12.5.0 ([811d8d8](https://github.com/smarlhens/npm-check-engines/commit/811d8d81e6936e15954cc78c264b8cb263b82871))
+* **renovate:** remove limit on PR creation  & open PRs ([2eaf1c5](https://github.com/smarlhens/npm-check-engines/commit/2eaf1c557ca0e59d57b31d4cd02b5595a544b7c2))
+* **renovate:** remove semantic-release labels ([73c7f73](https://github.com/smarlhens/npm-check-engines/commit/73c7f73c3f4407d4320c6d6c26f916746d0848ac))
+
 ## [0.2.0](https://github.com/smarlhens/npm-check-engines/compare/v0.1.5...v0.2.0) (2022-05-31)
 
 
