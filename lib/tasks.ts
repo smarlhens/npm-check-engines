@@ -83,10 +83,25 @@ export const restrictiveRange = (r1: Range, r2: Range, ignoredRanges: string[], 
 
     if (newR1.intersects(newR2, rangeOptions)) {
       return restrictiveRange(newR1, newR2, ignoredRanges, debug);
+    } else {
+      throw new Error('Not yet implemented :/');
     }
   }
 
-  throw new Error('Not yet implemented :/');
+  const minComp1: Comparator[] | undefined = sortedR1.shift();
+  const minComp2: Comparator[] | undefined = sortedR2.shift();
+  const minComp: Comparator[] | undefined = minComp1 || minComp2;
+
+  if (!minComp) {
+    throw new Error('Not yet implemented :/');
+  }
+
+  const set: Comparator[][] = [minComp];
+  const newR1 = setToRange(sortedR1);
+  const newR2 = setToRange(sortedR2);
+  const newRange = restrictiveRange(newR1, newR2, ignoredRanges, debug);
+  set.push(...sortRangeSet(newRange.set));
+  return setToRange(set);
 };
 
 export const humanizeRange = (range?: Range): string | undefined => {
