@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.0](https://github.com/smarlhens/npm-check-engines/compare/v0.3.0...v0.4.0) (2022-05-31)
+
+
+### Features
+
+* add cli engines option to choose specific engine(s) ([ec06756](https://github.com/smarlhens/npm-check-engines/commit/ec06756f34f0189689bf56670d8ae79c97ec6ce9))
+* add support for npm engine ([ae7df76](https://github.com/smarlhens/npm-check-engines/commit/ae7df76a7a695dd4d26e5ded05ecea3d85bde227))
+* add yarn engine ([69a4268](https://github.com/smarlhens/npm-check-engines/commit/69a4268a948762c942eb2aadf75d8db029da46f5))
+
 ## [0.3.0](https://github.com/smarlhens/npm-check-engines/compare/v0.2.0...v0.3.0) (2022-05-31)
 
 
