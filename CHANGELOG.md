@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.0](https://github.com/smarlhens/npm-check-engines/compare/v0.1.5...v0.2.0) (2022-05-31)
+
+
+### Features
+
+* handle more complex ranges ([df52a90](https://github.com/smarlhens/npm-check-engines/commit/df52a906104fe2d18dd3ef8cd7780234ef73231e)), closes [#14](https://github.com/smarlhens/npm-check-engines/issues/14)
+
+
+### Miscellaneous
+
+* **bolt:** add .whitesource configuration file ([233fd7d](https://github.com/smarlhens/npm-check-engines/commit/233fd7d46a93decb19b8f16b725a85976a0e1465))
+* **gh-actions:** add style to changelog miscellaneous ([8c3c13b](https://github.com/smarlhens/npm-check-engines/commit/8c3c13bac5436cfabffc48d00af71b2e73db5a26))
+* **lint-staged:** lint yml & json files using prettier ([51ef943](https://github.com/smarlhens/npm-check-engines/commit/51ef943c470c69c0d7032fade69c9594db81f935))
+* **release-please:** set bump strategies to default ([bb152ff](https://github.com/smarlhens/npm-check-engines/commit/bb152ffacd30941a18e0d8b230b4f921414ca5b0))
+
 ### [0.1.5](https://github.com/smarlhens/npm-check-engines/compare/v0.1.4...v0.1.5) (2022-05-30)
 
 
