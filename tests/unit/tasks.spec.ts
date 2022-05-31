@@ -136,6 +136,19 @@ describe('tasks', () => {
         ),
       ).toEqual(new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0', rangeOptions));
     });
+
+    it('w/ intersection at middle range', () => {
+      expect(
+        restrictiveRange(
+          new Range('>=14.15.0 <15.0.0-0||>=16.10.0'),
+          new Range('>=14.15.0 <15.0.0-0||>=16.0.0 <17.0.0-0||>=17.0.0 <18.0.0-0||>=18.0.0 <19.0.0-0'),
+          [],
+          jest.fn() as unknown as Debugger,
+        ),
+      ).toEqual(
+        new Range('>=14.15.0 <15.0.0-0||>=16.10.0 <17.0.0-0||>=17.0.0 <18.0.0-0||>=18.0.0 <19.0.0-0', rangeOptions),
+      );
+    });
   });
 
   describe('should simplify range', () => {
