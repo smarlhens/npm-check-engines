@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.4.1](https://github.com/smarlhens/npm-check-engines/compare/v0.4.0...v0.4.1) (2022-06-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency colorette to v2.0.17 ([624217c](https://github.com/smarlhens/npm-check-engines/commit/624217cb2dfdb56149fc29b8461e814f7186902c))
+
+
+### Chores
+
+* **deps:** move form dependencies to devDependencies ([310248f](https://github.com/smarlhens/npm-check-engines/commit/310248fb9fb5e4b621b73c7784ac49ff415f9d2a))
+* **deps:** update commitlint monorepo to v17.0.2 ([9a05965](https://github.com/smarlhens/npm-check-engines/commit/9a059657a6a5a4a07e48323506a8d47360c7cf15))
+* **deps:** update dependency @types/jest to v28 ([63ce9fc](https://github.com/smarlhens/npm-check-engines/commit/63ce9fce0c86eb37903d790f94dbea01d727ee5d))
+* **deps:** update dependency lint-staged to v13 ([6b92d2e](https://github.com/smarlhens/npm-check-engines/commit/6b92d2eb4715d8832dc91262f500615562343878))
+* **deps:** update dependency ts-node to v10.8.1 ([82538fb](https://github.com/smarlhens/npm-check-engines/commit/82538fbdd2cdb74fba73a6d2080a67706e311ba2))
+* **deps:** update dependency typescript to v4.7.3 ([56913f7](https://github.com/smarlhens/npm-check-engines/commit/56913f7f21c0558564b1d6f43844489ad2fb7084))
+
+
+### Miscellaneous
+
+* **release-please:** update changelog-types, add documentation & chores sections ([710a11c](https://github.com/smarlhens/npm-check-engines/commit/710a11cb1c94b06e02d9bfa8399c9d29205ec6a4))
+
 ## [0.4.0](https://github.com/smarlhens/npm-check-engines/compare/v0.3.0...v0.4.0) (2022-05-31)
 
 
