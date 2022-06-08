@@ -44,4 +44,3 @@ jobs:
           command: github-release
           token: ${{ secrets.PAT }}
           changelog-types: '[{"type":"build","section":"Miscellaneous","hidden":false},{"type":"chore","section":"Chores","hidden":false},{"type":"ci","section":"Miscellaneous","hidden":false},{"type":"docs","section":"Documentation","hidden":false},{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"refactor","section":"Miscellaneous","hidden":false},{"type":"style","section":"Miscellaneous","hidden":false},{"type":"test","section":"Miscellaneous","hidden":false}]'
-          signoff: 'Samuel MARLHENS <samuel.marlhens@gmail.com>'
