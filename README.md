@@ -1,6 +1,8 @@
 # NPM check engines
 
 [![GitHub CI](https://github.com/smarlhens/npm-check-engines/workflows/ci/badge.svg)](https://github.com/smarlhens/npm-check-engines/actions/workflows/ci.yml)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/smarlhens/npm-check-engines.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/smarlhens/npm-check-engines/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/smarlhens/npm-check-engines.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/smarlhens/npm-check-engines/context:javascript)
 ![node-current (scoped)](https://img.shields.io/node/v/@smarlhens/npm-check-engines)
 [![GitHub license](https://img.shields.io/github/license/smarlhens/npm-check-engines)](https://github.com/smarlhens/npm-check-engines)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
