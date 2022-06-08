@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.4.2](https://github.com/smarlhens/npm-check-engines/compare/v0.4.1...v0.4.2) (2022-06-08)
+
+
+### Chores
+
+* **deps:** update dependency @types/jest to v28.1.1 ([990732b](https://github.com/smarlhens/npm-check-engines/commit/990732b13009c8350232d112822589d7a9f9301c))
+* **deps:** update jest monorepo to v28.1.1 ([a05193b](https://github.com/smarlhens/npm-check-engines/commit/a05193b59324f417241b3e460f0e77fb322a9a5b))
+
+
+### Documentation
+
+* **readme:** add lgtm badges ([2dac6ac](https://github.com/smarlhens/npm-check-engines/commit/2dac6ac13c2b5568f1b84d3b623343275de3404f))
+
+
+### Miscellaneous
+
+* **release-please:** remove signoff option ([5ad0155](https://github.com/smarlhens/npm-check-engines/commit/5ad0155693846b1424e5592972aeee072cfddbb3))
+
 ## [0.4.1](https://github.com/smarlhens/npm-check-engines/compare/v0.4.0...v0.4.1) (2022-06-04)
 
 
