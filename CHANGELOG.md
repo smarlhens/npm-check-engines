@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.4.3](https://github.com/smarlhens/npm-check-engines/compare/v0.4.2...v0.4.3) (2022-06-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency colorette to v2.0.19 ([281242c](https://github.com/smarlhens/npm-check-engines/commit/281242c59d04bb3c9fc1ff107d4b3dfdcdc8e99a))
+
+
+### Chores
+
+* **deps:** update dependency @babel/core to v7.18.5 ([601783a](https://github.com/smarlhens/npm-check-engines/commit/601783a96ae78057ff0111a036e69e0b869b0bcb))
+* **deps:** update dependency @types/jest to v28.1.2 ([c072752](https://github.com/smarlhens/npm-check-engines/commit/c072752e5a1d88d8a49d07315985f569005eb883))
+* **deps:** update dependency @types/semver to v7.3.10 ([841925a](https://github.com/smarlhens/npm-check-engines/commit/841925a060353105beb25f9218fc7cc29c58f855))
+* **deps:** update dependency lint-staged to v13.0.1 ([7e3c509](https://github.com/smarlhens/npm-check-engines/commit/7e3c509c2d933e8bbed30996496e6da2458c7a91))
+* **deps:** update dependency lint-staged to v13.0.2 ([e9c715e](https://github.com/smarlhens/npm-check-engines/commit/e9c715e665571927ebaeabf880d5361a2135d4d9))
+* **deps:** update dependency prettier to v2.7.1 ([1cc780d](https://github.com/smarlhens/npm-check-engines/commit/1cc780dbf80055dd00129b11e4c4dc6fd3b49d41))
+* **deps:** update dependency typescript to v4.7.4 ([d10a5d5](https://github.com/smarlhens/npm-check-engines/commit/d10a5d5559438b0d5499cea9c3a14597b17c7950))
+
 ## [0.4.2](https://github.com/smarlhens/npm-check-engines/compare/v0.4.1...v0.4.2) (2022-06-08)
 
 
