@@ -71,13 +71,15 @@ $ nce -u
 Usage: nce [options]
 
 Options:
-  -p, --path     Path to the NPM package folder. Default will use current folder.                     [string]
-  -q, --quiet    Enable quiet mode.                                                 [boolean] [default: false]
-  -d, --debug    Enable debug mode. Can be used with environment variable DEBUG=nce.[boolean] [default: false]
-  -v, --verbose  A little more detailed than the default output.                    [boolean] [default: false]
-  -u, --update   Update engines in package.json file.                               [boolean] [default: false]
-      --help     Show help                                                                           [boolean]
-      --version  Show version number                                                                 [boolean]
+  -p, --path     Path to the NPM package folder. Default will use current folder.                 [string]
+  -q, --quiet    Enable quiet mode.                                             [boolean] [default: false]
+  -d, --debug    Enable debug mode. Can be used with environment variable DEBUG=nce.
+                                                                                [boolean] [default: false]
+  -v, --verbose  A little more detailed than the default output.                [boolean] [default: false]
+  -e, --engines  Select engines to check. Default will check all engines defined.                  [array]
+  -u, --update   Update engines in package.json file.                           [boolean] [default: false]
+      --help     Show help                                                                       [boolean]
+      --version  Show version number                                                             [boolean]
 
 Examples:
   nce                 Check package-lock.json file in current working directory.
