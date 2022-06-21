@@ -143,3 +143,9 @@ $ DEBUG=* nce -d
 </details>
 
 ---
+
+## Thanks
+
+This project is heavily inspired by the following awesome project: [npm-check-updates](https://github.com/raineorshine/npm-check-updates).
+
+---
