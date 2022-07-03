@@ -1,23 +1,26 @@
+import { green } from 'colorette';
+import { Debugger } from 'debug';
+import { ListrRenderer, ListrTaskWrapper } from 'listr2';
+import { Comparator, Range } from 'semver';
+
 import {
   checkCommandTasks,
   cliCommandTask,
   computeEnginesConstraints,
+  humanizeRange,
+  loadPackageFile,
   loadPackageLockFile,
   outputComputedConstraints,
   rangeOptions,
   restrictiveRange,
-  humanizeRange,
   sortRangeSet,
   updatePackageJson,
-  loadPackageFile,
 } from '../../lib/tasks';
-import { Comparator, Range } from 'semver';
-import { Debugger } from 'debug';
-import { ListrRenderer, ListrTaskWrapper } from 'listr2';
 import { CheckCommandContext, PackageLockJSONSchema } from '../../lib/types';
-import SpyInstance = jest.SpyInstance;
 import * as utils from '../../lib/utils';
-import { green } from 'colorette';
+
+import SpyInstance = jest.SpyInstance;
+
 const fsExtra = require('fs-extra');
 
 describe('tasks', () => {

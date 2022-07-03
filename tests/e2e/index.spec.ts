@@ -1,5 +1,6 @@
 import { nce } from '../../lib/index';
 import { CLIArgs } from '../../lib/yargs';
+
 import SpyInstance = jest.SpyInstance;
 
 describe('index', () => {

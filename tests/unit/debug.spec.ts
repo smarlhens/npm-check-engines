@@ -1,4 +1,5 @@
 import { debug, enableNamespaces, namespaces } from '../../lib/debug';
+
 const Debug = require('debug');
 
 describe('debug', () => {
