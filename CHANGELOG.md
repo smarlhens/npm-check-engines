@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.0](https://github.com/smarlhens/npm-check-engines/compare/v0.6.0...v0.7.0) (2022-07-03)
+
+
+### Features
+
+* tips to upgrade package.json when new computed range constraints are available ([17ea35f](https://github.com/smarlhens/npm-check-engines/commit/17ea35f2e0eb2240c85c46fc16fdef25411d0188))
+
+
+### Documentation
+
+* **readme:** add missing thanks link in toc ([0e579a4](https://github.com/smarlhens/npm-check-engines/commit/0e579a4d475936c59595ac18301c0ac0c600fe76))
+
 ## [0.6.0](https://github.com/smarlhens/npm-check-engines/compare/v0.5.0...v0.6.0) (2022-07-03)
 
 
