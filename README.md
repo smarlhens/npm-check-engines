@@ -53,6 +53,8 @@ $ nce
 ✔ Computed engines range constraints:
 
  node  *  →  ^14.17.0 || ^16.10.0 || >=17.0.0
+
+Run nce -u to upgrade package.json.
 ```
 
 Upgrade a project's `package.json` file:
@@ -166,12 +168,16 @@ $ DEBUG=* nce -d
 [TITLE] Computed engines range constraints:
 [TITLE]
 [TITLE]  node  *  →  ^14.17.0 || ^16.10.0 || >=17.0.0
+[TITLE]
+[TITLE] Run nce -p examples -d -u to upgrade package.json.
 [SUCCESS] Output computed engines range constraints...
 [STARTED] Update package.json file...
 [SKIPPED] Update is disabled by default.
 [SUCCESS] Computed engines range constraints:
 [SUCCESS]
 [SUCCESS]  node  *  →  ^14.17.0 || ^16.10.0 || >=17.0.0
+[SUCCESS]
+[SUCCESS] Run nce -p examples -d -u to upgrade package.json.
 ```
 
 </details>
