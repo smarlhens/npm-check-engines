@@ -76,7 +76,6 @@
     "@types/semver": "7.3.10",
     "@types/yargs": "17.0.10",
     "babel-jest": "28.1.2",
-    "cz-conventional-changelog": "3.3.0",
     "execa": "5.1.1",
     "husky": "8.0.1",
     "jest": "28.1.2",

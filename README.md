@@ -5,7 +5,6 @@
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/smarlhens/npm-check-engines.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/smarlhens/npm-check-engines/context:javascript)
 ![node-current (scoped)](https://img.shields.io/node/v/@smarlhens/npm-check-engines)
 [![GitHub license](https://img.shields.io/github/license/smarlhens/npm-check-engines)](https://github.com/smarlhens/npm-check-engines)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
