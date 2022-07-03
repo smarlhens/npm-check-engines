@@ -1,6 +1,6 @@
 import { ValidateFunction } from 'ajv';
 import Table from 'cli-table';
-import { blue, gray, green, red, white, yellow } from 'colorette';
+import { blue, cyan, gray, green, red, white, yellow } from 'colorette';
 import { Debugger } from 'debug';
 import { writeJson } from 'fs-extra';
 import {
@@ -339,8 +339,41 @@ const createEnginesTable = (colWidths: number[]): Table => {
   });
 };
 
+export const generateUpdateCommandFromContext = (ctx: CheckCommandContext): string => {
+  const argv: string[] = ['nce'];
+
+  let path: string | undefined = undefined;
+  if (typeof ctx.path === 'string' && ctx.path.length > 0) {
+    path = getRelativePath({ path: ctx.path, workingDir: ctx.workingDir });
+  }
+
+  if (typeof path === 'string' && path.length > 0) {
+    argv.push(...['-p', path]);
+  }
+
+  if (ctx.engines) {
+    argv.push(...ctx.engines.map(e => ['-e', e]).flat());
+  }
+
+  if (ctx.quiet) {
+    argv.push('-q');
+  }
+
+  if (ctx.debug) {
+    argv.push('-d');
+  }
+
+  if (ctx.verbose) {
+    argv.push('-v');
+  }
+
+  argv.push('-u');
+
+  return argv.join(' ');
+};
+
 export const outputComputedConstraints: CheckCommandTask = ({ ctx, parent, debug }): void => {
-  const { ranges } = ctx;
+  const { ranges, packageObject, update } = ctx;
 
   if (!ranges) {
     throw new Error(`Computed engines range constraints are not defined.`);
@@ -375,7 +408,13 @@ export const outputComputedConstraints: CheckCommandTask = ({ ctx, parent, debug
   } else {
     const table: Table = createEnginesTable(colWidths);
     table.push(...colValues);
-    parent.title = `Computed engines range constraints:\n\n${table.toString()}`;
+    let title = `Computed engines range constraints:\n\n${table.toString()}`;
+
+    if (!update) {
+      title += `\n\nRun ${cyan(generateUpdateCommandFromContext(ctx))} to upgrade ${packageObject.filename}.`;
+    }
+
+    parent.title = title;
   }
 
   ctx.rangesSimplified = rangesSimplified;

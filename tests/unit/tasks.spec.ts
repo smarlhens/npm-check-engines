@@ -1,4 +1,4 @@
-import { green } from 'colorette';
+import { cyan, green } from 'colorette';
 import { Debugger } from 'debug';
 import { ListrRenderer, ListrTaskWrapper } from 'listr2';
 import { Comparator, Range } from 'semver';
@@ -7,6 +7,7 @@ import {
   checkCommandTasks,
   cliCommandTask,
   computeEnginesConstraints,
+  generateUpdateCommandFromContext,
   humanizeRange,
   loadPackageFile,
   loadPackageLockFile,
@@ -281,6 +282,40 @@ describe('tasks', () => {
 
     it('should output simplified computed range constraints', () => {
       const ctx: CheckCommandContext = {
+        packageObject: { filename: 'package.json' },
+        ranges: new Map([
+          ['node', { from: new Range('*'), to: new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0') }],
+        ]),
+      } as CheckCommandContext;
+      const parent = {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>;
+      Object.defineProperty(parent, 'title', {
+        get: jest.fn(() => ''),
+        set: jest.fn(),
+        configurable: true,
+      });
+      const spyOnTitle = jest.spyOn(parent, 'title', 'set');
+      outputComputedConstraints({
+        ctx,
+        task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
+        parent,
+        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+      });
+      expect(spyOnTitle).toHaveBeenCalledWith(
+        `Computed engines range constraints:\n\n node  *  →  ^14.17.0 || ^16.10.0 \n\nRun ${cyan(
+          'nce -u',
+        )} to upgrade package.json.`,
+      );
+      expect(ctx).toEqual(
+        expect.objectContaining({
+          rangesSimplified: new Map([['node', '^14.17.0 || ^16.10.0']]),
+        }),
+      );
+    });
+
+    it('should output simplified computed range constraints w/ update', () => {
+      const ctx: CheckCommandContext = {
+        packageObject: { filename: 'package.json' },
+        update: true,
         ranges: new Map([
           ['node', { from: new Range('*'), to: new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0') }],
         ]),
@@ -834,6 +869,50 @@ describe('tasks', () => {
         }),
         { encoding: 'utf8', replacer: null, spaces: 2 },
       );
+    });
+  });
+
+  describe('should generate update command from context', () => {
+    it('w/o additional params', () => {
+      const context: CheckCommandContext = {} as CheckCommandContext;
+      const expected: string = 'nce -u';
+      expect(generateUpdateCommandFromContext(context)).toEqual(expected);
+    });
+
+    it('w/ custom path', () => {
+      const context: CheckCommandContext = { path: 'examples', workingDir: '' } as CheckCommandContext;
+      const expected: string = 'nce -p examples -u';
+      expect(generateUpdateCommandFromContext(context)).toEqual(expected);
+    });
+
+    it('w/ custom engine', () => {
+      const context: CheckCommandContext = { engines: ['node'] } as CheckCommandContext;
+      const expected: string = 'nce -e node -u';
+      expect(generateUpdateCommandFromContext(context)).toEqual(expected);
+    });
+
+    it('w/ custom engines', () => {
+      const context: CheckCommandContext = { engines: ['node', 'yarn'] } as CheckCommandContext;
+      const expected: string = 'nce -e node -e yarn -u';
+      expect(generateUpdateCommandFromContext(context)).toEqual(expected);
+    });
+
+    it('w/ quiet mode', () => {
+      const context: CheckCommandContext = { quiet: true } as CheckCommandContext;
+      const expected: string = 'nce -q -u';
+      expect(generateUpdateCommandFromContext(context)).toEqual(expected);
+    });
+
+    it('w/ verbose mode', () => {
+      const context: CheckCommandContext = { verbose: true } as CheckCommandContext;
+      const expected: string = 'nce -v -u';
+      expect(generateUpdateCommandFromContext(context)).toEqual(expected);
+    });
+
+    it('w/ debug mode', () => {
+      const context: CheckCommandContext = { debug: true } as CheckCommandContext;
+      const expected: string = 'nce -d -u';
+      expect(generateUpdateCommandFromContext(context)).toEqual(expected);
     });
   });
 });
