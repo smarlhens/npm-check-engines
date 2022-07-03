@@ -1,4 +1,5 @@
 import { getJson, getRelativePath, isAbsolutePath, joinPath } from '../../lib/utils';
+
 const fsExtra = require('fs-extra');
 const path = require('path');
 

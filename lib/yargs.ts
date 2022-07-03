@@ -1,5 +1,4 @@
 /* istanbul ignore file */
-
 import yargs, { terminalWidth } from 'yargs';
 import { hideBin } from 'yargs/helpers';
 

@@ -1,3 +1,8 @@
+import { ValidateFunction } from 'ajv';
+import Table from 'cli-table';
+import { blue, gray, green, red, white, yellow } from 'colorette';
+import { Debugger } from 'debug';
+import { writeJson } from 'fs-extra';
 import {
   Listr,
   ListrBaseClassOptions,
@@ -8,6 +13,12 @@ import {
   ListrTaskResult,
   ListrTaskWrapper,
 } from 'listr2';
+import { isArray, merge } from 'lodash';
+import { sep } from 'path';
+import { Comparator, compare, eq, gte, minVersion, Options, Range, SemVer, subset, validRange } from 'semver';
+import sortPackageJson from 'sort-package-json';
+
+import { validatePackageJSONFn, validatePackageLockJSONFn } from './json-schema-validator';
 import {
   CheckCommandContext,
   EngineConstraintChange,
@@ -20,17 +31,7 @@ import {
   PackageJSONSchema,
   PackageLockJSONSchema,
 } from './types';
-import { getJson, joinPath, getRelativePath } from './utils';
-import { validatePackageJSONFn, validatePackageLockJSONFn } from './json-schema-validator';
-import { isArray, merge } from 'lodash';
-import { writeJson } from 'fs-extra';
-import sortPackageJson from 'sort-package-json';
-import { blue, gray, green, red, white, yellow } from 'colorette';
-import { Debugger } from 'debug';
-import { Comparator, compare, eq, gte, minVersion, Options, SemVer, subset, Range, validRange } from 'semver';
-import { sep } from 'path';
-import Table from 'cli-table';
-import { ValidateFunction } from 'ajv';
+import { getJson, getRelativePath, joinPath } from './utils';
 
 export type Task<Ctx, Renderer extends ListrRendererFactory = any> = (args: {
   ctx: Ctx;
