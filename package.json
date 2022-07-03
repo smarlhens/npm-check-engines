@@ -59,6 +59,7 @@
     "lodash": "4.17.21",
     "semver": "7.3.7",
     "sort-package-json": "1.57.0",
+    "update-notifier": "5.1.0",
     "yargs": "17.5.1"
   },
   "devDependencies": {
@@ -75,6 +76,7 @@
     "@types/lodash": "4.14.182",
     "@types/node": "18.0.1",
     "@types/semver": "7.3.10",
+    "@types/update-notifier": "5.1.0",
     "@types/yargs": "17.0.10",
     "babel-jest": "28.1.2",
     "execa": "5.1.1",
@@ -90,8 +92,5 @@
   "engines": {
     "node": "^14.17.0 || ^16.10.0 || ^18.0.0",
     "npm": ">=6.0.0"
-  },
-  "publishConfig": {
-    "tag": "latest"
   }
 }
