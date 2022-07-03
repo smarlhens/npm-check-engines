@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.6.0](https://github.com/smarlhens/npm-check-engines/compare/v0.5.0...v0.6.0) (2022-07-03)
+
+
+### Features
+
+* use update-notifier to check for tool updates ([17fa3d9](https://github.com/smarlhens/npm-check-engines/commit/17fa3d95a60f5234b3f1583a8a9c9f0616dd80df))
+
+
+### Miscellaneous
+
+* simplify imports ([084f677](https://github.com/smarlhens/npm-check-engines/commit/084f677d488f0cf3845a80d474d20d0773a04834))
+
+
+### Chores
+
+* clarify imports order using prettier plugin ([530dec3](https://github.com/smarlhens/npm-check-engines/commit/530dec38837d60d5dbf8fa8dd6a2fc87b646aa1c))
+* **deps:** update dependency @types/node to v18 ([23efdfd](https://github.com/smarlhens/npm-check-engines/commit/23efdfddcda846b30a2c9cec6c2e9c156f0aec7f))
+* **typescript:** enforce tsconfig & type checking ([b39f097](https://github.com/smarlhens/npm-check-engines/commit/b39f097b51e4aa130f0708276e16cc7096424c89))
+
 ## [0.5.0](https://github.com/smarlhens/npm-check-engines/compare/v0.4.3...v0.5.0) (2022-07-03)
 
 
