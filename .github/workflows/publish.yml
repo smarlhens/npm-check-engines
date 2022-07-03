@@ -5,7 +5,7 @@ on:
     types: [created]
 
 env:
-  NODE_VERSION: '^14.17.0'
+  NODE_VERSION: '14.17.0'
 
 jobs:
   publish:
