@@ -19,6 +19,7 @@
 - [Usage](#usage)
 - [Options](#options)
 - [Debug](#debug)
+- [Thanks](#thanks)
 
 ---
 
