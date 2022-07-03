@@ -10,8 +10,10 @@ import {
 } from 'listr2';
 import {
   CheckCommandContext,
+  EngineConstraintChange,
   EngineConstraintKey,
   EngineConstraintKeys,
+  FileObject,
   LockPackage,
   LockPackageEngines,
   LockPackageEnginesObject,
@@ -21,17 +23,14 @@ import {
 import { getJson, joinPath, getRelativePath } from './utils';
 import { validatePackageJSONFn, validatePackageLockJSONFn } from './json-schema-validator';
 import { isArray, merge } from 'lodash';
-import Comparator from 'semver/classes/comparator';
-import compare from 'semver/functions/compare';
-import Range from 'semver/classes/range';
-import semverValidRange from 'semver/ranges/valid';
-import rangeSubset from 'semver/ranges/subset';
 import { writeJson } from 'fs-extra';
 import sortPackageJson from 'sort-package-json';
 import { blue, gray, green, red, white, yellow } from 'colorette';
 import { Debugger } from 'debug';
-import { eq, gte, minVersion, Options, SemVer } from 'semver';
+import { Comparator, compare, eq, gte, minVersion, Options, SemVer, subset, Range, validRange } from 'semver';
 import { sep } from 'path';
+import Table from 'cli-table';
+import { ValidateFunction } from 'ajv';
 
 export type Task<Ctx, Renderer extends ListrRendererFactory = any> = (args: {
   ctx: Ctx;
@@ -42,8 +41,6 @@ export type Task<Ctx, Renderer extends ListrRendererFactory = any> = (args: {
 export type CheckCommandTask = Task<CheckCommandContext>;
 
 export const rangeOptions: Options = { loose: false, includePrerelease: false };
-const packageJSONFilename = 'package.json' as const;
-const packageLockJSONFilename = 'package-lock.json' as const;
 
 export const sortRangeSet = (set: ReadonlyArray<ReadonlyArray<Comparator>>): Comparator[][] =>
   [...set.map(comp => [...comp])].sort((a, b) => compare(a[0].semver, b[0].semver));
@@ -68,11 +65,11 @@ export const applyMinVersionToRangeSet = (
 export const restrictiveRange = (r1: Range, r2: Range, ignoredRanges: string[], debug: Debugger): Range => {
   debug(`${white('Compare:')} ${blue(r1.raw)} ${white('and')} ${blue(r2.raw)}`);
 
-  if (rangeSubset(r1, r2)) {
+  if (subset(r1, r2)) {
     debug(`${white('Range')} ${green(r1.raw)} ${white('is a subset of')} ${blue(r2.raw)}`);
     ignoredRanges.push(r2.raw);
     return r1;
-  } else if (rangeSubset(r2, r1)) {
+  } else if (subset(r2, r1)) {
     debug(`${white('Range')} ${green(r2.raw)} ${white('is a subset of')} ${blue(r1.raw)}`);
     ignoredRanges.push(r1.raw);
     return r2;
@@ -113,9 +110,9 @@ export const restrictiveRange = (r1: Range, r2: Range, ignoredRanges: string[], 
   return setToRange(set);
 };
 
-export const humanizeRange = (range?: Range): string | undefined => {
-  if (!range) {
-    return;
+export const humanizeRange = (range?: Range): string => {
+  if (!range || '*' === range.raw) {
+    return '*';
   }
 
   const res: string[] = [];
@@ -141,28 +138,67 @@ export const humanizeRange = (range?: Range): string | undefined => {
   return res.join(' || ');
 };
 
-export const loadLockFile: CheckCommandTask = async ({ ctx }): Promise<void> => {
-  const { path, workingDir } = ctx;
-  const pathToFile = joinPath(path || '', packageLockJSONFilename);
+const loadFile = async <T>({
+  fileObject,
+  path,
+  workingDir,
+  debug,
+  validateFn,
+}: {
+  fileObject: FileObject<T>;
+  workingDir: string;
+  path: string;
+  debug: Debugger;
+  validateFn: ValidateFunction<T>;
+}): Promise<FileObject<T>> => {
+  const pathToFile = joinPath(path, fileObject.filename);
   const relativePath = getRelativePath({ path: pathToFile, workingDir });
-  const packageLockJSON: PackageLockJSONSchema | undefined = await getJson<PackageLockJSONSchema>(relativePath).catch(
-    () => undefined,
-  );
+  debug(`${white(`Relative path to ${fileObject.filename}:`)} ${blue(relativePath)}`);
 
-  if (!packageLockJSON) {
+  const jsonObject: T | undefined = await getJson<T>(relativePath).catch(() => undefined);
+
+  if (!jsonObject) {
     throw new Error(`${relativePath} is not defined.`);
   }
 
-  const packageLockData = validatePackageLockJSONFn(packageLockJSON);
+  debug(`${white(`Validate JSON schema of`)} ${blue(relativePath)}`);
+  const data = validateFn(jsonObject);
 
-  if (!packageLockData) {
-    throw new Error(validatePackageLockJSONFn.errors?.map(e => e.message).join('\n'));
+  if (!data) {
+    throw new Error(validateFn.errors?.map(e => e.message).join('\n'));
   }
 
-  ctx.packageLockObject = packageLockJSON;
+  fileObject.relativePath = relativePath;
+  fileObject.data = jsonObject;
+
+  return fileObject;
 };
 
-export const getConstraintFromEngines = (
+export const loadPackageFile: CheckCommandTask = async ({ ctx, debug }): Promise<void> => {
+  const { path, workingDir, packageObject } = ctx;
+
+  ctx.packageObject = await loadFile<PackageJSONSchema>({
+    fileObject: packageObject,
+    path,
+    debug,
+    workingDir,
+    validateFn: validatePackageJSONFn,
+  });
+};
+
+export const loadPackageLockFile: CheckCommandTask = async ({ ctx, debug }): Promise<void> => {
+  const { path, workingDir, packageLockObject } = ctx;
+
+  ctx.packageLockObject = await loadFile<PackageLockJSONSchema>({
+    fileObject: packageLockObject,
+    path,
+    debug,
+    workingDir,
+    validateFn: validatePackageLockJSONFn,
+  });
+};
+
+const getConstraintFromEngines = (
   engines: LockPackageEngines,
   constraintKey: EngineConstraintKey,
 ): string | undefined => {
@@ -175,7 +211,7 @@ export const getConstraintFromEngines = (
   return undefined;
 };
 
-export const computeEnginesConstraint = ({
+const computeEnginesConstraint = ({
   packages,
   constraintKey,
   debug,
@@ -183,8 +219,8 @@ export const computeEnginesConstraint = ({
   packages: [string, LockPackage][];
   constraintKey: EngineConstraintKey;
   debug: Debugger;
-}): Range | undefined | never => {
-  let mrr: Range | undefined;
+}): Range | never => {
+  let mrr: Range = new Range('*');
   const ignoredRanges: string[] = [];
   const debugConstraint = debug.extend(constraintKey);
 
@@ -197,7 +233,7 @@ export const computeEnginesConstraint = ({
       continue;
     }
 
-    const rawValidRange = semverValidRange(constraint);
+    const rawValidRange = validRange(constraint);
     if (!rawValidRange) {
       debugConstraint(`${red(constraint)} ${white('is not a valid semver range')}`);
       continue;
@@ -233,20 +269,24 @@ export const computeEnginesConstraint = ({
 };
 
 export const computeEnginesConstraints: CheckCommandTask = ({ ctx, debug }): void => {
-  const { packageLockObject, engines } = ctx;
+  const { packageObject, packageLockObject, engines } = ctx;
 
-  if (!packageLockObject) {
-    throw new Error(`${packageLockJSONFilename} data is not defined.`);
+  if (!packageObject.data) {
+    throw new Error(`${packageObject.filename} data is not defined.`);
   }
 
-  if (!('packages' in packageLockObject)) {
-    throw new Error(`${packageLockJSONFilename} does not contain packages property.`);
+  if (!packageLockObject.data) {
+    throw new Error(`${packageLockObject.filename} data is not defined.`);
+  }
+
+  if (!('packages' in packageLockObject.data)) {
+    throw new Error(`${packageLockObject.filename} does not contain packages property.`);
   }
 
   const filterEngineConstraintKey = (key: string): key is EngineConstraintKey =>
     -1 !== EngineConstraintKeys.indexOf(key as EngineConstraintKey);
-  const packages = Object.entries(packageLockObject.packages);
-  const ranges = new Map<EngineConstraintKey, Range | undefined>();
+  const packages = Object.entries(packageLockObject.data.packages);
+  const ranges = new Map<EngineConstraintKey, EngineConstraintChange>();
   const constraintKeys: EngineConstraintKey[] = engines?.filter(filterEngineConstraintKey) || [...EngineConstraintKeys];
 
   if (0 === constraintKeys.length) {
@@ -254,10 +294,48 @@ export const computeEnginesConstraints: CheckCommandTask = ({ ctx, debug }): voi
   }
 
   for (const constraintKey of constraintKeys) {
-    ranges.set(constraintKey, computeEnginesConstraint({ packages, constraintKey, debug }));
+    ranges.set(constraintKey, {
+      from: computeEnginesConstraint({
+        packages: [['', { engines: packageObject.data.engines || {} }]],
+        constraintKey,
+        debug,
+      }),
+      to: computeEnginesConstraint({ packages, constraintKey, debug }),
+    });
   }
 
   ctx.ranges = ranges;
+};
+
+const createEnginesTable = (colWidths: number[]): Table => {
+  return new Table({
+    style: {
+      head: [],
+      border: [],
+      compact: false,
+      'padding-left': 1,
+      'padding-right': 1,
+    },
+    colWidths,
+    colAligns: ['left', 'left', 'left', 'left'],
+    chars: {
+      top: '',
+      'top-mid': '',
+      'top-left': '',
+      'top-right': '',
+      bottom: '',
+      'bottom-mid': '',
+      'bottom-left': '',
+      'bottom-right': '',
+      left: '',
+      'left-mid': '',
+      mid: '',
+      'mid-mid': '',
+      right: '',
+      'right-mid': '',
+      middle: '',
+    },
+  });
 };
 
 export const outputComputedConstraints: CheckCommandTask = ({ ctx, parent, debug }): void => {
@@ -268,65 +346,81 @@ export const outputComputedConstraints: CheckCommandTask = ({ ctx, parent, debug
   }
 
   const rangesSimplified = new Map<EngineConstraintKey, string | undefined>();
-  let title: string = `Computed engines range constraints:`;
-  for (const [key, range] of ranges.entries()) {
-    const rangeHumanized = humanizeRange(range);
-    if (!rangeHumanized) {
+  const arrowSeparator: string = '→';
+  let colWidths: [number, number, number, number] = [2, 2, 2, 2];
+  let colValues: [string, string, string, string][] = [];
+
+  for (const [engine, range] of ranges.entries()) {
+    const rangeToHumanized = humanizeRange(range.to);
+    const rangeFromHumanized = humanizeRange(range.from);
+
+    if (rangeToHumanized === rangeFromHumanized) {
       continue;
     }
 
-    rangesSimplified.set(key, rangeHumanized);
-    debug.extend(key)(`${white(`Simplified computed engine range constraint:`)} ${blue(rangeHumanized)}`);
-    title += `\n${!ctx.debug ? '  ' : ''}- ${yellow(key)}: ${blue(rangeHumanized)}`;
+    rangesSimplified.set(engine, rangeToHumanized);
+    debug.extend(engine)(`${white(`Simplified computed engine range constraint:`)} ${blue(rangeToHumanized)}`);
+    colWidths = [
+      Math.max(colWidths[0], engine.length + 2),
+      Math.max(colWidths[1], rangeFromHumanized.length + 2),
+      arrowSeparator.length + 2,
+      Math.max(colWidths[3], rangeToHumanized.length + 2),
+    ];
+    colValues.push([engine, rangeFromHumanized, arrowSeparator, rangeToHumanized]);
   }
 
   if (0 === rangesSimplified.size) {
-    throw new Error('Simplified engines range constraints are not defined.');
+    parent.title = `All computed engines range constraints are up-to-date ${green(':)')}`;
+  } else {
+    const table: Table = createEnginesTable(colWidths);
+    table.push(...colValues);
+    parent.title = `Computed engines range constraints:\n\n${table.toString()}`;
   }
 
-  parent.title = title;
   ctx.rangesSimplified = rangesSimplified;
 };
 
 export const updatePackageJson: CheckCommandTask = async ({ ctx, debug }): Promise<void> => {
-  const { path, workingDir, rangesSimplified } = ctx;
+  const { packageObject, rangesSimplified } = ctx;
 
   if (!rangesSimplified) {
     throw new Error(`Simplified computed engines range constraints are not defined.`);
   }
 
-  const pathToFile = joinPath(path, packageJSONFilename);
-  const relativePath = getRelativePath({ path: pathToFile, workingDir });
-  debug(`${white(`Relative path to ${packageJSONFilename}:`)} ${blue(relativePath)}`);
-
-  const packageJSON: PackageJSONSchema | undefined = await getJson<PackageJSONSchema>(relativePath).catch(
-    () => undefined,
-  );
-
-  if (!packageJSON) {
-    throw new Error(`${relativePath} is not defined.`);
+  if (!packageObject.data) {
+    throw new Error(`${packageObject.filename} data is not defined.`);
   }
 
-  debug(`${white(`Validate JSON schema of`)} ${blue(relativePath)}`);
-  let packageLockData = validatePackageJSONFn(packageJSON);
-
-  if (!packageLockData) {
-    throw new Error(validatePackageJSONFn.errors?.map(e => e.message).join('\n'));
+  if (!packageObject.relativePath) {
+    throw new Error(`${packageObject.filename} path is not defined.`);
   }
 
-  packageJSON.engines = merge({}, packageJSON.engines, Object.fromEntries(rangesSimplified));
+  packageObject.data.engines = merge({}, packageObject.data.engines, Object.fromEntries(rangesSimplified));
 
-  debug(`${white(`Write JSON to`)} ${blue(relativePath)}`);
-  return writeJson(relativePath, sortPackageJson(packageJSON), { encoding: 'utf8', replacer: null, spaces: 2 });
+  debug(`${white(`Write JSON to`)} ${blue(packageObject.relativePath)}`);
+  return writeJson(packageObject.relativePath, sortPackageJson(packageObject.data), {
+    encoding: 'utf8',
+    replacer: null,
+    spaces: 2,
+  });
 };
 
-export const checkCommandTasks = (
-  parent: Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-  debug: Debugger,
-): ListrTask<CheckCommandContext>[] => [
+export const checkCommandTasks = ({
+  context,
+  parent,
+  debug,
+}: {
+  context: CheckCommandContext;
+  parent: Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>;
+  debug: Debugger;
+}): ListrTask<CheckCommandContext>[] => [
   {
-    title: `Load ${packageLockJSONFilename} file...`,
-    task: (ctx, task) => loadLockFile({ ctx, task, parent, debug }),
+    title: `Load ${context.packageObject.filename} file...`,
+    task: (ctx, task) => loadPackageFile({ ctx, task, parent, debug }),
+  },
+  {
+    title: `Load ${context.packageLockObject.filename} file...`,
+    task: (ctx, task) => loadPackageLockFile({ ctx, task, parent, debug }),
   },
   {
     title: 'Compute engines range constraints...',
@@ -337,7 +431,7 @@ export const checkCommandTasks = (
     task: (ctx, task) => outputComputedConstraints({ ctx, task, parent, debug }),
   },
   {
-    title: `Update ${packageJSONFilename} file...`,
+    title: `Update ${context.packageObject.filename} file...`,
     skip: ({ update }) => (!update ? 'Update is disabled by default.' : !update),
     task: (ctx, task) => updatePackageJson({ ctx, task, parent, debug }),
   },
@@ -350,15 +444,15 @@ export const cliCommandTask = (
   new Listr(
     [
       {
-        title: 'Checking npm package engines range constraints in package-lock.json file...',
+        title: `Checking npm package engines range constraints in ${options.ctx?.packageLockObject.filename} file...`,
         task: (ctx, task) => {
-          const { path, workingDir } = ctx;
-          const completePath = joinPath(workingDir, path, packageLockJSONFilename);
+          const { path, workingDir, packageLockObject } = ctx;
+          const completePath = joinPath(workingDir, path, packageLockObject.filename);
           task.title = `Checking npm package engines range constraints in ${completePath.replace(
             `${workingDir}${sep}`,
             '',
           )} file...`;
-          return task.newListr(parent => checkCommandTasks(parent, debug));
+          return task.newListr(parent => checkCommandTasks({ context: ctx, parent, debug }));
         },
       },
     ],

@@ -1,5 +1,5 @@
 import { CLIArgs } from './yargs';
-import { CheckCommandContext, CLIContext } from './types';
+import { CLIContext, packageJSONFilename, packageLockJSONFilename } from './types';
 import { cliCommandTask } from './tasks';
 import { renderer } from './renderer';
 import { debug, enableNamespaces, namespaces } from './debug';
@@ -16,17 +16,19 @@ export const nce = async (args: Promise<CLIArgs>): Promise<CLIContext> => {
     quiet: cliArgs.quiet || false,
     debug: cliArgs.debug || false,
     engines: cliArgs.engines,
+    packageObject: { filename: packageJSONFilename },
+    packageLockObject: { filename: packageLockJSONFilename },
   };
 
-  const options = { ...renderer({ quiet: context.quiet, debug: context.debug, verbose: context.verbose }) };
+  const options = {
+    ...renderer({ quiet: context.quiet, debug: context.debug, verbose: context.verbose }),
+    ctx: context,
+  };
 
   const debugNamespaces = namespaces();
   if (context.debug) {
     enableNamespaces(debugNamespaces);
   }
 
-  const cmd = cliCommandTask(options, debug);
-  const ctx: CheckCommandContext = context;
-
-  return cmd.run(ctx);
+  return cliCommandTask(options, debug).run();
 };

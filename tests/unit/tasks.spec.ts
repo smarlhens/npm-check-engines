@@ -2,22 +2,23 @@ import {
   checkCommandTasks,
   cliCommandTask,
   computeEnginesConstraints,
-  loadLockFile,
+  loadPackageLockFile,
   outputComputedConstraints,
   rangeOptions,
   restrictiveRange,
   humanizeRange,
   sortRangeSet,
   updatePackageJson,
+  loadPackageFile,
 } from '../../lib/tasks';
 import Comparator from 'semver/classes/comparator';
 import Range from 'semver/classes/range';
 import { Debugger } from 'debug';
 import { ListrRenderer, ListrTaskWrapper } from 'listr2';
-import { CheckCommandContext, LockPackage, PackageLockJSONSchema } from '../../lib/types';
+import { CheckCommandContext, PackageLockJSONSchema } from '../../lib/types';
 import SpyInstance = jest.SpyInstance;
 import * as utils from '../../lib/utils';
-import { blue, yellow } from 'colorette';
+import { green } from 'colorette';
 const fsExtra = require('fs-extra');
 
 describe('tasks', () => {
@@ -153,8 +154,12 @@ describe('tasks', () => {
   });
 
   describe('should simplify range', () => {
-    it('should return undefined if range is not defined', () => {
-      expect(humanizeRange(undefined)).toEqual(undefined);
+    it('should return * if range is not defined or range is *', () => {
+      expect(humanizeRange(undefined)).toEqual('*');
+    });
+
+    it('should return * if range is range is *', () => {
+      expect(humanizeRange(new Range('*'))).toEqual('*');
     });
 
     it('should simplify w/ caret', () => {
@@ -169,11 +174,23 @@ describe('tasks', () => {
   });
 
   it('should return list of tasks', async () => {
-    const cmd = checkCommandTasks(
-      {} as unknown as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-      jest.fn() as unknown as Debugger,
-    );
+    const cmd = checkCommandTasks({
+      context: {
+        packageObject: {
+          filename: 'package.json',
+        },
+        packageLockObject: {
+          filename: 'package-lock.json',
+        },
+      } as CheckCommandContext,
+      parent: {} as unknown as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
+      debug: jest.fn() as unknown as Debugger,
+    });
     expect(cmd).toEqual([
+      expect.objectContaining({
+        title: 'Load package.json file...',
+        task: expect.any(Function),
+      }),
       expect.objectContaining({
         title: 'Load package-lock.json file...',
         task: expect.any(Function),
@@ -194,7 +211,12 @@ describe('tasks', () => {
   });
 
   it('should return cliCommandTask', () => {
-    expect(cliCommandTask({}, jest.fn() as unknown as Debugger)).toEqual(
+    expect(
+      cliCommandTask(
+        { ctx: { packageLockObject: { filename: 'package-lock.json' } } as CheckCommandContext },
+        jest.fn() as unknown as Debugger,
+      ),
+    ).toEqual(
       expect.objectContaining({
         tasks: [
           expect.objectContaining({
@@ -222,9 +244,44 @@ describe('tasks', () => {
       }
     });
 
-    it('should simplifiedComputedRange in ctx', () => {
+    it('should output simplified computed range constraints when there is no changes', () => {
       const ctx: CheckCommandContext = {
-        ranges: new Map([['node', new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0')]]),
+        ranges: new Map([
+          [
+            'node',
+            {
+              from: new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0'),
+              to: new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0'),
+            },
+          ],
+        ]),
+      } as CheckCommandContext;
+      const parent = {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>;
+      Object.defineProperty(parent, 'title', {
+        get: jest.fn(() => ''),
+        set: jest.fn(),
+        configurable: true,
+      });
+      const spyOnTitle = jest.spyOn(parent, 'title', 'set');
+      outputComputedConstraints({
+        ctx,
+        task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
+        parent,
+        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+      });
+      expect(spyOnTitle).toHaveBeenCalledWith(`All computed engines range constraints are up-to-date ${green(':)')}`);
+      expect(ctx).toEqual(
+        expect.objectContaining({
+          rangesSimplified: new Map([]),
+        }),
+      );
+    });
+
+    it('should output simplified computed range constraints', () => {
+      const ctx: CheckCommandContext = {
+        ranges: new Map([
+          ['node', { from: new Range('*'), to: new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0') }],
+        ]),
       } as CheckCommandContext;
       const parent = {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>;
       Object.defineProperty(parent, 'title', {
@@ -240,9 +297,7 @@ describe('tasks', () => {
         debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
       });
       expect(spyOnTitle).toHaveBeenCalledWith(
-        expect.stringContaining(
-          `Computed engines range constraints:\n  - ${yellow('node')}: ${blue('^14.17.0 || ^16.10.0')}`,
-        ),
+        `Computed engines range constraints:\n\n node  *  →  ^14.17.0 || ^16.10.0 `,
       );
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -253,8 +308,28 @@ describe('tasks', () => {
   });
 
   describe('should compute engine constraint', () => {
-    it('should throw error if lock obj not defined', () => {
-      const ctx: CheckCommandContext = {} as CheckCommandContext;
+    it('should throw error if package data not defined', () => {
+      const ctx: CheckCommandContext = {
+        packageObject: { filename: 'package.json', data: undefined },
+      } as CheckCommandContext;
+      expect.assertions(1);
+      try {
+        computeEnginesConstraints({
+          ctx,
+          task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
+          parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
+          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        });
+      } catch (e) {
+        expect(e).toEqual(new Error('package.json data is not defined.'));
+      }
+    });
+
+    it('should throw error if package lock data not defined', () => {
+      const ctx: CheckCommandContext = {
+        packageObject: { filename: 'package.json', data: {} },
+        packageLockObject: { filename: 'package-lock.json', data: undefined },
+      } as CheckCommandContext;
       expect.assertions(1);
       try {
         computeEnginesConstraints({
@@ -268,8 +343,11 @@ describe('tasks', () => {
       }
     });
 
-    it('should throw error if packages is not defined in lock obj', () => {
-      const ctx: CheckCommandContext = { packageLockObject: {} } as CheckCommandContext;
+    it('should throw error if packages is not defined in package lock data', () => {
+      const ctx: CheckCommandContext = {
+        packageObject: { filename: 'package.json', data: { engines: {} } },
+        packageLockObject: { filename: 'package-lock.json', data: {} },
+      } as CheckCommandContext;
       expect.assertions(1);
       try {
         computeEnginesConstraints({
@@ -283,11 +361,34 @@ describe('tasks', () => {
       }
     });
 
+    it('should set mrr in ctx using engines obj even if package data does not contain engines', () => {
+      const ctx: CheckCommandContext = {
+        packageObject: { filename: 'package.json', data: {} },
+        packageLockObject: {
+          filename: 'package-lock.json',
+          data: { packages: { foo: { engines: { node: '>=12.22.0' } } } } as PackageLockJSONSchema,
+        },
+      } as CheckCommandContext;
+      computeEnginesConstraints({
+        ctx,
+        task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
+        parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
+        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+      });
+      expect(ctx).toEqual(
+        expect.objectContaining({
+          ranges: new Map([['node', new Range('>=12.22.0', rangeOptions)]]),
+        }),
+      );
+    });
+
     it('should set mrr in ctx using engines obj', () => {
       const ctx: CheckCommandContext = {
+        packageObject: { filename: 'package.json', data: { engines: {} } },
         packageLockObject: {
-          packages: { foo: { engines: { node: '>=12.22.0' } } },
-        } as PackageLockJSONSchema,
+          filename: 'package-lock.json',
+          data: { packages: { foo: { engines: { node: '>=12.22.0' } } } } as PackageLockJSONSchema,
+        },
       } as CheckCommandContext;
       computeEnginesConstraints({
         ctx,
@@ -305,9 +406,8 @@ describe('tasks', () => {
     it('should set mrr in ctx using node engines', () => {
       const ctx: CheckCommandContext = {
         engines: ['node'],
-        packageLockObject: {
-          packages: { foo: { engines: { node: '>=12.22.0' } } },
-        } as PackageLockJSONSchema,
+        packageObject: { filename: 'package.json', data: { engines: {} } },
+        packageLockObject: { data: { packages: { foo: { engines: { node: '>=12.22.0' } } } } as PackageLockJSONSchema },
       } as CheckCommandContext;
       computeEnginesConstraints({
         ctx,
@@ -325,9 +425,8 @@ describe('tasks', () => {
     it('should throw error if undefined engines', () => {
       const ctx: CheckCommandContext = {
         engines: ['foo'],
-        packageLockObject: {
-          packages: { foo: { engines: { node: '>=12.22.0' } } },
-        } as PackageLockJSONSchema,
+        packageObject: { filename: 'package.json', data: { engines: {} } },
+        packageLockObject: { data: { packages: { foo: { engines: { node: '>=12.22.0' } } } } as PackageLockJSONSchema },
       } as CheckCommandContext;
       expect.assertions(1);
       try {
@@ -345,9 +444,8 @@ describe('tasks', () => {
     it('should set mrr in ctx using engines node & npm', () => {
       const ctx: CheckCommandContext = {
         engines: ['node', 'npm'],
-        packageLockObject: {
-          packages: { foo: { engines: { node: '>=12.22.0' } } },
-        } as PackageLockJSONSchema,
+        packageObject: { filename: 'package.json', data: { engines: {} } },
+        packageLockObject: { data: { packages: { foo: { engines: { node: '>=12.22.0' } } } } as PackageLockJSONSchema },
       } as CheckCommandContext;
       computeEnginesConstraints({
         ctx,
@@ -364,9 +462,8 @@ describe('tasks', () => {
 
     it('should set mrr in ctx using engines arr', () => {
       const ctx: CheckCommandContext = {
-        packageLockObject: {
-          packages: { foo: { engines: ['node >=12.22.0'] } },
-        } as PackageLockJSONSchema,
+        packageObject: { filename: 'package.json', data: { engines: {} } },
+        packageLockObject: { data: { packages: { foo: { engines: ['node >=12.22.0'] } } } as PackageLockJSONSchema },
       } as CheckCommandContext;
       computeEnginesConstraints({
         ctx,
@@ -383,13 +480,16 @@ describe('tasks', () => {
 
     it('should compute mrr & skip invalid range', () => {
       const ctx: CheckCommandContext = {
+        packageObject: { filename: 'package.json', data: { engines: {} } },
         packageLockObject: {
-          packages: {
-            foo: { engines: { node: '>=12.22.0' } },
-            bar: { engines: { node: '>=a.b.c' } },
-            lorem: { engines: { node: '>=14.17.0' } },
-          },
-        } as PackageLockJSONSchema,
+          data: {
+            packages: {
+              foo: { engines: { node: '>=12.22.0' } },
+              bar: { engines: { node: '>=a.b.c' } },
+              lorem: { engines: { node: '>=14.17.0' } },
+            },
+          } as PackageLockJSONSchema,
+        },
       } as CheckCommandContext;
       computeEnginesConstraints({
         ctx,
@@ -406,14 +506,17 @@ describe('tasks', () => {
 
     it('should compute mrr & using ignored range', () => {
       const ctx: CheckCommandContext = {
+        packageObject: { filename: 'package.json', data: { engines: {} } },
         packageLockObject: {
-          packages: {
-            foo: { engines: { node: '>=12.22.0' } },
-            bar: { engines: { node: '>=14.17.0' } },
-            lorem: { engines: { node: '>=12.22.0' } },
-            ipsum: { engines: { node: '>=14.17.0' } },
-          },
-        } as PackageLockJSONSchema,
+          data: {
+            packages: {
+              foo: { engines: { node: '>=12.22.0' } },
+              bar: { engines: { node: '>=14.17.0' } },
+              lorem: { engines: { node: '>=12.22.0' } },
+              ipsum: { engines: { node: '>=14.17.0' } },
+            },
+          } as PackageLockJSONSchema,
+        },
       } as CheckCommandContext;
       computeEnginesConstraints({
         ctx,
@@ -429,7 +532,7 @@ describe('tasks', () => {
     });
   });
 
-  describe('should load lock file', () => {
+  describe('should load package lock file', () => {
     let getJsonSpy: SpyInstance;
 
     beforeEach(() => {
@@ -440,11 +543,12 @@ describe('tasks', () => {
       const ctx: CheckCommandContext = {
         path: '',
         workingDir: 'foo',
+        packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
       getJsonSpy.mockRejectedValueOnce('Oops');
       expect.assertions(1);
       try {
-        await loadLockFile({
+        await loadPackageLockFile({
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
@@ -459,11 +563,12 @@ describe('tasks', () => {
       const ctx: CheckCommandContext = {
         path: '',
         workingDir: 'foo',
+        packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
       getJsonSpy.mockReturnValueOnce(Promise.resolve(null));
       expect.assertions(1);
       try {
-        await loadLockFile({
+        await loadPackageLockFile({
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
@@ -478,11 +583,12 @@ describe('tasks', () => {
       const ctx: CheckCommandContext = {
         path: '',
         workingDir: 'foo',
+        packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
       getJsonSpy.mockReturnValueOnce(Promise.resolve({}));
       expect.assertions(1);
       try {
-        await loadLockFile({
+        await loadPackageLockFile({
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
@@ -497,11 +603,12 @@ describe('tasks', () => {
       const ctx: CheckCommandContext = {
         path: '',
         workingDir: 'foo',
+        packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
       getJsonSpy.mockReturnValueOnce(Promise.resolve({ packages: undefined }));
       expect.assertions(1);
       try {
-        await loadLockFile({
+        await loadPackageLockFile({
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
@@ -516,9 +623,10 @@ describe('tasks', () => {
       const ctx: CheckCommandContext = {
         path: '',
         workingDir: 'foo',
+        packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
       getJsonSpy.mockReturnValueOnce(Promise.resolve({ packages: {} }));
-      await loadLockFile({
+      await loadPackageLockFile({
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
@@ -527,19 +635,119 @@ describe('tasks', () => {
       expect(ctx).toEqual(
         expect.objectContaining({
           packageLockObject: {
-            packages: {},
+            filename: 'package-lock.json',
+            relativePath: 'package-lock.json',
+            data: {
+              packages: {},
+            },
           },
+          path: '',
+          workingDir: 'foo',
+        }),
+      );
+    });
+  });
+
+  describe('should load package file', () => {
+    let getJsonSpy: SpyInstance;
+
+    beforeEach(() => {
+      getJsonSpy = jest.spyOn(utils, 'getJson');
+    });
+
+    it('should throw error if read json throw error', async () => {
+      const ctx: CheckCommandContext = {
+        path: '',
+        workingDir: 'foo',
+        packageObject: { filename: 'package.json' },
+      } as CheckCommandContext;
+      getJsonSpy.mockRejectedValueOnce('Oops');
+      expect.assertions(1);
+      try {
+        await loadPackageFile({
+          ctx,
+          task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
+          parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
+          debug: jest.fn() as unknown as Debugger,
+        });
+      } catch (e) {
+        expect(e).toEqual(new Error('package.json is not defined.'));
+      }
+    });
+
+    it('should throw error if json is undefined', async () => {
+      const ctx: CheckCommandContext = {
+        path: '',
+        workingDir: 'foo',
+        packageObject: { filename: 'package.json' },
+      } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(Promise.resolve(null));
+      expect.assertions(1);
+      try {
+        await loadPackageFile({
+          ctx,
+          task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
+          parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
+          debug: jest.fn() as unknown as Debugger,
+        });
+      } catch (e) {
+        expect(e).toEqual(new Error('package.json is not defined.'));
+      }
+    });
+
+    it('should throw error if json is malformed', async () => {
+      const ctx: CheckCommandContext = {
+        path: '',
+        workingDir: 'foo',
+        packageObject: { filename: 'package.json' },
+      } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(Promise.resolve({ name: ' bar' }));
+      expect.assertions(1);
+      try {
+        await loadPackageFile({
+          ctx,
+          task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
+          parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
+          debug: jest.fn() as unknown as Debugger,
+        });
+      } catch (e) {
+        expect(e).toEqual(expect.any(Error));
+      }
+    });
+
+    it('should set package object with empty obj', async () => {
+      const ctx: CheckCommandContext = {
+        path: '',
+        workingDir: 'foo',
+        packageObject: { filename: 'package.json' },
+      } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(Promise.resolve({ engines: {} }));
+      await loadPackageFile({
+        ctx,
+        task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
+        parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
+        debug: jest.fn() as unknown as Debugger,
+      });
+      expect(ctx).toEqual(
+        expect.objectContaining({
+          packageObject: {
+            filename: 'package.json',
+            relativePath: 'package.json',
+            data: {
+              engines: {},
+            },
+          },
+          path: '',
+          workingDir: 'foo',
         }),
       );
     });
   });
 
   describe('should update package.json file', () => {
-    let getJsonSpy: SpyInstance;
     let writeJsonSpy: SpyInstance;
 
     beforeEach(() => {
-      getJsonSpy = jest.spyOn(utils, 'getJson');
       writeJsonSpy = jest.spyOn(fsExtra, 'writeJson').mockReturnValueOnce(Promise.resolve());
     });
 
@@ -558,13 +766,14 @@ describe('tasks', () => {
       }
     });
 
-    it('should throw error if read json throw error', async () => {
+    it('should throw error if package object data is undefined', async () => {
       const ctx: CheckCommandContext = {
         rangesSimplified: new Map([['node', '^14.17.0']]),
-        path: '',
-        workingDir: 'foo',
+        packageObject: {
+          filename: 'package.json',
+        },
       } as CheckCommandContext;
-      getJsonSpy.mockRejectedValueOnce('Oops');
+
       expect.assertions(1);
       try {
         await updatePackageJson({
@@ -574,17 +783,18 @@ describe('tasks', () => {
           debug: jest.fn() as unknown as Debugger,
         });
       } catch (e) {
-        expect(e).toEqual(new Error('package.json is not defined.'));
+        expect(e).toEqual(new Error('package.json data is not defined.'));
       }
     });
 
-    it('should throw error if json is undefined', async () => {
+    it('should throw error if package object relative path is undefined', async () => {
       const ctx: CheckCommandContext = {
         rangesSimplified: new Map([['node', '^14.17.0']]),
-        path: '',
-        workingDir: 'foo',
+        packageObject: {
+          filename: 'package.json',
+          data: {},
+        },
       } as CheckCommandContext;
-      getJsonSpy.mockReturnValueOnce(Promise.resolve(null));
       expect.assertions(1);
       try {
         await updatePackageJson({
@@ -594,37 +804,19 @@ describe('tasks', () => {
           debug: jest.fn() as unknown as Debugger,
         });
       } catch (e) {
-        expect(e).toEqual(new Error('package.json is not defined.'));
-      }
-    });
-
-    it('should throw error if json is malformed', async () => {
-      const ctx: CheckCommandContext = {
-        rangesSimplified: new Map([['node', '^14.17.0']]),
-        path: '',
-        workingDir: 'foo',
-      } as CheckCommandContext;
-      getJsonSpy.mockReturnValueOnce(Promise.resolve({ name: ' bar' }));
-      expect.assertions(1);
-      try {
-        await updatePackageJson({
-          ctx,
-          task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
-          parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
-        });
-      } catch (e) {
-        expect(e).toEqual(expect.any(Error));
+        expect(e).toEqual(new Error('package.json path is not defined.'));
       }
     });
 
     it('should write json', async () => {
       const ctx: CheckCommandContext = {
         rangesSimplified: new Map([['node', '^14.17.0']]),
-        path: '',
-        workingDir: 'foo',
+        packageObject: {
+          filename: 'package.json',
+          relativePath: 'foo/package.json',
+          data: {},
+        },
       } as CheckCommandContext;
-      getJsonSpy.mockReturnValueOnce(Promise.resolve({ foo: 'bar' }));
       await updatePackageJson({
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
