@@ -11,8 +11,7 @@ import {
   updatePackageJson,
   loadPackageFile,
 } from '../../lib/tasks';
-import Comparator from 'semver/classes/comparator';
-import Range from 'semver/classes/range';
+import { Comparator, Range } from 'semver';
 import { Debugger } from 'debug';
 import { ListrRenderer, ListrTaskWrapper } from 'listr2';
 import { CheckCommandContext, PackageLockJSONSchema } from '../../lib/types';
