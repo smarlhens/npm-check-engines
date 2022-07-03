@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.5.0](https://github.com/smarlhens/npm-check-engines/compare/v0.4.3...v0.5.0) (2022-07-03)
+
+
+### Features
+
+* clarify computed engines range constraints using table with before & after ([e675e3b](https://github.com/smarlhens/npm-check-engines/commit/e675e3ba7de42b564d1b479573af12fa4c023485))
+
+
+### Bug Fixes
+
+* **npm:** remove minimist overrides ([78337f7](https://github.com/smarlhens/npm-check-engines/commit/78337f75a94f99d6504244ca784d5a7c3c6354ed))
+
+
+### Documentation
+
+* **readme:** add thanks section ([d4517d8](https://github.com/smarlhens/npm-check-engines/commit/d4517d816868314915d3d94e686ebb65cf1ab2c5))
+* **readme:** reduce width of text ([ad721ed](https://github.com/smarlhens/npm-check-engines/commit/ad721ed304259cca43a0ef7022d684917246d162))
+
+
+### Chores
+
+* add format markdown files using prettier ([bae0798](https://github.com/smarlhens/npm-check-engines/commit/bae07988821c4a4009f38ef29aae3ed7f3a659ab))
+* **deps:** update babel monorepo to v7.18.6 ([a869dcf](https://github.com/smarlhens/npm-check-engines/commit/a869dcf9e92ee0904e43192b5c0c4802bd4474b4))
+* **deps:** update commitlint monorepo to v17.0.3 ([8ed112a](https://github.com/smarlhens/npm-check-engines/commit/8ed112a50300bb5965aaa6bf96620dad783f9c1e))
+* **deps:** update dependency @types/jest to v28.1.3 ([f44cdbe](https://github.com/smarlhens/npm-check-engines/commit/f44cdbe1f299d3ff552b91f22e158e3d78968235))
+* **deps:** update dependency @types/jest to v28.1.4 ([2280e9a](https://github.com/smarlhens/npm-check-engines/commit/2280e9a12db283775bd7f1cdb29157a61e095f3c))
+* **deps:** update dependency lint-staged to v13.0.3 ([d02aea3](https://github.com/smarlhens/npm-check-engines/commit/d02aea3328de97105a88482e739d8e6e72d5392f))
+* **deps:** update dependency ts-node to v10.8.2 ([94e2b98](https://github.com/smarlhens/npm-check-engines/commit/94e2b987b2ee7bc1b1b66a1e79d9a5289e9bb3a7))
+* **deps:** update jest monorepo to v28.1.2 ([c72c044](https://github.com/smarlhens/npm-check-engines/commit/c72c0443f102a0944fc08f6181ae289cfbaf3588))
+* **gh-actions:** pin-down node version used in ci jobs ([0dd7936](https://github.com/smarlhens/npm-check-engines/commit/0dd793631a8c7a6b1868b8d16c59c8ebf2794dd3))
+* remove unused commitizen related dependency & badge ([b0cbf83](https://github.com/smarlhens/npm-check-engines/commit/b0cbf836dca5ee75b493e885bce37ce8d0849160))
+
 ## [0.4.3](https://github.com/smarlhens/npm-check-engines/compare/v0.4.2...v0.4.3) (2022-06-18)
 
 
