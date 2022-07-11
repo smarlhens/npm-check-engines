@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import yargs, { terminalWidth } from 'yargs';
+import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 export type CLIArgs = {
@@ -61,5 +61,5 @@ export const cli: Promise<CLIArgs> = yargs(hideBin(process.argv))
   })
   .help('help')
   .version()
-  .wrap(terminalWidth())
+  .wrap(yargs.terminalWidth())
   .epilog('© 2022 Samuel MARLHENS').argv as Promise<CLIArgs>;
