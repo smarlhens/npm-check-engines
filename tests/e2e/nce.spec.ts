@@ -1,17 +1,15 @@
 import { cyan } from 'colorette';
-import { Options } from 'execa';
-
-const execa = require('execa');
-const path = require('path');
+import { command, Options } from 'execa';
+import { resolve, sep } from 'node:path';
 
 describe('nce', () => {
   it('should check engines from examples lock file', async () => {
     const execaOptions: Options = {
-      cwd: path.resolve(__dirname, '..', '..', 'examples'),
+      cwd: resolve(__dirname, '..', '..', 'examples'),
       stdio: 'pipe',
       cleanup: true,
     };
-    const { stdout } = await execa.command(`ts-node ../bin/nce.ts`, execaOptions);
+    const { stdout } = await command(`ts-node ../bin/nce.ts`, execaOptions);
     expect(stdout).toEqual(
       '[STARTED] Checking npm package engines range constraints in package-lock.json file...\n' +
         `[TITLE] Checking npm package engines range constraints in package-lock.json file...\n` +
@@ -39,11 +37,11 @@ describe('nce', () => {
   }, 10000);
 
   it('should check engines from examples lock file using path option', async () => {
-    const execaOptions: Options = { cwd: path.resolve(__dirname, '..', '..'), stdio: 'pipe', cleanup: true };
-    const { stdout } = await execa.command(`ts-node bin/nce.ts -p examples`, execaOptions);
+    const execaOptions: Options = { cwd: resolve(__dirname, '..', '..'), stdio: 'pipe', cleanup: true };
+    const { stdout } = await command(`ts-node bin/nce.ts -p examples`, execaOptions);
     expect(stdout).toEqual(
       '[STARTED] Checking npm package engines range constraints in package-lock.json file...\n' +
-        `[TITLE] Checking npm package engines range constraints in examples${path.sep}package-lock.json file...\n` +
+        `[TITLE] Checking npm package engines range constraints in examples${sep}package-lock.json file...\n` +
         '[STARTED] Load package.json file...\n' +
         '[SUCCESS] Load package.json file...\n' +
         '[STARTED] Load package-lock.json file...\n' +

@@ -1,5 +1,5 @@
 import { readJson } from 'fs-extra';
-import { isAbsolute, join, relative } from 'path';
+import { isAbsolute, join, relative } from 'node:path';
 
 export const getJson = <T>(path: string): Promise<T> => readJson(path, { encoding: 'utf8' });
 export const isAbsolutePath = (p: string): boolean => isAbsolute(p);
