@@ -2,8 +2,8 @@
 import { JTDDataType } from 'ajv/dist/types/jtd-schema';
 import { Range } from 'semver';
 
-import * as packageLockJSONSchema from '../schemas/package-lock.json';
-import * as packageJSONSchema from '../schemas/package.json';
+import * as packageLockJSONSchema from '../schemas/schema-package-lock.json';
+import * as packageJSONSchema from '../schemas/schema-package.json';
 
 /**
  * Info props is inferred manually because Ajv JTDDataType: https://ajv.js.org/guide/typescript.html#utility-type-for-jtd-data-type

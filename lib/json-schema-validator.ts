@@ -1,8 +1,8 @@
 import Ajv from 'ajv-draft-04';
 import addFormats from 'ajv-formats';
 
-import * as packageLockJSONSchema from '../schemas/package-lock.json';
-import * as packageJSONSchema from '../schemas/package.json';
+import * as packageLockJSONSchema from '../schemas/schema-package-lock.json';
+import * as packageJSONSchema from '../schemas/schema-package.json';
 import { PackageJSONSchema, PackageLockJSONSchema } from './types';
 
 const ajv = addFormats(
