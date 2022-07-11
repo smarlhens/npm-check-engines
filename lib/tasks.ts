@@ -14,7 +14,7 @@ import {
   ListrTaskWrapper,
 } from 'listr2';
 import { isArray, merge } from 'lodash';
-import { sep } from 'path';
+import { sep } from 'node:path';
 import { Comparator, compare, eq, gte, minVersion, Options, Range, SemVer, subset, validRange } from 'semver';
 import sortPackageJson from 'sort-package-json';
 
