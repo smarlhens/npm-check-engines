@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/smarlhens/npm-check-engines/compare/v0.7.0...v0.7.1) (2022-07-11)
+
+
+### Miscellaneous
+
+* use tsup instead of tsc, export to esm, add .d.ts to package ([e475f45](https://github.com/smarlhens/npm-check-engines/commit/e475f454fb49476da6d4f75a3b02956868888004))
+
 ## [0.7.0](https://github.com/smarlhens/npm-check-engines/compare/v0.6.0...v0.7.0) (2022-07-03)
 
 
