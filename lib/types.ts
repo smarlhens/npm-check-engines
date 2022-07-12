@@ -1,13 +1,5 @@
 /* istanbul ignore file */
-import { JTDDataType } from 'ajv/dist/types/jtd-schema';
 import { Range } from 'semver';
-
-import * as packageLockJSONSchema from '../schemas/schema-package-lock.json';
-import * as packageJSONSchema from '../schemas/schema-package.json';
-
-/**
- * Info props is inferred manually because Ajv JTDDataType: https://ajv.js.org/guide/typescript.html#utility-type-for-jtd-data-type
- */
 
 export const packageJSONFilename = 'package.json' as const;
 export const packageLockJSONFilename = 'package-lock.json' as const;
@@ -22,8 +14,8 @@ export type LockPackage = {
   engines: LockPackageEngines;
 };
 export type FileObject<T> = { filename: string; relativePath?: string; data?: T };
-export type PackageJSONSchema = JTDDataType<typeof packageJSONSchema> & LockPackage;
-export type PackageLockJSONSchema = JTDDataType<typeof packageLockJSONSchema> & {
+export type PackageJSONSchema = LockPackage;
+export type PackageLockJSONSchema = {
   packages: {
     [k: string]: LockPackage;
   };

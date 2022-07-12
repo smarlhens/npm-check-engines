@@ -1,18 +1,13 @@
 import { nce } from '../../lib/index';
 import { CLIArgs } from '../../lib/yargs';
 
-import SpyInstance = jest.SpyInstance;
-
 describe('index', () => {
-  let consoleInfoSpy: SpyInstance;
-  let consoleLogSpy: SpyInstance;
-  let consoleErrorSpy: SpyInstance;
   let cliArgs: CLIArgs;
 
   beforeEach(() => {
-    consoleLogSpy = jest.spyOn(global.console, 'log').mockImplementation(jest.fn());
-    consoleInfoSpy = jest.spyOn(global.console, 'info').mockImplementation(jest.fn());
-    consoleErrorSpy = jest.spyOn(global.console, 'error').mockImplementation(jest.fn());
+    jest.spyOn(global.console, 'log').mockImplementation(jest.fn());
+    jest.spyOn(global.console, 'info').mockImplementation(jest.fn());
+    jest.spyOn(global.console, 'error').mockImplementation(jest.fn());
   });
 
   it('should run w/ path', async () => {
@@ -22,7 +17,7 @@ describe('index', () => {
       p: 'examples',
     };
 
-    const res = await nce(Promise.resolve(cliArgs));
+    const res = await nce(cliArgs);
 
     expect(res).toEqual(
       expect.objectContaining({
@@ -40,7 +35,7 @@ describe('index', () => {
       d: true,
     };
 
-    const res = await nce(Promise.resolve(cliArgs));
+    const res = await nce(cliArgs);
 
     expect(res).toEqual(
       expect.objectContaining({
