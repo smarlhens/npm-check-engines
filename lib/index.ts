@@ -6,8 +6,8 @@ import { cliCommandTask } from './tasks';
 import { CLIContext, packageJSONFilename, packageLockJSONFilename } from './types';
 import { CLIArgs } from './yargs';
 
-export const nce = async (args: Promise<CLIArgs>): Promise<CLIContext> => {
-  const cliArgs = await args;
+export const nce = async (args: CLIArgs): Promise<CLIContext> => {
+  const cliArgs = args;
 
   let context: CLIContext = {
     workingDir: normalize(process.cwd()),

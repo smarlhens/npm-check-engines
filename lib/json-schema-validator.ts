@@ -1,11 +1,10 @@
 import Ajv from 'ajv-draft-04';
 import addFormats from 'ajv-formats';
 
-import * as packageLockJSONSchema from '../schemas/schema-package-lock.json';
-import * as packageJSONSchema from '../schemas/schema-package.json';
-import { PackageJSONSchema, PackageLockJSONSchema } from './types';
+export const packageJSONSchema = '../schemas/schema-package.json' as const;
+export const packageLockJSONSchema = '../schemas/schema-package-lock.json' as const;
 
-const ajv = addFormats(
+export const ajv = addFormats(
   new Ajv({
     allErrors: true,
     coerceTypes: true,
@@ -14,6 +13,3 @@ const ajv = addFormats(
     allowMatchingProperties: true,
   }),
 );
-
-export const validatePackageJSONFn = ajv.compile<PackageJSONSchema>(packageJSONSchema);
-export const validatePackageLockJSONFn = ajv.compile<PackageLockJSONSchema>(packageLockJSONSchema);

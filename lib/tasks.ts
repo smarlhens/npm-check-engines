@@ -1,8 +1,7 @@
-import { ValidateFunction } from 'ajv';
+import { AnySchema, ValidateFunction } from 'ajv';
 import Table from 'cli-table';
 import { blue, cyan, gray, green, red, white, yellow } from 'colorette';
 import { Debugger } from 'debug';
-import { writeJson } from 'fs-extra';
 import {
   Listr,
   ListrBaseClassOptions,
@@ -18,7 +17,7 @@ import { sep } from 'node:path';
 import { Comparator, compare, eq, gte, minVersion, Options, Range, SemVer, subset, validRange } from 'semver';
 import sortPackageJson from 'sort-package-json';
 
-import { validatePackageJSONFn, validatePackageLockJSONFn } from './json-schema-validator';
+import { ajv, packageJSONSchema, packageLockJSONSchema } from './json-schema-validator';
 import {
   CheckCommandContext,
   EngineConstraintChange,
@@ -31,7 +30,7 @@ import {
   PackageJSONSchema,
   PackageLockJSONSchema,
 } from './types';
-import { getJson, getRelativePath, joinPath } from './utils';
+import { getJson, getRelativePath, joinPath, writeJson } from './utils';
 
 export type Task<Ctx, Renderer extends ListrRendererFactory = any> = (args: {
   ctx: Ctx;
@@ -178,24 +177,34 @@ const loadFile = async <T>({
 export const loadPackageFile: CheckCommandTask = async ({ ctx, debug }): Promise<void> => {
   const { path, workingDir, packageObject } = ctx;
 
+  const pathToFile = joinPath(__dirname, packageJSONSchema);
+  const relativePath = getRelativePath({ path: pathToFile, workingDir });
+  const packageJSONSchemaObj = await getJson<AnySchema>(relativePath);
+  const validateFn = ajv.compile<PackageJSONSchema>(packageJSONSchemaObj);
+
   ctx.packageObject = await loadFile<PackageJSONSchema>({
     fileObject: packageObject,
     path,
     debug,
     workingDir,
-    validateFn: validatePackageJSONFn,
+    validateFn,
   });
 };
 
 export const loadPackageLockFile: CheckCommandTask = async ({ ctx, debug }): Promise<void> => {
   const { path, workingDir, packageLockObject } = ctx;
 
+  const pathToFile = joinPath(__dirname, packageLockJSONSchema);
+  const relativePath = getRelativePath({ path: pathToFile, workingDir });
+  const packageLockJSONSchemaObj = await getJson<AnySchema>(relativePath);
+  const validateFn = ajv.compile<PackageLockJSONSchema>(packageLockJSONSchemaObj);
+
   ctx.packageLockObject = await loadFile<PackageLockJSONSchema>({
     fileObject: packageLockObject,
     path,
     debug,
     workingDir,
-    validateFn: validatePackageLockJSONFn,
+    validateFn,
   });
 };
 
@@ -438,11 +447,7 @@ export const updatePackageJson: CheckCommandTask = async ({ ctx, debug }): Promi
   packageObject.data.engines = merge({}, packageObject.data.engines, Object.fromEntries(rangesSimplified));
 
   debug(`${white(`Write JSON to`)} ${blue(packageObject.relativePath)}`);
-  return writeJson(packageObject.relativePath, sortPackageJson(packageObject.data), {
-    encoding: 'utf8',
-    replacer: null,
-    spaces: 2,
-  });
+  return writeJson(packageObject.relativePath, sortPackageJson(packageObject.data));
 };
 
 export const checkCommandTasks = ({

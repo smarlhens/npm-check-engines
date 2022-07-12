@@ -17,7 +17,7 @@ describe('index', () => {
       p: 'examples',
     };
 
-    const res = await nce(Promise.resolve(cliArgs));
+    const res = await nce(cliArgs);
 
     expect(res).toEqual(
       expect.objectContaining({
@@ -35,7 +35,7 @@ describe('index', () => {
       d: true,
     };
 
-    const res = await nce(Promise.resolve(cliArgs));
+    const res = await nce(cliArgs);
 
     expect(res).toEqual(
       expect.objectContaining({
