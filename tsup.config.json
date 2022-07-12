@@ -2,6 +2,7 @@
   "entry": ["lib/**/*.ts", "bin/nce.ts"],
   "splitting": false,
   "platform": "node",
+  "target": "node14",
   "sourcemap": false,
   "bundle": true,
   "minify": true,

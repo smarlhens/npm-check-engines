@@ -22,7 +22,8 @@ import * as utils from '../../lib/utils';
 
 import SpyInstance = jest.SpyInstance;
 
-const fsExtra = require('fs-extra');
+const packageJsonSchema = require('../../schemas/schema-package.json');
+const packageLockJsonSchema = require('../../schemas/schema-package-lock.json');
 
 describe('tasks', () => {
   it('should sort range', () => {
@@ -582,6 +583,7 @@ describe('tasks', () => {
         workingDir: 'foo',
         packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(packageLockJsonSchema);
       getJsonSpy.mockRejectedValueOnce('Oops');
       expect.assertions(1);
       try {
@@ -602,6 +604,7 @@ describe('tasks', () => {
         workingDir: 'foo',
         packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(packageLockJsonSchema);
       getJsonSpy.mockReturnValueOnce(Promise.resolve(null));
       expect.assertions(1);
       try {
@@ -622,6 +625,7 @@ describe('tasks', () => {
         workingDir: 'foo',
         packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(packageLockJsonSchema);
       getJsonSpy.mockReturnValueOnce(Promise.resolve({}));
       expect.assertions(1);
       try {
@@ -642,6 +646,7 @@ describe('tasks', () => {
         workingDir: 'foo',
         packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(packageLockJsonSchema);
       getJsonSpy.mockReturnValueOnce(Promise.resolve({ packages: undefined }));
       expect.assertions(1);
       try {
@@ -662,6 +667,7 @@ describe('tasks', () => {
         workingDir: 'foo',
         packageLockObject: { filename: 'package-lock.json' },
       } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(packageLockJsonSchema);
       getJsonSpy.mockReturnValueOnce(Promise.resolve({ packages: {} }));
       await loadPackageLockFile({
         ctx,
@@ -698,6 +704,7 @@ describe('tasks', () => {
         workingDir: 'foo',
         packageObject: { filename: 'package.json' },
       } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(packageJsonSchema);
       getJsonSpy.mockRejectedValueOnce('Oops');
       expect.assertions(1);
       try {
@@ -718,6 +725,7 @@ describe('tasks', () => {
         workingDir: 'foo',
         packageObject: { filename: 'package.json' },
       } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(packageJsonSchema);
       getJsonSpy.mockReturnValueOnce(Promise.resolve(null));
       expect.assertions(1);
       try {
@@ -738,6 +746,7 @@ describe('tasks', () => {
         workingDir: 'foo',
         packageObject: { filename: 'package.json' },
       } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(packageJsonSchema);
       getJsonSpy.mockReturnValueOnce(Promise.resolve({ name: ' bar' }));
       expect.assertions(1);
       try {
@@ -758,6 +767,7 @@ describe('tasks', () => {
         workingDir: 'foo',
         packageObject: { filename: 'package.json' },
       } as CheckCommandContext;
+      getJsonSpy.mockReturnValueOnce(packageJsonSchema);
       getJsonSpy.mockReturnValueOnce(Promise.resolve({ engines: {} }));
       await loadPackageFile({
         ctx,
@@ -785,7 +795,7 @@ describe('tasks', () => {
     let writeJsonSpy: SpyInstance;
 
     beforeEach(() => {
-      writeJsonSpy = jest.spyOn(fsExtra, 'writeJson').mockReturnValueOnce(Promise.resolve());
+      writeJsonSpy = jest.spyOn(utils, 'writeJson').mockReturnValueOnce(Promise.resolve());
     });
 
     it('should throw error if simplifiedComputedRange is undefined', async () => {
@@ -867,7 +877,6 @@ describe('tasks', () => {
             node: '^14.17.0',
           },
         }),
-        { encoding: 'utf8', replacer: null, spaces: 2 },
       );
     });
   });
