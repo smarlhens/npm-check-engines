@@ -83,7 +83,7 @@
     "@types/jest": "28.1.4",
     "@types/lodash": "4.14.182",
     "@types/node": "18.0.1",
-    "@types/semver": "7.3.10",
+    "@types/semver": "7.3.12",
     "@types/update-notifier": "5.1.0",
     "@types/yargs": "17.0.10",
     "babel-jest": "28.1.2",
