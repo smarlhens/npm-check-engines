@@ -62,7 +62,7 @@
     "colorette": "2.0.19",
     "debug": "4.3.4",
     "fs-extra": "10.1.0",
-    "listr2": "4.0.5",
+    "listr2": "5.0.5",
     "lodash": "4.17.21",
     "semver": "7.3.7",
     "sort-package-json": "1.57.0",
