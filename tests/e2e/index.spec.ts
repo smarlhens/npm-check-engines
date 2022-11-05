@@ -1,13 +1,15 @@
-import { nce } from '../../lib/index';
-import { CLIArgs } from '../../lib/yargs';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { nce } from '../../lib/index.js';
+import type { CLIArgs } from '../../lib/yargs.js';
 
 describe('index', () => {
   let cliArgs: CLIArgs;
 
   beforeEach(() => {
-    jest.spyOn(global.console, 'log').mockImplementation(jest.fn());
-    jest.spyOn(global.console, 'info').mockImplementation(jest.fn());
-    jest.spyOn(global.console, 'error').mockImplementation(jest.fn());
+    vi.spyOn(global.console, 'log').mockImplementation(() => vi.fn());
+    vi.spyOn(global.console, 'info').mockImplementation(() => vi.fn());
+    vi.spyOn(global.console, 'error').mockImplementation(() => vi.fn());
   });
 
   it('should run w/ path', async () => {

@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import yargs, { terminalWidth } from 'yargs';
+import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 export type CLIArgs = {
@@ -14,7 +14,8 @@ export type CLIArgs = {
   $0?: string;
 };
 
-export const cli: Promise<CLIArgs> = yargs(hideBin(process.argv))
+const argv = yargs(hideBin(process.argv));
+export const cli: Promise<CLIArgs> = argv
   .scriptName('nce')
   .usage('Usage: $0 [options]')
   .example('$0', 'Check package-lock.json file in current working directory.')
@@ -61,5 +62,5 @@ export const cli: Promise<CLIArgs> = yargs(hideBin(process.argv))
   })
   .help('help')
   .version()
-  .wrap(terminalWidth())
+  .wrap(argv.terminalWidth())
   .epilog('© 2022 Samuel MARLHENS').argv as Promise<CLIArgs>;

@@ -1,7 +1,8 @@
-import { cyan, green } from 'colorette';
-import { Debugger } from 'debug';
-import { ListrRenderer, ListrTaskWrapper } from 'listr2';
+import chalk from 'chalk';
+import type { Debugger } from 'debug';
+import type { ListrRenderer, ListrTaskWrapper } from 'listr2';
 import { Comparator, Range } from 'semver';
+import { beforeEach, describe, expect, it, SpyInstance, vi } from 'vitest';
 
 import {
   checkCommandTasks,
@@ -16,11 +17,9 @@ import {
   restrictiveRange,
   sortRangeSet,
   updatePackageJson,
-} from '../../lib/tasks';
-import { CheckCommandContext, PackageLockJSONSchema } from '../../lib/types';
-import * as utils from '../../lib/utils';
-
-import SpyInstance = jest.SpyInstance;
+} from '../../lib/tasks.js';
+import type { CheckCommandContext, PackageLockJSONSchema } from '../../lib/types.js';
+import * as utils from '../../lib/utils.js';
 
 const packageJsonSchema = require('../../schemas/schema-package.json');
 const packageLockJsonSchema = require('../../schemas/schema-package-lock.json');
@@ -54,7 +53,7 @@ describe('tasks', () => {
           new Range('^14.17.0 || ^16.10.0'),
           new Range('^14.0.0 || ^16.0.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('^14.17.0 || ^16.10.0'));
     });
@@ -65,7 +64,7 @@ describe('tasks', () => {
           new Range('^14.0.0 || ^16.0.0'),
           new Range('^14.17.0 || ^16.10.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('^14.17.0 || ^16.10.0'));
     });
@@ -76,7 +75,7 @@ describe('tasks', () => {
           new Range('^14.13.0 || ^16.10.0'),
           new Range('^14.17.0 || ^16.0.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0', rangeOptions));
       expect(
@@ -84,7 +83,7 @@ describe('tasks', () => {
           new Range('^14.13.0 || ^16.10.0'),
           new Range('^12.22.0 || ^14.17.0 || ^16.0.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0', rangeOptions));
       expect(
@@ -92,7 +91,7 @@ describe('tasks', () => {
           new Range('^12.22.0 || ^14.17.0'),
           new Range('^14.13.0 || ^16.10.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('>=14.17.0 <15.0.0-0', rangeOptions));
     });
@@ -103,7 +102,7 @@ describe('tasks', () => {
           new Range('^14.17.0 || ^16.0.0'),
           new Range('^14.13.0 || ^16.10.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0', rangeOptions));
       expect(
@@ -111,7 +110,7 @@ describe('tasks', () => {
           new Range('^12.22.0 || ^14.17.0 || ^16.0.0'),
           new Range('^14.13.0 || ^16.10.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0', rangeOptions));
       expect(
@@ -119,7 +118,7 @@ describe('tasks', () => {
           new Range('^14.13.0 || ^16.10.0'),
           new Range('^12.22.0 || ^14.17.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('>=14.17.0 <15.0.0-0', rangeOptions));
       expect(
@@ -127,7 +126,7 @@ describe('tasks', () => {
           new Range('>=12.22.0'),
           new Range('^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('>=12.22.0 <13.0.0-0||>=14.15.0 <15.0.0-0||>=16.10.0 <17.0.0-0||>=17.0.0'));
     });
@@ -138,7 +137,7 @@ describe('tasks', () => {
           new Range('^14.13.0 || ^16.10.0'),
           new Range('^12.22.0 || >=14.17.0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(new Range('>=14.17.0 <15.0.0-0||>=16.10.0 <17.0.0-0', rangeOptions));
     });
@@ -149,7 +148,7 @@ describe('tasks', () => {
           new Range('>=14.15.0 <15.0.0-0||>=16.10.0'),
           new Range('>=14.15.0 <15.0.0-0||>=16.0.0 <17.0.0-0||>=17.0.0 <18.0.0-0||>=18.0.0 <19.0.0-0'),
           [],
-          jest.fn() as unknown as Debugger,
+          vi.fn() as unknown as Debugger,
         ),
       ).toEqual(
         new Range('>=14.15.0 <15.0.0-0||>=16.10.0 <17.0.0-0||>=17.0.0 <18.0.0-0||>=18.0.0 <19.0.0-0', rangeOptions),
@@ -188,7 +187,7 @@ describe('tasks', () => {
         },
       } as CheckCommandContext,
       parent: {} as unknown as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-      debug: jest.fn() as unknown as Debugger,
+      debug: vi.fn() as unknown as Debugger,
     });
     expect(cmd).toEqual([
       expect.objectContaining({
@@ -218,7 +217,7 @@ describe('tasks', () => {
     expect(
       cliCommandTask(
         { ctx: { packageLockObject: { filename: 'package-lock.json' } } as CheckCommandContext },
-        jest.fn() as unknown as Debugger,
+        vi.fn() as unknown as Debugger,
       ),
     ).toEqual(
       expect.objectContaining({
@@ -241,7 +240,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+          debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('Computed engines range constraints are not defined.'));
@@ -262,18 +261,20 @@ describe('tasks', () => {
       } as CheckCommandContext;
       const parent = {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>;
       Object.defineProperty(parent, 'title', {
-        get: jest.fn(() => ''),
-        set: jest.fn(),
+        get: vi.fn(() => ''),
+        set: vi.fn(),
         configurable: true,
       });
-      const spyOnTitle = jest.spyOn(parent, 'title', 'set');
+      const spyOnTitle = vi.spyOn(parent, 'title', 'set');
       outputComputedConstraints({
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
-      expect(spyOnTitle).toHaveBeenCalledWith(`All computed engines range constraints are up-to-date ${green(':)')}`);
+      expect(spyOnTitle).toHaveBeenCalledWith(
+        `All computed engines range constraints are up-to-date ${chalk.green(':)')}`,
+      );
       expect(ctx).toEqual(
         expect.objectContaining({
           rangesSimplified: new Map([]),
@@ -290,19 +291,19 @@ describe('tasks', () => {
       } as CheckCommandContext;
       const parent = {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>;
       Object.defineProperty(parent, 'title', {
-        get: jest.fn(() => ''),
-        set: jest.fn(),
+        get: vi.fn(() => ''),
+        set: vi.fn(),
         configurable: true,
       });
-      const spyOnTitle = jest.spyOn(parent, 'title', 'set');
+      const spyOnTitle = vi.spyOn(parent, 'title', 'set');
       outputComputedConstraints({
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
       expect(spyOnTitle).toHaveBeenCalledWith(
-        `Computed engines range constraints:\n\n node  *  →  ^14.17.0 || ^16.10.0 \n\nRun ${cyan(
+        `Computed engines range constraints:\n\n node  *  →  ^14.17.0 || ^16.10.0 \n\nRun ${chalk.cyan(
           'nce -u',
         )} to upgrade package.json.`,
       );
@@ -323,16 +324,16 @@ describe('tasks', () => {
       } as CheckCommandContext;
       const parent = {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>;
       Object.defineProperty(parent, 'title', {
-        get: jest.fn(() => ''),
-        set: jest.fn(),
+        get: vi.fn(() => ''),
+        set: vi.fn(),
         configurable: true,
       });
-      const spyOnTitle = jest.spyOn(parent, 'title', 'set');
+      const spyOnTitle = vi.spyOn(parent, 'title', 'set');
       outputComputedConstraints({
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
       expect(spyOnTitle).toHaveBeenCalledWith(
         `Computed engines range constraints:\n\n node  *  →  ^14.17.0 || ^16.10.0 `,
@@ -349,14 +350,14 @@ describe('tasks', () => {
     it('should throw error if package data not defined', () => {
       const ctx: CheckCommandContext = {
         packageObject: { filename: 'package.json', data: undefined },
-      } as CheckCommandContext;
+      } as unknown as CheckCommandContext;
       expect.assertions(1);
       try {
         computeEnginesConstraints({
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+          debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package.json data is not defined.'));
@@ -367,14 +368,14 @@ describe('tasks', () => {
       const ctx: CheckCommandContext = {
         packageObject: { filename: 'package.json', data: {} },
         packageLockObject: { filename: 'package-lock.json', data: undefined },
-      } as CheckCommandContext;
+      } as unknown as CheckCommandContext;
       expect.assertions(1);
       try {
         computeEnginesConstraints({
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+          debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package-lock.json data is not defined.'));
@@ -392,7 +393,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+          debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package-lock.json does not contain packages property.'));
@@ -411,7 +412,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -432,7 +433,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -451,7 +452,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -472,7 +473,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+          debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('No valid constraint key(s).'));
@@ -489,7 +490,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -507,7 +508,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -533,7 +534,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -560,7 +561,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: { extend: jest.fn(() => jest.fn()) } as unknown as Debugger,
+        debug: { extend: vi.fn(() => vi.fn()) } as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -574,7 +575,7 @@ describe('tasks', () => {
     let getJsonSpy: SpyInstance;
 
     beforeEach(() => {
-      getJsonSpy = jest.spyOn(utils, 'getJson');
+      getJsonSpy = vi.spyOn(utils, 'getJson');
     });
 
     it('should throw error if read json throw error', async () => {
@@ -591,7 +592,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package-lock.json is not defined.'));
@@ -612,7 +613,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package-lock.json is not defined.'));
@@ -633,7 +634,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error(`must have required property 'packages'`));
@@ -654,7 +655,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error(`must have required property 'packages'`));
@@ -673,7 +674,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: jest.fn() as unknown as Debugger,
+        debug: vi.fn() as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -695,7 +696,7 @@ describe('tasks', () => {
     let getJsonSpy: SpyInstance;
 
     beforeEach(() => {
-      getJsonSpy = jest.spyOn(utils, 'getJson');
+      getJsonSpy = vi.spyOn(utils, 'getJson');
     });
 
     it('should throw error if read json throw error', async () => {
@@ -712,7 +713,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package.json is not defined.'));
@@ -733,7 +734,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package.json is not defined.'));
@@ -754,7 +755,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(expect.any(Error));
@@ -773,7 +774,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: jest.fn() as unknown as Debugger,
+        debug: vi.fn() as unknown as Debugger,
       });
       expect(ctx).toEqual(
         expect.objectContaining({
@@ -795,7 +796,7 @@ describe('tasks', () => {
     let writeJsonSpy: SpyInstance;
 
     beforeEach(() => {
-      writeJsonSpy = jest.spyOn(utils, 'writeJson').mockReturnValueOnce(Promise.resolve());
+      writeJsonSpy = vi.spyOn(utils, 'writeJson').mockReturnValueOnce(Promise.resolve());
     });
 
     it('should throw error if simplifiedComputedRange is undefined', async () => {
@@ -806,7 +807,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('Simplified computed engines range constraints are not defined.'));
@@ -827,7 +828,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package.json data is not defined.'));
@@ -848,7 +849,7 @@ describe('tasks', () => {
           ctx,
           task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
           parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-          debug: jest.fn() as unknown as Debugger,
+          debug: vi.fn() as unknown as Debugger,
         });
       } catch (e) {
         expect(e).toEqual(new Error('package.json path is not defined.'));
@@ -868,7 +869,7 @@ describe('tasks', () => {
         ctx,
         task: {} as ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>,
         parent: {} as Omit<ListrTaskWrapper<CheckCommandContext, typeof ListrRenderer>, 'skip' | 'enabled'>,
-        debug: jest.fn() as unknown as Debugger,
+        debug: vi.fn() as unknown as Debugger,
       });
       expect(writeJsonSpy).toHaveBeenCalledWith(
         expect.any(String),
