@@ -1,10 +1,10 @@
 import { normalize } from 'node:path';
 
-import { debug, enableNamespaces, namespaces } from './debug';
-import { renderer } from './renderer';
-import { cliCommandTask } from './tasks';
-import { CLIContext, packageJSONFilename, packageLockJSONFilename } from './types';
-import { CLIArgs } from './yargs';
+import { debug, enableNamespaces, namespaces } from './debug.js';
+import { renderer } from './renderer.js';
+import { cliCommandTask } from './tasks.js';
+import { CLIContext, packageJSONFilename, packageLockJSONFilename } from './types.js';
+import type { CLIArgs } from './yargs.js';
 
 export const nce = async (args: CLIArgs): Promise<CLIContext> => {
   const cliArgs = args;

@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { Range } from 'semver';
+import type { Range } from 'semver';
 
 export const packageJSONFilename = 'package.json' as const;
 export const packageLockJSONFilename = 'package-lock.json' as const;
@@ -27,7 +27,7 @@ export type CLIContext = {
   workingDir: string;
   verbose: boolean;
   debug: boolean;
-  engines?: string[];
+  engines: string[] | undefined;
   packageObject: FileObject<PackageJSONSchema>;
   packageLockObject: FileObject<PackageLockJSONSchema>;
   ranges?: Map<EngineConstraintKey, EngineConstraintChange>;

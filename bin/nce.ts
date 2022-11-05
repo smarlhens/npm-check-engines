@@ -1,14 +1,16 @@
 #!/usr/bin/env node
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import updateNotifier, { Package } from 'update-notifier';
 
-import { nce } from '../lib/index';
-import { getJson, joinPath } from '../lib/utils';
-import { cli } from '../lib/yargs';
+import { nce } from '../lib/index.js';
+import { getJson, joinPath } from '../lib/utils.js';
+import { cli } from '../lib/yargs.js';
 
 (async () => {
   const packageJSON = '../package.json' as const;
   const cliArgs = await cli;
-  const pathToFile = joinPath(__dirname, packageJSON);
+  const pathToFile = joinPath(dirname(fileURLToPath(import.meta.url)), packageJSON);
   const packageJson = await getJson<Package>(pathToFile);
   const notifier = updateNotifier({
     pkg: packageJson,

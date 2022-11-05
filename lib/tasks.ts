@@ -1,7 +1,7 @@
-import { AnySchema, ValidateFunction } from 'ajv';
+import type { AnySchema, ValidateFunction } from 'ajv';
+import chalk from 'chalk';
 import Table from 'cli-table';
-import { blue, cyan, gray, green, red, white, yellow } from 'colorette';
-import { Debugger } from 'debug';
+import type { Debugger } from 'debug';
 import {
   Listr,
   ListrBaseClassOptions,
@@ -12,12 +12,13 @@ import {
   ListrTaskResult,
   ListrTaskWrapper,
 } from 'listr2';
-import { isArray, merge } from 'lodash';
-import { sep } from 'node:path';
-import { Comparator, compare, eq, gte, minVersion, Options, Range, SemVer, subset, validRange } from 'semver';
+import lodash from 'lodash';
+import { dirname, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import semver from 'semver';
 import sortPackageJson from 'sort-package-json';
 
-import { ajv, packageJSONSchema, packageLockJSONSchema } from './json-schema-validator';
+import { ajv, packageJSONSchema, packageLockJSONSchema } from './json-schema-validator.js';
 import {
   CheckCommandContext,
   EngineConstraintChange,
@@ -29,8 +30,8 @@ import {
   LockPackageEnginesObject,
   PackageJSONSchema,
   PackageLockJSONSchema,
-} from './types';
-import { getJson, getRelativePath, joinPath, writeJson } from './utils';
+} from './types.js';
+import { getJson, getRelativePath, joinPath, writeJson } from './utils.js';
 
 export type Task<Ctx, Renderer extends ListrRendererFactory = any> = (args: {
   ctx: Ctx;
@@ -40,49 +41,56 @@ export type Task<Ctx, Renderer extends ListrRendererFactory = any> = (args: {
 }) => void | ListrTaskResult<Ctx>;
 export type CheckCommandTask = Task<CheckCommandContext>;
 
-export const rangeOptions: Options = { loose: false, includePrerelease: false };
+export const rangeOptions: semver.Options = { loose: false };
 
-export const sortRangeSet = (set: ReadonlyArray<ReadonlyArray<Comparator>>): Comparator[][] =>
-  [...set.map(comp => [...comp])].sort((a, b) => compare(a[0].semver, b[0].semver));
+export const sortRangeSet = (set: ReadonlyArray<ReadonlyArray<semver.Comparator>>): semver.Comparator[][] =>
+  [...set.map(comp => [...comp])].sort((a, b) => semver.compare(a[0].semver, b[0].semver));
 
-export const setToRange = (set: Comparator[][]): Range =>
-  new Range(set.map(tuple => tuple.map(comp => comp.value).join(' ')).join('||'), rangeOptions);
+export const setToRange = (set: semver.Comparator[][]): semver.Range =>
+  new semver.Range(set.map(tuple => tuple.map(comp => comp.value).join(' ')).join('||'), rangeOptions);
 
 export const applyMinVersionToRangeSet = (
-  set: ReadonlyArray<ReadonlyArray<Comparator>>,
-  minVersion: SemVer,
-): Comparator[][] =>
+  set: ReadonlyArray<ReadonlyArray<semver.Comparator>>,
+  minVersion: semver.SemVer,
+): semver.Comparator[][] =>
   [...set.map(comp => [...comp])]
     .filter(c => c[0].semver.major >= minVersion.major)
     .map(c => {
-      if (c[0].semver.major === minVersion.major && gte(minVersion, c[0].semver, rangeOptions)) {
-        c[0] = new Comparator(`${c[0].operator}${minVersion.raw}`);
+      if (c[0].semver.major === minVersion.major && semver.gte(minVersion, c[0].semver, rangeOptions)) {
+        c[0] = new semver.Comparator(`${c[0].operator}${minVersion.raw}`);
       }
 
       return c;
     });
 
-export const restrictiveRange = (r1: Range, r2: Range, ignoredRanges: string[], debug: Debugger): Range => {
-  debug(`${white('Compare:')} ${blue(r1.raw)} ${white('and')} ${blue(r2.raw)}`);
+export const restrictiveRange = (
+  r1: semver.Range,
+  r2: semver.Range,
+  ignoredRanges: string[],
+  debug: Debugger,
+): semver.Range => {
+  debug(`${chalk.white('Compare:')} ${chalk.blue(r1.raw)} ${chalk.white('and')} ${chalk.blue(r2.raw)}`);
 
-  if (subset(r1, r2)) {
-    debug(`${white('Range')} ${green(r1.raw)} ${white('is a subset of')} ${blue(r2.raw)}`);
+  if (semver.subset(r1, r2)) {
+    debug(`${chalk.white('Range')} ${chalk.green(r1.raw)} ${chalk.white('is a subset of')} ${chalk.blue(r2.raw)}`);
     ignoredRanges.push(r2.raw);
     return r1;
-  } else if (subset(r2, r1)) {
-    debug(`${white('Range')} ${green(r2.raw)} ${white('is a subset of')} ${blue(r1.raw)}`);
+  } else if (semver.subset(r2, r1)) {
+    debug(`${chalk.white('Range')} ${chalk.green(r2.raw)} ${chalk.white('is a subset of')} ${chalk.blue(r1.raw)}`);
     ignoredRanges.push(r1.raw);
     return r2;
   }
 
-  const minVersion1 = minVersion(r1, rangeOptions) || new SemVer('*');
-  const minVersion2 = minVersion(r2, rangeOptions) || new SemVer('*');
-  const sortedR1: Comparator[][] = sortRangeSet(r1.set);
-  const sortedR2: Comparator[][] = sortRangeSet(r2.set);
+  const minVersion1 = semver.minVersion(r1, rangeOptions) || new semver.SemVer('*');
+  const minVersion2 = semver.minVersion(r2, rangeOptions) || new semver.SemVer('*');
+  const sortedR1: semver.Comparator[][] = sortRangeSet(r1.set);
+  const sortedR2: semver.Comparator[][] = sortRangeSet(r2.set);
 
-  if (!eq(minVersion1, minVersion2, rangeOptions)) {
-    const minSemver = compare(minVersion1, minVersion2) === -1 ? minVersion2 : minVersion1;
-    debug(`${white('Applying minimal version')} ${yellow(minSemver.version)} ${white('to both ranges.')}`);
+  if (!semver.eq(minVersion1, minVersion2, rangeOptions)) {
+    const minSemver = semver.compare(minVersion1, minVersion2) === -1 ? minVersion2 : minVersion1;
+    debug(
+      `${chalk.white('Applying minimal version')} ${chalk.yellow(minSemver.version)} ${chalk.white('to both ranges.')}`,
+    );
 
     const newR1 = setToRange(applyMinVersionToRangeSet(sortedR1, minSemver));
     const newR2 = setToRange(applyMinVersionToRangeSet(sortedR2, minSemver));
@@ -94,15 +102,15 @@ export const restrictiveRange = (r1: Range, r2: Range, ignoredRanges: string[], 
     }
   }
 
-  const minComp1: Comparator[] | undefined = sortedR1.shift();
-  const minComp2: Comparator[] | undefined = sortedR2.shift();
-  const minComp: Comparator[] | undefined = minComp1 || minComp2;
+  const minComp1: semver.Comparator[] | undefined = sortedR1.shift();
+  const minComp2: semver.Comparator[] | undefined = sortedR2.shift();
+  const minComp: semver.Comparator[] | undefined = minComp1 || minComp2;
 
   if (!minComp) {
     throw new Error('Not yet implemented :/');
   }
 
-  const set: Comparator[][] = [minComp];
+  const set: semver.Comparator[][] = [minComp];
   const newR1 = setToRange(sortedR1);
   const newR2 = setToRange(sortedR2);
   const newRange = restrictiveRange(newR1, newR2, ignoredRanges, debug);
@@ -110,7 +118,7 @@ export const restrictiveRange = (r1: Range, r2: Range, ignoredRanges: string[], 
   return setToRange(set);
 };
 
-export const humanizeRange = (range?: Range): string => {
+export const humanizeRange = (range?: semver.Range): string => {
   if (!range || '*' === range.raw) {
     return '*';
   }
@@ -153,7 +161,7 @@ const loadFile = async <T>({
 }): Promise<FileObject<T>> => {
   const pathToFile = joinPath(path, fileObject.filename);
   const relativePath = getRelativePath({ path: pathToFile, workingDir });
-  debug(`${white(`Relative path to ${fileObject.filename}:`)} ${blue(relativePath)}`);
+  debug(`${chalk.white(`Relative path to ${fileObject.filename}:`)} ${chalk.blue(relativePath)}`);
 
   const jsonObject: T | undefined = await getJson<T>(relativePath).catch(() => undefined);
 
@@ -161,7 +169,7 @@ const loadFile = async <T>({
     throw new Error(`${relativePath} is not defined.`);
   }
 
-  debug(`${white(`Validate JSON schema of`)} ${blue(relativePath)}`);
+  debug(`${chalk.white(`Validate JSON schema of`)} ${chalk.blue(relativePath)}`);
   const data = validateFn(jsonObject);
 
   if (!data) {
@@ -177,7 +185,7 @@ const loadFile = async <T>({
 export const loadPackageFile: CheckCommandTask = async ({ ctx, debug }): Promise<void> => {
   const { path, workingDir, packageObject } = ctx;
 
-  const pathToFile = joinPath(__dirname, packageJSONSchema);
+  const pathToFile = joinPath(dirname(fileURLToPath(import.meta.url)), packageJSONSchema);
   const relativePath = getRelativePath({ path: pathToFile, workingDir });
   const packageJSONSchemaObj = await getJson<AnySchema>(relativePath);
   const validateFn = ajv.compile<PackageJSONSchema>(packageJSONSchemaObj);
@@ -194,7 +202,7 @@ export const loadPackageFile: CheckCommandTask = async ({ ctx, debug }): Promise
 export const loadPackageLockFile: CheckCommandTask = async ({ ctx, debug }): Promise<void> => {
   const { path, workingDir, packageLockObject } = ctx;
 
-  const pathToFile = joinPath(__dirname, packageLockJSONSchema);
+  const pathToFile = joinPath(dirname(fileURLToPath(import.meta.url)), packageLockJSONSchema);
   const relativePath = getRelativePath({ path: pathToFile, workingDir });
   const packageLockJSONSchemaObj = await getJson<AnySchema>(relativePath);
   const validateFn = ajv.compile<PackageLockJSONSchema>(packageLockJSONSchemaObj);
@@ -214,7 +222,7 @@ const getConstraintFromEngines = (
 ): string | undefined => {
   if (typeof engines === 'object' && constraintKey in engines) {
     return (engines as LockPackageEnginesObject)[constraintKey];
-  } else if (isArray(engines) && engines.some(constraint => constraint.includes(constraintKey))) {
+  } else if (lodash.isArray(engines) && engines.some(constraint => constraint.includes(constraintKey))) {
     return engines.find(constraint => constraint.includes(constraintKey))?.replace(constraintKey, '');
   }
 
@@ -229,8 +237,8 @@ const computeEnginesConstraint = ({
   packages: [string, LockPackage][];
   constraintKey: EngineConstraintKey;
   debug: Debugger;
-}): Range | never => {
-  let mrr: Range = new Range('*');
+}): semver.Range | never => {
+  let mrr: semver.Range = new semver.Range('*');
   const ignoredRanges: string[] = [];
   const debugConstraint = debug.extend(constraintKey);
 
@@ -239,40 +247,42 @@ const computeEnginesConstraint = ({
     let constraint: string | undefined = getConstraintFromEngines(engines, constraintKey);
 
     if (!constraint) {
-      debugConstraint(`${white('Package')} ${gray(pkgName)} ${white('has no constraints for current engine')}`);
+      debugConstraint(
+        `${chalk.white('Package')} ${chalk.gray(pkgName)} ${chalk.white('has no constraints for current engine')}`,
+      );
       continue;
     }
 
-    const rawValidRange = validRange(constraint);
+    const rawValidRange = semver.validRange(constraint);
     if (!rawValidRange) {
-      debugConstraint(`${red(constraint)} ${white('is not a valid semver range')}`);
+      debugConstraint(`${chalk.red(constraint)} ${chalk.white('is not a valid semver range')}`);
       continue;
     }
 
     if (ignoredRanges.indexOf(rawValidRange) !== -1) {
-      debugConstraint(`${white('Ignored range:')} ${gray(rawValidRange)}`);
+      debugConstraint(`${chalk.white('Ignored range:')} ${chalk.gray(rawValidRange)}`);
       continue;
     }
 
-    const range = new Range(rawValidRange, rangeOptions);
+    const range = new semver.Range(rawValidRange, rangeOptions);
 
     if (!mrr) {
       mrr = range;
-      debugConstraint(`${white('New most restrictive range:')} ${green(mrr.raw)}`);
+      debugConstraint(`${chalk.white('New most restrictive range:')} ${chalk.green(mrr.raw)}`);
       continue;
     }
 
     const newRestrictiveRange = restrictiveRange(mrr, range, ignoredRanges, debugConstraint);
     if (mrr.raw !== newRestrictiveRange.raw) {
       mrr = newRestrictiveRange;
-      debugConstraint(`${white('New most restrictive range:')} ${green(mrr.raw)}`);
+      debugConstraint(`${chalk.white('New most restrictive range:')} ${chalk.green(mrr.raw)}`);
     }
   }
 
   if (mrr) {
-    debugConstraint(`${white(`Final computed engine range constraint:`)} ${blue(mrr.raw)}`);
+    debugConstraint(`${chalk.white(`Final computed engine range constraint:`)} ${chalk.blue(mrr.raw)}`);
   } else {
-    debugConstraint(`${white(`No computed engine range constraint`)}`);
+    debugConstraint(`${chalk.white(`No computed engine range constraint`)}`);
   }
 
   return mrr;
@@ -297,7 +307,11 @@ export const computeEnginesConstraints: CheckCommandTask = ({ ctx, debug }): voi
     -1 !== EngineConstraintKeys.indexOf(key as EngineConstraintKey);
   const packages = Object.entries(packageLockObject.data.packages);
   const ranges = new Map<EngineConstraintKey, EngineConstraintChange>();
-  const constraintKeys: EngineConstraintKey[] = engines?.filter(filterEngineConstraintKey) || [...EngineConstraintKeys];
+  let constraintKeys: EngineConstraintKey[] = [...EngineConstraintKeys];
+
+  if (engines && engines.length > 0) {
+    constraintKeys = engines.filter(filterEngineConstraintKey);
+  }
 
   if (0 === constraintKeys.length) {
     throw new Error(`No valid constraint key(s).`);
@@ -402,7 +416,9 @@ export const outputComputedConstraints: CheckCommandTask = ({ ctx, parent, debug
     }
 
     rangesSimplified.set(engine, rangeToHumanized);
-    debug.extend(engine)(`${white(`Simplified computed engine range constraint:`)} ${blue(rangeToHumanized)}`);
+    debug.extend(engine)(
+      `${chalk.white(`Simplified computed engine range constraint:`)} ${chalk.blue(rangeToHumanized)}`,
+    );
     colWidths = [
       Math.max(colWidths[0], engine.length + 2),
       Math.max(colWidths[1], rangeFromHumanized.length + 2),
@@ -413,14 +429,14 @@ export const outputComputedConstraints: CheckCommandTask = ({ ctx, parent, debug
   }
 
   if (0 === rangesSimplified.size) {
-    parent.title = `All computed engines range constraints are up-to-date ${green(':)')}`;
+    parent.title = `All computed engines range constraints are up-to-date ${chalk.green(':)')}`;
   } else {
     const table: Table = createEnginesTable(colWidths);
     table.push(...colValues);
     let title = `Computed engines range constraints:\n\n${table.toString()}`;
 
     if (!update) {
-      title += `\n\nRun ${cyan(generateUpdateCommandFromContext(ctx))} to upgrade ${packageObject.filename}.`;
+      title += `\n\nRun ${chalk.cyan(generateUpdateCommandFromContext(ctx))} to upgrade ${packageObject.filename}.`;
     }
 
     parent.title = title;
@@ -444,9 +460,9 @@ export const updatePackageJson: CheckCommandTask = async ({ ctx, debug }): Promi
     throw new Error(`${packageObject.filename} path is not defined.`);
   }
 
-  packageObject.data.engines = merge({}, packageObject.data.engines, Object.fromEntries(rangesSimplified));
+  packageObject.data.engines = lodash.merge({}, packageObject.data.engines, Object.fromEntries(rangesSimplified));
 
-  debug(`${white(`Write JSON to`)} ${blue(packageObject.relativePath)}`);
+  debug(`${chalk.white(`Write JSON to`)} ${chalk.blue(packageObject.relativePath)}`);
   return writeJson(packageObject.relativePath, sortPackageJson(packageObject.data));
 };
 

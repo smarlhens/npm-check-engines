@@ -1,4 +1,6 @@
-import { renderer } from '../../lib/renderer';
+import { describe, expect, it } from 'vitest';
+
+import { renderer } from '../../lib/renderer.js';
 
 describe('renderer', () => {
   it('should return silent renderer when quiet', () => {

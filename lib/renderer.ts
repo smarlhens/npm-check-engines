@@ -1,4 +1,4 @@
-import { ListrDefaultRendererOptions, ListrRendererValue } from 'listr2';
+import type { ListrDefaultRendererOptions, ListrRendererValue } from 'listr2';
 
 export const renderer = (
   { debug, quiet, verbose }: { debug?: boolean; quiet?: boolean; verbose?: boolean },
