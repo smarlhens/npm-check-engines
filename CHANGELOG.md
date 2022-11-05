@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.7.1](https://github.com/smarlhens/npm-check-engines/compare/v0.7.0...v0.7.1) (2022-11-05)
+
+
+### Miscellaneous
+
+* change imports, remove unused variables ([c94683d](https://github.com/smarlhens/npm-check-engines/commit/c94683d239f1194e0fbea1db3424dce80b76c8b1))
+* move to vitest, chalk; remove babel, colorette, jest; es2022 ([3ff18da](https://github.com/smarlhens/npm-check-engines/commit/3ff18da7811b0e36be0b4682b654ffffafd62a1e))
+* remove json imports, load json using fs-extra ([d73e09f](https://github.com/smarlhens/npm-check-engines/commit/d73e09f1eec615fa3d2212be4deaf1da7961c5bb))
+* use tsup instead of tsc, export to esm, add .d.ts to package ([e475f45](https://github.com/smarlhens/npm-check-engines/commit/e475f454fb49476da6d4f75a3b02956868888004))
+
+
+### Chores
+
+* set node minimal version to v16.13 ([a13c29c](https://github.com/smarlhens/npm-check-engines/commit/a13c29c9b807196d23807d425f377bec536ea77b))
+
 ## [0.7.0](https://github.com/smarlhens/npm-check-engines/compare/v0.6.0...v0.7.0) (2022-07-03)
 
 
