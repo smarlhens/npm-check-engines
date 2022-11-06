@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.3](https://github.com/smarlhens/npm-check-engines/compare/v0.7.2...v0.7.3) (2022-11-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sort-package-json to v2.1.0 ([3fcfe85](https://github.com/smarlhens/npm-check-engines/commit/3fcfe85be4ce540707c407054ea66609232c0c39))
+* use package file to propose update notification ([5c52b85](https://github.com/smarlhens/npm-check-engines/commit/5c52b850f2932f4707dbea2b79a02a8d2d9609bf))
+
 ## [0.7.2](https://github.com/smarlhens/npm-check-engines/compare/v0.7.1...v0.7.2) (2022-11-06)
 
 
