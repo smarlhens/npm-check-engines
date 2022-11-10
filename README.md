@@ -1,8 +1,7 @@
 # NPM check engines
 
+[![CodeQL](https://github.com/smarlhens/npm-check-engines/workflows/codeql/badge.svg)](https://github.com/smarlhens/npm-check-engines/actions/workflows/codeql.yml)
 [![GitHub CI](https://github.com/smarlhens/npm-check-engines/workflows/ci/badge.svg)](https://github.com/smarlhens/npm-check-engines/actions/workflows/ci.yml)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/smarlhens/npm-check-engines.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/smarlhens/npm-check-engines/alerts/)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/smarlhens/npm-check-engines.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/smarlhens/npm-check-engines/context:javascript)
 ![node-current (scoped)](https://img.shields.io/node/v/@smarlhens/npm-check-engines)
 [![GitHub license](https://img.shields.io/github/license/smarlhens/npm-check-engines)](https://github.com/smarlhens/npm-check-engines)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
