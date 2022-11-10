@@ -90,7 +90,7 @@
     "@vitest/coverage-c8": "0.25.0",
     "copyfiles": "2.4.1",
     "execa": "6.1.0",
-    "husky": "8.0.1",
+    "husky": "8.0.2",
     "lint-staged": "13.0.3",
     "prettier": "2.7.1",
     "rimraf": "3.0.2",
