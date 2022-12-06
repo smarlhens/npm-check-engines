@@ -86,7 +86,7 @@
     "@types/node": "18.11.11",
     "@types/semver": "7.3.13",
     "@types/update-notifier": "6.0.1",
-    "@types/yargs": "17.0.15",
+    "@types/yargs": "17.0.16",
     "@vitest/coverage-c8": "0.25.3",
     "copyfiles": "2.4.1",
     "execa": "6.1.0",
