@@ -65,7 +65,7 @@
     "ajv": "8.11.2",
     "ajv-draft-04": "1.0.0",
     "ajv-formats": "2.1.1",
-    "chalk": "5.1.2",
+    "chalk": "5.2.0",
     "cli-table": "0.3.11",
     "debug": "4.3.4",
     "listr2": "5.0.6",
