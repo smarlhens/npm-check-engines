@@ -1,5 +1,70 @@
 # Changelog
 
+## [0.7.4](https://github.com/smarlhens/npm-check-engines/compare/v0.7.3...v0.7.4) (2022-12-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ajv to v8.11.2 ([6bf9a4d](https://github.com/smarlhens/npm-check-engines/commit/6bf9a4ddd75ab11f89c1009bbe45f8699deb63df))
+* **deps:** update dependency chalk to v5.2.0 ([6b88d7b](https://github.com/smarlhens/npm-check-engines/commit/6b88d7ba49bb7f0492a29d7ff873f8d4592d4e5a))
+* **deps:** update dependency listr2 to v5.0.6 ([8c3db19](https://github.com/smarlhens/npm-check-engines/commit/8c3db19c86f454e44c32d5388c86f622a0cf55e0))
+
+
+### Miscellaneous
+
+* add CodeQL workflow for GitHub code scanning ([6a7a686](https://github.com/smarlhens/npm-check-engines/commit/6a7a6868e9bc85e24213a740b2bcdf5916daa090))
+
+
+### Chores
+
+* **deps:** update commitlint monorepo to v17.3.0 ([c916ef0](https://github.com/smarlhens/npm-check-engines/commit/c916ef0c14b0170963487ef64ab1e63b045b104e))
+* **deps:** update dependency @swc/core to v1.3.15 ([a6bdc2e](https://github.com/smarlhens/npm-check-engines/commit/a6bdc2e52c0bf3dfabe3a92930b0d46516339b8d))
+* **deps:** update dependency @swc/core to v1.3.16 ([9fd291e](https://github.com/smarlhens/npm-check-engines/commit/9fd291e9b9eed084a50f3abae13dbf8bf7202d81))
+* **deps:** update dependency @swc/core to v1.3.18 ([6737fe6](https://github.com/smarlhens/npm-check-engines/commit/6737fe6bf14e89c3f9c401e838c34c2ce7cb074a))
+* **deps:** update dependency @swc/core to v1.3.19 ([10a0fe3](https://github.com/smarlhens/npm-check-engines/commit/10a0fe3928b74591f6b488d9fd158f8b521bd97c))
+* **deps:** update dependency @swc/core to v1.3.20 ([dc2b2dc](https://github.com/smarlhens/npm-check-engines/commit/dc2b2dce27d9a0f624fc717cd428c2a8e047e1a0))
+* **deps:** update dependency @swc/core to v1.3.21 ([3636fe8](https://github.com/smarlhens/npm-check-engines/commit/3636fe84d22406ae702f6a0772eec0f60650dbbb))
+* **deps:** update dependency @swc/core to v1.3.22 ([1b71758](https://github.com/smarlhens/npm-check-engines/commit/1b71758b05b0b55cbec84f9273c5ce0c6c6ed36e))
+* **deps:** update dependency @swc/core to v1.3.23 ([325cb6c](https://github.com/smarlhens/npm-check-engines/commit/325cb6ca939fe50518ef11466d60622933fb26fd))
+* **deps:** update dependency @swc/core to v1.3.24 ([19b21f8](https://github.com/smarlhens/npm-check-engines/commit/19b21f8e0d3138452cfefa0cbb04139f28e6cd0d))
+* **deps:** update dependency @trivago/prettier-plugin-sort-imports to v4 ([3873ea6](https://github.com/smarlhens/npm-check-engines/commit/3873ea6a7bf3ae7bb549cfe6c7c07b454e0432ee))
+* **deps:** update dependency @types/lodash to v4.14.189 ([c144ddc](https://github.com/smarlhens/npm-check-engines/commit/c144ddce7f15f8cfdfa9a9b92e486d7b0c15e5e5))
+* **deps:** update dependency @types/lodash to v4.14.190 ([af9d597](https://github.com/smarlhens/npm-check-engines/commit/af9d5972e4b6ab5b50b79a09f861502d17dc8347))
+* **deps:** update dependency @types/lodash to v4.14.191 ([82fd199](https://github.com/smarlhens/npm-check-engines/commit/82fd199ab194f458caae90191f2d57e50ab83967))
+* **deps:** update dependency @types/node to v18.11.10 ([c4c5516](https://github.com/smarlhens/npm-check-engines/commit/c4c551699c67e1526c9079066bd84125e16359cd))
+* **deps:** update dependency @types/node to v18.11.11 ([2f8f867](https://github.com/smarlhens/npm-check-engines/commit/2f8f867c3c851617e3330387270b5225eca70657))
+* **deps:** update dependency @types/node to v18.11.12 ([b162401](https://github.com/smarlhens/npm-check-engines/commit/b162401d4c7c898e66d8a4ca3e7722d72f5dd2da))
+* **deps:** update dependency @types/node to v18.11.13 ([11c0e79](https://github.com/smarlhens/npm-check-engines/commit/11c0e790c11d203b4bcb50a70c280a718fff7b49))
+* **deps:** update dependency @types/node to v18.11.15 ([482923c](https://github.com/smarlhens/npm-check-engines/commit/482923c2710c9ad64024811ae9c87239b485ea75))
+* **deps:** update dependency @types/node to v18.11.16 ([3a13ef1](https://github.com/smarlhens/npm-check-engines/commit/3a13ef1b7719bf17450dbd959477a366316f258b))
+* **deps:** update dependency @types/node to v18.11.17 ([90aa43d](https://github.com/smarlhens/npm-check-engines/commit/90aa43d8aa688b7204c24c0b860d70ff0217117d))
+* **deps:** update dependency @types/node to v18.11.18 ([aeb3b88](https://github.com/smarlhens/npm-check-engines/commit/aeb3b880c7f75c47874ae00863a512228d52a0b6))
+* **deps:** update dependency @types/yargs to v17.0.14 ([b8d61f5](https://github.com/smarlhens/npm-check-engines/commit/b8d61f52e344a70c15a26190888bc50ca5e40844))
+* **deps:** update dependency @types/yargs to v17.0.15 ([f579eca](https://github.com/smarlhens/npm-check-engines/commit/f579eca75dacdeb0b8ca55e70b811ad6ba290bb1))
+* **deps:** update dependency @types/yargs to v17.0.16 ([a84ba65](https://github.com/smarlhens/npm-check-engines/commit/a84ba650f67cb4ce63232098f3619d489b64733d))
+* **deps:** update dependency @types/yargs to v17.0.17 ([2f0f0e7](https://github.com/smarlhens/npm-check-engines/commit/2f0f0e7e24f384318f9269a2eca060d6c09428cc))
+* **deps:** update dependency @types/yargs to v17.0.18 ([ab81d99](https://github.com/smarlhens/npm-check-engines/commit/ab81d9950ce8b37a5c5ef33d10b4558e86ff9d9b))
+* **deps:** update dependency husky to v8.0.2 ([5995389](https://github.com/smarlhens/npm-check-engines/commit/59953890d7a5105e41e2ceb0f67e54e0b48aec16))
+* **deps:** update dependency lint-staged to v13.0.4 ([89d88fe](https://github.com/smarlhens/npm-check-engines/commit/89d88fe8f2b3555809c13b86bbaf6d3a89896c03))
+* **deps:** update dependency lint-staged to v13.1.0 ([5955d4f](https://github.com/smarlhens/npm-check-engines/commit/5955d4f5a0957ebd715ed46f5116155ef5437f8d))
+* **deps:** update dependency prettier to v2.8.0 ([2837a87](https://github.com/smarlhens/npm-check-engines/commit/2837a87fd04f89832e03a09d6fee05bb172f9482))
+* **deps:** update dependency prettier to v2.8.1 ([9da78c4](https://github.com/smarlhens/npm-check-engines/commit/9da78c47983aadf17ac2bfc03b58bddbaab31bbd))
+* **deps:** update dependency tsup to v6.5.0 ([aacb7c3](https://github.com/smarlhens/npm-check-engines/commit/aacb7c394653b53bc3303b5328802763aca8d8fc))
+* **deps:** update dependency typescript to v4.9.3 ([618aff1](https://github.com/smarlhens/npm-check-engines/commit/618aff1035ca441599fd57606b433ee920b95ec5))
+* **deps:** update dependency typescript to v4.9.4 ([1331cbc](https://github.com/smarlhens/npm-check-engines/commit/1331cbc32bbe8094dc9c4e62c6d69cf0d3d14f76))
+* **deps:** update vitest monorepo ([ce07882](https://github.com/smarlhens/npm-check-engines/commit/ce07882003a0b84fb4f6ff927cb873bea490b80c))
+* **deps:** update vitest monorepo to v0.25.0 ([3e2e69a](https://github.com/smarlhens/npm-check-engines/commit/3e2e69a063413c449518c721d38c2df503870632))
+* **deps:** update vitest monorepo to v0.25.1 ([9c50a23](https://github.com/smarlhens/npm-check-engines/commit/9c50a23dd0a0b3d2fc2d9265712f2413e435e85f))
+* **deps:** update vitest monorepo to v0.25.2 ([dd3fd3c](https://github.com/smarlhens/npm-check-engines/commit/dd3fd3cca0b35922521f12a95dd2f5822183dc6e))
+* **deps:** update vitest monorepo to v0.25.3 ([cba5c2c](https://github.com/smarlhens/npm-check-engines/commit/cba5c2cabd7526f3ad7aa5d709d2cfc6cac02edd))
+* **deps:** update vitest monorepo to v0.25.4 ([ded8fbf](https://github.com/smarlhens/npm-check-engines/commit/ded8fbf334696415625a2045c3a38a712bef05f6))
+* **deps:** update vitest monorepo to v0.25.5 ([e0f85f7](https://github.com/smarlhens/npm-check-engines/commit/e0f85f75486c5d36e8c98c94bd388ec72f17526f))
+* **deps:** update vitest monorepo to v0.25.6 ([452c100](https://github.com/smarlhens/npm-check-engines/commit/452c10027ca594c1e0fe03e0c32bc2a116f956d5))
+* **deps:** update vitest monorepo to v0.25.7 ([510583f](https://github.com/smarlhens/npm-check-engines/commit/510583f8bd36f0cd90d05e9d6577ada6b799382c))
+* **deps:** update vitest monorepo to v0.25.8 ([c893f48](https://github.com/smarlhens/npm-check-engines/commit/c893f485ecc7c98455ad1eb77993803dbaadd0c9))
+* **deps:** update vitest monorepo to v0.26.2 ([226727b](https://github.com/smarlhens/npm-check-engines/commit/226727b4e465df79e244f7ca6dea34a9e303d804))
+* remove lgtm related content ([7a5d68f](https://github.com/smarlhens/npm-check-engines/commit/7a5d68fa826eb1cbe35ffd6ac43499183aec6e25))
+
 ## [0.7.3](https://github.com/smarlhens/npm-check-engines/compare/v0.7.2...v0.7.3) (2022-11-06)
 
 
