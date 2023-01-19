@@ -68,7 +68,7 @@
     "chalk": "5.2.0",
     "cli-table": "0.3.11",
     "debug": "4.3.4",
-    "listr2": "5.0.6",
+    "listr2": "5.0.7",
     "lodash": "4.17.21",
     "semver": "7.3.8",
     "sort-package-json": "2.1.0",
