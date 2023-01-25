@@ -71,7 +71,7 @@
     "listr2": "5.0.7",
     "lodash": "4.17.21",
     "semver": "7.3.8",
-    "sort-package-json": "2.1.0",
+    "sort-package-json": "2.2.0",
     "update-notifier": "6.0.2",
     "yargs": "17.6.2"
   },
