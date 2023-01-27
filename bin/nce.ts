@@ -1,20 +1,16 @@
 #!/usr/bin/env node
+import { findUp } from 'find-up';
+import fs from 'node:fs/promises';
 import { dirname } from 'node:path';
-import process from 'node:process';
 import { fileURLToPath } from 'node:url';
-import updateNotifier, { Package } from 'update-notifier';
+import updateNotifier from 'update-notifier';
 
-import { nce } from '../lib/index.js';
-import { getJson, joinPath } from '../lib/utils.js';
+import { checkEnginesFromCLI } from '../lib/nce.js';
 import { cli } from '../lib/yargs.js';
 
 (async () => {
-  const isNotTestEnv = process.env.NODE_ENV !== 'test';
-  const parentOfDistFolder = isNotTestEnv ? '../' : '';
-  const packageJSON = `${parentOfDistFolder}../package.json` as const;
-  const cliArgs = await cli;
-  const pathToFile = joinPath(dirname(fileURLToPath(import.meta.url)), packageJSON);
-  const packageJson = await getJson<Partial<Package>>(pathToFile);
+  const packageJsonPath = await findUp('package.json', { type: 'file', cwd: dirname(fileURLToPath(import.meta.url)) });
+  const packageJson = JSON.parse(await fs.readFile(packageJsonPath!, 'utf8'));
   const notifier = updateNotifier({
     pkg: packageJson,
     updateCheckInterval: 1000 * 60,
@@ -28,5 +24,6 @@ import { cli } from '../lib/yargs.js';
     });
   }
 
-  await nce(cliArgs);
+  const cliArgs = await cli;
+  await checkEnginesFromCLI(cliArgs);
 })();
