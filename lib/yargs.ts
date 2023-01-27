@@ -4,7 +4,6 @@ import { hideBin } from 'yargs/helpers';
 
 export type CLIArgs = {
   [p: string]: unknown;
-  path?: string;
   update?: boolean;
   quiet?: boolean;
   verbose?: boolean;
@@ -19,17 +18,8 @@ export const cli: Promise<CLIArgs> = argv
   .scriptName('nce')
   .usage('Usage: $0 [options]')
   .example('$0', 'Check package-lock.json file in current working directory.')
-  .example(
-    '$0 -p examples -u',
-    'Check package-lock.json file and update engines in package.json in relative examples directory.',
-  )
   .strict()
   .options({
-    path: {
-      alias: 'p',
-      string: true,
-      description: 'Path to the NPM package folder. Default will use current folder.',
-    },
     quiet: {
       boolean: true,
       alias: 'q',
