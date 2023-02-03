@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.9.0](https://github.com/smarlhens/npm-check-engines/compare/v0.8.0...v0.9.0) (2023-02-03)
+
+
+### Features
+
+* engines as optional, support lockfileversion 3, expose validation functions ([eddd11d](https://github.com/smarlhens/npm-check-engines/commit/eddd11d7c7ff487497e0b09fde5c0dd75022ef7b))
+
+
+### Bug Fixes
+
+* **deps:** update dependency sort-package-json to v2.4.0 ([3084312](https://github.com/smarlhens/npm-check-engines/commit/3084312017828d7ca24e0115ad0063623b3b1696))
+
+
+### Chores
+
+* **deps:** update dependency @swc/core to v1.3.32 ([fe08e7e](https://github.com/smarlhens/npm-check-engines/commit/fe08e7e6273d1480c4ff9c5fe07d213e068cabd0))
+* **deps:** update dependency @types/yargs to v17.0.22 ([a7002a1](https://github.com/smarlhens/npm-check-engines/commit/a7002a19fcd09a831a653b573703f0958accd57a))
+* **deps:** update dependency typescript to v4.9.5 ([c5202c5](https://github.com/smarlhens/npm-check-engines/commit/c5202c5b150eea564acb0f9afecd312c9d3d0c29))
+* **deps:** update vitest monorepo to v0.28.4 ([00ae755](https://github.com/smarlhens/npm-check-engines/commit/00ae755d4d1ed560e59a9237d2bf425c09c054e4))
+
 ## [0.8.0](https://github.com/smarlhens/npm-check-engines/compare/v0.7.4...v0.8.0) (2023-01-27)
 
 
