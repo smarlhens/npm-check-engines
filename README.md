@@ -16,7 +16,9 @@
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Options](#options)
+  - [CLI](#cli)
+  - [Node](#node)
+- [CLI Options](#cli-options)
 - [Debug](#debug)
 - [Thanks](#thanks)
 
@@ -46,6 +48,8 @@ npx @smarlhens/npm-check-engines
 
 ## Usage
 
+### CLI
+
 Show the most restrictive constraint (**opinionated**) of the node engine for the project in the current directory based on the npm `package-lock.json` file:
 
 ```sh
@@ -66,9 +70,34 @@ $ nce -u
  node  *  →  ^14.17.0 || ^16.10.0 || >=17.0.0
 ```
 
+### Node
+
+```typescript
+import { checkEnginesFromString, validatePackageJson, validatePackageLock } from '@smarlhens/npm-check-engines';
+
+let packageJsonString = ''; // load content of package.json as stringified JSON
+let packageLockString = ''; // load content of package-lock.json as stringified JSON
+
+validatePackageJson({ packageJsonString }); // can throw Errors if unexpected format
+validatePackageLock({ packageLockString }); // can throw Errors if unexpected format
+
+// packageJson is the content of your package.json with updated engines
+// enginesRangeToSet contains changes if you want to display them
+const { enginesRangeToSet, packageJson } = checkEnginesFromString({
+  packageJsonString,
+  packageLockString,
+});
+console.log(packageJson);
+console.log(
+  enginesRangeToSet
+    .map(({ engine, range, rangeToSet }) => `${engine} range "${range}" replaced by "${rangeToSet}"`)
+    .join('\n'),
+);
+```
+
 ---
 
-## Options
+## CLI Options
 
 ```text
 Usage: nce [options]

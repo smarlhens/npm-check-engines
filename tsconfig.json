@@ -12,7 +12,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "resolveJsonModule": false,
+    "resolveJsonModule": true,
     "target": "ES2021",
     "typeRoots": ["node_modules/@types"],
     "types": ["node", "yargs"],
