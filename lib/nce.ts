@@ -20,23 +20,28 @@ type LockPackageEnginesObject = Partial<Record<EngineConstraintKey, string>>;
 type LockPackageEnginesArray = string[];
 type LockPackageEngines = LockPackageEnginesObject | LockPackageEnginesArray;
 
-type PackageJson = {
-  engines: LockPackageEngines;
+type OptionalEngines = {
+  engines?: LockPackageEngines;
 };
 
-type PackageDependencies = { [dependencyName: string]: { engines: LockPackageEngines } };
+type PackageDependencies = { [dependencyName: string]: OptionalEngines };
+type PackageLockDependencies = { dependencies: PackageDependencies };
+type PackageLockPackages = { packages: PackageDependencies };
 
 type PackageLockVersion1 = {
   lockfileVersion: 1;
-  dependencies: PackageDependencies;
-};
+} & PackageLockDependencies;
 
 type PackageLockVersion2 = {
   lockfileVersion: 2;
-  packages: PackageDependencies;
-};
+} & Partial<PackageLockPackages> &
+  PackageLockDependencies;
 
-type PackageLock = PackageLockVersion1 | PackageLockVersion2;
+type PackageLockVersion3 = {
+  lockfileVersion: 3;
+} & PackageLockPackages;
+
+type PackageLock = PackageLockVersion1 | PackageLockVersion2 | PackageLockVersion3;
 
 type EngineRangeToSet = {
   engine: EngineConstraintKey;
@@ -51,7 +56,7 @@ export type CheckEnginesInput = {
 };
 
 export type CheckEnginesOutput = {
-  packageJson: PackageJson;
+  packageJson: OptionalEngines;
   enginesRangeToSet: EngineRangeToSet[];
 };
 
@@ -130,105 +135,72 @@ export const checkEnginesFromCLI = async (args: CLIArgs): Promise<CheckEnginesCo
 const ajv = new Ajv();
 
 // @ts-ignore
-const packageJsonSchema: JSONSchemaType<PackageJson> = {
+const optionalEnginesSchema: JSONSchemaType<OptionalEngines> = {
   type: 'object',
   properties: {
     engines: {
-      oneOf: [
+      anyOf: [
         {
           type: 'object',
-          additionalProperties: {
-            type: 'string',
-          },
-          required: [],
+          additionalProperties: { type: 'string' },
+          oneOf: [
+            {
+              required: ['node'],
+            },
+            {
+              required: ['npm'],
+            },
+            {
+              required: ['yarn'],
+            },
+          ],
         },
         {
           type: 'array',
-          additionalProperties: {
-            type: 'string',
-          },
+          items: { type: 'string' },
+        },
+        {
+          type: 'object',
+          not: { required: ['engines'] },
         },
       ],
     },
   },
-  required: [],
 };
 
 // @ts-ignore
 const packageLockSchema: JSONSchemaType<PackageLock> = {
   type: 'object',
   properties: {
-    lockfileVersion: {
-      type: 'number',
+    lockfileVersion: { type: 'number', enum: [1, 2, 3] },
+    dependencies: {
+      type: 'object',
+      patternProperties: {
+        '^.*$': optionalEnginesSchema,
+      },
+    },
+    packages: {
+      type: 'object',
+      patternProperties: {
+        '^.*$': optionalEnginesSchema,
+      },
     },
   },
   required: ['lockfileVersion'],
   oneOf: [
     {
-      type: 'object',
-      properties: {
-        packages: {
-          type: 'object',
-          patternProperties: {
-            '^.*$': {
-              type: 'object',
-              properties: {
-                engines: {
-                  oneOf: [
-                    {
-                      type: 'object',
-                      additionalProperties: {
-                        type: 'string',
-                      },
-                      required: [],
-                    },
-                    {
-                      type: 'array',
-                      additionalProperties: {
-                        type: 'string',
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
-      },
-      required: ['packages'],
+      properties: { lockfileVersion: { const: 1 } },
+      required: ['dependencies'],
+      not: { required: ['packages'] },
     },
     {
-      type: 'object',
-      properties: {
-        dependencies: {
-          type: 'object',
-          patternProperties: {
-            '^.*$': {
-              type: 'object',
-              properties: {
-                engines: {
-                  oneOf: [
-                    {
-                      type: 'object',
-                      additionalProperties: {
-                        type: 'string',
-                      },
-                      required: [],
-                    },
-                    {
-                      type: 'array',
-                      additionalProperties: {
-                        type: 'string',
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
-      },
+      properties: { lockfileVersion: { const: 2 } },
       required: ['dependencies'],
+    },
+    {
+      properties: { lockfileVersion: { const: 3 } },
+      required: ['packages'],
+      not: { required: ['dependencies'] },
     },
   ],
 };
@@ -366,6 +338,12 @@ const computeEnginesConstraint = ({
 
   for (const [pkgName, pkg] of Object.entries(packages)) {
     const { engines } = pkg;
+
+    if (!engines) {
+      debugConstraint(`${chalk.white('Package')} ${chalk.gray(pkgName)} ${chalk.white('has no engines')}`);
+      continue;
+    }
+
     let constraint: string | undefined = getConstraintFromEngines(engines, constraintKey);
 
     if (!constraint) {
@@ -467,7 +445,7 @@ const generateUpdateCommandFromContext = (options: Options): string => {
 
 export const checkEnginesFromString = (ctx: CheckEnginesInput): CheckEnginesOutput => {
   const packageLock: PackageLock = JSON.parse(ctx.packageLockString);
-  const packageJson: PackageJson = JSON.parse(ctx.packageJsonString);
+  const packageJson: OptionalEngines = JSON.parse(ctx.packageJsonString);
   const engines = ctx.engines;
   const enginesRangeToSet: EngineRangeToSet[] = [];
 
@@ -482,7 +460,9 @@ export const checkEnginesFromString = (ctx: CheckEnginesInput): CheckEnginesOutp
   let packages: PackageDependencies;
   if (packageLock.lockfileVersion === 1) {
     packages = packageLock.dependencies;
-  } else {
+  } else if (packageLock.lockfileVersion === 2) {
+    packages = packageLock.packages ? packageLock.packages : packageLock.dependencies;
+  } else if (packageLock.lockfileVersion === 3) {
     packages = packageLock.packages;
   }
 
@@ -492,7 +472,7 @@ export const checkEnginesFromString = (ctx: CheckEnginesInput): CheckEnginesOutp
       constraintKey,
       debug,
     });
-    const to = computeEnginesConstraint({ packages, constraintKey, debug });
+    const to = computeEnginesConstraint({ packages: packages!, constraintKey, debug });
     const rangeToHumanized = humanizeRange(to);
     const rangeFromHumanized = humanizeRange(from);
 
@@ -513,6 +493,26 @@ export const checkEnginesFromString = (ctx: CheckEnginesInput): CheckEnginesOutp
     packageJson,
     enginesRangeToSet,
   };
+};
+
+export const validatePackageLock = (ctx: Pick<CheckEnginesInput, 'packageLockString'>): boolean => {
+  const packageLockValidator = ajv.compile(packageLockSchema);
+  const isValid = packageLockValidator(JSON.parse(ctx.packageLockString));
+  if (!isValid) {
+    throw new Error(`Invalid package-lock.json: ${ajv.errorsText(packageLockValidator.errors)}`);
+  }
+
+  return isValid;
+};
+
+export const validatePackageJson = (ctx: Pick<CheckEnginesInput, 'packageJsonString'>): boolean => {
+  const packageJsonValidator = ajv.compile(optionalEnginesSchema);
+  const isValid = packageJsonValidator(JSON.parse(ctx.packageJsonString));
+  if (!isValid) {
+    throw new Error(`Invalid package.json: ${ajv.errorsText(packageJsonValidator.errors)}`);
+  }
+
+  return isValid;
 };
 
 const checkEnginesTasks = ({
@@ -537,21 +537,13 @@ const checkEnginesTasks = ({
   {
     title: 'Validating package-lock.json...',
     task: (ctx: CheckEnginesContext): void => {
-      const packageLockValidator = ajv.compile(packageLockSchema);
-      const isValid = packageLockValidator(JSON.parse(ctx.packageLockString));
-      if (!isValid) {
-        throw new Error(`Invalid package-lock.json: ${ajv.errorsText(packageLockValidator.errors)}`);
-      }
+      validatePackageLock(ctx);
     },
   },
   {
     title: 'Validating package.json...',
     task: (ctx: CheckEnginesContext): void => {
-      const packageJsonValidator = ajv.compile(packageJsonSchema);
-      const isValid = packageJsonValidator(JSON.parse(ctx.packageJsonString));
-      if (!isValid) {
-        throw new Error(`Invalid package.json: ${ajv.errorsText(packageJsonValidator.errors)}`);
-      }
+      validatePackageJson(ctx);
     },
   },
   {
