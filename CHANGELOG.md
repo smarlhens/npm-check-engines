@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.10.0](https://github.com/smarlhens/npm-check-engines/compare/v0.9.0...v0.10.0) (2023-02-17)
+
+
+### Features
+
+* add an option to enable engine strict ([1dfeb75](https://github.com/smarlhens/npm-check-engines/commit/1dfeb75a1c9c84869c9bb70cf58ba00a215e8831))
+
+
+### Bug Fixes
+
+* cjs does not support import.meta.url ([b0050e8](https://github.com/smarlhens/npm-check-engines/commit/b0050e88027ff57546976f675da8a3c9d49b2eea))
+* **deps:** update dependency sort-package-json to v2.4.1 ([07f08d6](https://github.com/smarlhens/npm-check-engines/commit/07f08d666f392ffcb72c36baab603d0f1bba90d7))
+* **deps:** update dependency yargs to v17.7.0 ([8300164](https://github.com/smarlhens/npm-check-engines/commit/83001645d11ed7c2dc58b4bb22726e5368f5c70b))
+
+
+### Chores
+
+* **deps:** update commitlint monorepo to v17.4.3 ([0a3fe51](https://github.com/smarlhens/npm-check-engines/commit/0a3fe518ae277b18bf79d32f756436200514a829))
+* **deps:** update dependency @swc/core to v1.3.35 ([384d6ed](https://github.com/smarlhens/npm-check-engines/commit/384d6ed8e7d8f49cd2b20f4deb47ba6346706987))
+* **deps:** update dependency @types/node to v18.11.19 ([43557ce](https://github.com/smarlhens/npm-check-engines/commit/43557ce8a0de86596c1d2a4a33a138d9bb777170))
+* **deps:** update dependency @types/node to v18.13.0 ([a10a009](https://github.com/smarlhens/npm-check-engines/commit/a10a0094f1f8917340cb810bccf64a28c1fd6f8c))
+* **deps:** update dependency @types/update-notifier to v6.0.2 ([719d6b7](https://github.com/smarlhens/npm-check-engines/commit/719d6b72cc476e5fee87628cdb2d8a493bd82124))
+* **deps:** update dependency execa to v7 ([716332e](https://github.com/smarlhens/npm-check-engines/commit/716332eb5897735e1f3afb24c1497fcc58d213c3))
+* **deps:** update dependency lint-staged to v13.1.1 ([58aaff3](https://github.com/smarlhens/npm-check-engines/commit/58aaff34c5be605c6143dbbb25ecb049406194ea))
+* **deps:** update dependency lint-staged to v13.1.2 ([e80bcc0](https://github.com/smarlhens/npm-check-engines/commit/e80bcc0c17dcc6a193baf6c353bfb0e812777413))
+* **deps:** update dependency prettier to v2.8.4 ([80a67d6](https://github.com/smarlhens/npm-check-engines/commit/80a67d6c019d926f16b5a77d10a170f0c2c34723))
+* **deps:** update dependency tsup to v6.6.0 ([b47f162](https://github.com/smarlhens/npm-check-engines/commit/b47f1627bfb722efb7554d8a32a1daa26f82eead))
+* **deps:** update dependency tsup to v6.6.2 ([36b2521](https://github.com/smarlhens/npm-check-engines/commit/36b2521d5506888f4a355bf2c9aa1603a46ff768))
+* **deps:** update dependency tsup to v6.6.3 ([797aa4d](https://github.com/smarlhens/npm-check-engines/commit/797aa4dfcd484341cb0805d55ea23a132d6c4b9b))
+* **deps:** update vitest monorepo to v0.28.5 ([b55107e](https://github.com/smarlhens/npm-check-engines/commit/b55107ecc506aa2f4181e7997eeaa5155ac9229f))
+* prepare execa update ([ac81f29](https://github.com/smarlhens/npm-check-engines/commit/ac81f290d55822436bd27088792b60721f6b3b27))
+
 ## [0.9.0](https://github.com/smarlhens/npm-check-engines/compare/v0.8.0...v0.9.0) (2023-02-03)
 
 
