@@ -8,6 +8,7 @@ export type CLIArgs = {
   quiet?: boolean;
   verbose?: boolean;
   debug?: boolean;
+  enableEngineStrict?: boolean;
   engines?: string[];
   _?: Array<string | number>;
   $0?: string;
@@ -48,6 +49,11 @@ export const cli: Promise<CLIArgs> = argv
       alias: 'u',
       default: false,
       description: 'Update engines in package.json file.',
+    },
+    enableEngineStrict: {
+      boolean: true,
+      default: false,
+      description: 'Enable engine strict.',
     },
   })
   .help('help')
