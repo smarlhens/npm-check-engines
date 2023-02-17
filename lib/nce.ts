@@ -69,6 +69,7 @@ type Options = {
   verbose: boolean;
   quiet: boolean;
   debug: boolean;
+  enableEngineStrict: boolean;
   packageLockPath: string;
   packageJsonPath: string;
 };
@@ -103,7 +104,8 @@ const renderer = (
 
 export const checkEnginesFromCLI = async (args: CLIArgs): Promise<CheckEnginesContext> => {
   const cliArgs = args;
-  const isValidConstraintEngine = (value: string): value is EngineConstraintKey => value in EngineConstraintKeys;
+  const isValidConstraintEngine = (value: string): value is EngineConstraintKey =>
+    EngineConstraintKeys.includes(value as EngineConstraintKey);
 
   let options: Options = {
     workingDir: normalize(process.cwd()),
@@ -112,6 +114,7 @@ export const checkEnginesFromCLI = async (args: CLIArgs): Promise<CheckEnginesCo
     quiet: cliArgs.quiet || false,
     debug: cliArgs.debug || false,
     engines: cliArgs.engines?.filter(isValidConstraintEngine) || [],
+    enableEngineStrict: cliArgs.enableEngineStrict || false,
     packageLockPath: join(process.cwd(), packageLockFilename),
     packageJsonPath: join(process.cwd(), packageJsonFilename),
   };
@@ -590,7 +593,8 @@ const checkEnginesTasks = ({
   },
   {
     title: 'Enabling engine-strict using .npmrc...',
-    skip: () => (!options.update ? 'Enabling engine-strict is disabled by default.' : !options.update),
+    skip: () =>
+      !options.enableEngineStrict ? 'Enabling engine-strict is disabled by default.' : !options.enableEngineStrict,
     task: async (): Promise<void> => {
       const path = '.npmrc' as const;
 

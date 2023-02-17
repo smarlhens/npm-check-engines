@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { execaCommand, Options } from 'execa';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -32,7 +33,7 @@ describe('check engines from cli', () => {
         '[TITLE]  npm   *  →  >=6.0.0                          \n' +
         '[TITLE]  yarn  *  →  ^1.22.4                          \n' +
         '[TITLE] \n' +
-        '[TITLE] Run nce -u to upgrade package.json.\n' +
+        `[TITLE] Run ${chalk.cyan('nce -u')} to upgrade package.json.\n` +
         '[SUCCESS] Output computed engines range constraints...\n' +
         '[STARTED] Enabling engine-strict using .npmrc...\n' +
         '[SKIPPED] Enabling engine-strict is disabled by default.\n' +
@@ -44,7 +45,7 @@ describe('check engines from cli', () => {
         '[SUCCESS]  npm   *  →  >=6.0.0                          \n' +
         '[SUCCESS]  yarn  *  →  ^1.22.4                          \n' +
         '[SUCCESS] \n' +
-        '[SUCCESS] Run nce -u to upgrade package.json.',
+        `[SUCCESS] Run ${chalk.cyan('nce -u')} to upgrade package.json.`,
     );
   }, 10000);
 
@@ -77,7 +78,7 @@ describe('check engines from cli', () => {
         '[TITLE]  npm   *  →  >=6.0.0                          \n' +
         '[TITLE]  yarn  *  →  ^1.22.4                          \n' +
         '[TITLE] \n' +
-        '[TITLE] Run nce -u to upgrade package.json.\n' +
+        `[TITLE] Run ${chalk.cyan('nce -u')} to upgrade package.json.\n` +
         '[SUCCESS] Output computed engines range constraints...\n' +
         '[STARTED] Enabling engine-strict using .npmrc...\n' +
         '[SKIPPED] Enabling engine-strict is disabled by default.\n' +
@@ -89,7 +90,7 @@ describe('check engines from cli', () => {
         '[SUCCESS]  npm   *  →  >=6.0.0                          \n' +
         '[SUCCESS]  yarn  *  →  ^1.22.4                          \n' +
         '[SUCCESS] \n' +
-        '[SUCCESS] Run nce -u to upgrade package.json.',
+        `[SUCCESS] Run ${chalk.cyan('nce -u')} to upgrade package.json.`,
     );
   }, 10000);
 
@@ -122,7 +123,7 @@ describe('check engines from cli', () => {
         '[TITLE]  npm   *  →  >=6.0.0                          \n' +
         '[TITLE]  yarn  *  →  ^1.22.4                          \n' +
         '[TITLE] \n' +
-        '[TITLE] Run nce -u to upgrade package.json.\n' +
+        `[TITLE] Run ${chalk.cyan('nce -u')} to upgrade package.json.\n` +
         '[SUCCESS] Output computed engines range constraints...\n' +
         '[STARTED] Enabling engine-strict using .npmrc...\n' +
         '[SKIPPED] Enabling engine-strict is disabled by default.\n' +
@@ -134,7 +135,7 @@ describe('check engines from cli', () => {
         '[SUCCESS]  npm   *  →  >=6.0.0                          \n' +
         '[SUCCESS]  yarn  *  →  ^1.22.4                          \n' +
         '[SUCCESS] \n' +
-        '[SUCCESS] Run nce -u to upgrade package.json.',
+        `[SUCCESS] Run ${chalk.cyan('nce -u')} to upgrade package.json.`,
     );
   }, 10000);
 });
