@@ -28,6 +28,13 @@ describe('check engines from string', () => {
           yarn: '^1.22.4',
         },
       },
+      packageLock: expect.objectContaining({
+        packages: expect.objectContaining({
+          '': expect.objectContaining({
+            engines: { node: '^14.17.0 || ^16.10.0 || >=17.0.0', npm: '>=6.0.0', yarn: '^1.22.4' },
+          }),
+        }),
+      }),
       enginesRangeToSet: [
         { engine: 'node', range: '*', rangeToSet: '^14.17.0 || ^16.10.0 || >=17.0.0' },
         { engine: 'npm', range: '*', rangeToSet: '>=6.0.0' },
@@ -51,6 +58,13 @@ describe('check engines from string', () => {
           node: '^14.17.0 || ^16.10.0 || >=17.0.0',
         },
       },
+      packageLock: expect.objectContaining({
+        packages: expect.objectContaining({
+          '': expect.objectContaining({
+            engines: { node: '^14.17.0 || ^16.10.0 || >=17.0.0' },
+          }),
+        }),
+      }),
       enginesRangeToSet: [{ engine: 'node', range: '*', rangeToSet: '^14.17.0 || ^16.10.0 || >=17.0.0' }],
     });
   });
@@ -67,6 +81,7 @@ describe('check engines from string', () => {
         name: 'fake',
         private: true,
       },
+      packageLock: expect.anything(),
       enginesRangeToSet: [],
     });
   });
@@ -84,6 +99,7 @@ describe('check engines from string', () => {
         private: true,
         engines: { node: '>=12.22.0' },
       },
+      packageLock: expect.anything(),
       enginesRangeToSet: [],
     });
   });
@@ -100,6 +116,7 @@ describe('check engines from string', () => {
         private: true,
         engines: { node: '>=6.9.0' },
       },
+      packageLock: expect.anything(),
       enginesRangeToSet: [{ engine: 'node', range: '*', rangeToSet: '>=6.9.0' }],
     });
   });
@@ -116,6 +133,13 @@ describe('check engines from string', () => {
         private: true,
         engines: { node: '>=6.9.0' },
       },
+      packageLock: expect.objectContaining({
+        packages: expect.objectContaining({
+          '': expect.objectContaining({
+            engines: { node: '>=6.9.0' },
+          }),
+        }),
+      }),
       enginesRangeToSet: [{ engine: 'node', range: '*', rangeToSet: '>=6.9.0' }],
     });
   });
@@ -132,6 +156,7 @@ describe('check engines from string', () => {
         private: true,
         engines: { node: '>=6.9.0' },
       },
+      packageLock: expect.anything(),
       enginesRangeToSet: [{ engine: 'node', range: '*', rangeToSet: '>=6.9.0' }],
     });
   });
@@ -148,6 +173,13 @@ describe('check engines from string', () => {
         private: true,
         engines: { node: '>=6.9.0' },
       },
+      packageLock: expect.objectContaining({
+        packages: expect.objectContaining({
+          '': expect.objectContaining({
+            engines: { node: '>=6.9.0' },
+          }),
+        }),
+      }),
       enginesRangeToSet: [{ engine: 'node', range: '*', rangeToSet: '>=6.9.0' }],
     });
   });

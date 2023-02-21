@@ -48,7 +48,7 @@ export const cli: Promise<CLIArgs> = argv
       boolean: true,
       alias: 'u',
       default: false,
-      description: 'Update engines in package.json file.',
+      description: 'Update engines in package.json and package-lock.json.',
     },
     enableEngineStrict: {
       boolean: true,
@@ -59,4 +59,4 @@ export const cli: Promise<CLIArgs> = argv
   .help('help')
   .version()
   .wrap(argv.terminalWidth())
-  .epilog('© 2022 Samuel MARLHENS').argv as Promise<CLIArgs>;
+  .epilog('© 2023 Samuel MARLHENS').argv as Promise<CLIArgs>;
