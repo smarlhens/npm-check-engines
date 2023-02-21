@@ -82,12 +82,14 @@ validatePackageJson({ packageJsonString }); // can throw Errors if unexpected fo
 validatePackageLock({ packageLockString }); // can throw Errors if unexpected format
 
 // packageJson is the content of your package.json with updated engines
+// packageLock is the content of your package-lock.json with updated engines of the root project in packages
 // enginesRangeToSet contains changes if you want to display them
-const { enginesRangeToSet, packageJson } = checkEnginesFromString({
+const { enginesRangeToSet, packageJson, packageLock } = checkEnginesFromString({
   packageJsonString,
   packageLockString,
 });
 console.log(packageJson);
+console.log(packageLock);
 console.log(
   enginesRangeToSet
     .map(({ engine, range, rangeToSet }) => `${engine} range "${range}" replaced by "${rangeToSet}"`)
@@ -109,7 +111,8 @@ Options:
                                                                                 [boolean] [default: false]
   -v, --verbose  A little more detailed than the default output.                [boolean] [default: false]
   -e, --engines  Select engines to check. Default will check all engines defined.                  [array]
-  -u, --update   Update engines in package.json file.                           [boolean] [default: false]
+  -u, --update   Update engines in package.json and package-lock.json.          [boolean] [default: false]
+      --enableEngineStrict  Enable engine strict.                               [boolean] [default: false]
       --help     Show help                                                                       [boolean]
       --version  Show version number                                                             [boolean]
 
@@ -118,7 +121,7 @@ Examples:
   nce -p examples -u  Check package-lock.json file and update engines in package.json in relative examples
                       directory.
 
-© 2022 Samuel MARLHENS
+© 2023 Samuel MARLHENS
 ```
 
 ---
@@ -202,6 +205,8 @@ $ DEBUG=* nce -d
 [SUCCESS] Output computed engines range constraints...
 [STARTED] Update package.json file...
 [SKIPPED] Update is disabled by default.
+[STARTED] Enabling engine-strict using .npmrc...
+[SKIPPED] Enabling engine-strict is disabled by default.
 [SUCCESS] Computed engines range constraints:
 [SUCCESS]
 [SUCCESS]  node  *  →  ^14.17.0 || ^16.10.0 || >=17.0.0

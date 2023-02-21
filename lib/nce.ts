@@ -57,6 +57,7 @@ export type CheckEnginesInput = {
 
 export type CheckEnginesOutput = {
   packageJson: OptionalEngines;
+  packageLock: PackageLock;
   enginesRangeToSet: EngineRangeToSet[];
 };
 
@@ -264,6 +265,8 @@ export const restrictiveRange = (
 
     if (newR1.intersects(newR2, rangeOptions)) {
       return restrictiveRange(newR1, newR2, ignoredRanges, debug);
+    } else if (newR2.intersects(newR1, rangeOptions)) {
+      return restrictiveRange(newR2, newR1, ignoredRanges, debug);
     } else {
       throw new Error('Not yet implemented :/');
     }
@@ -490,10 +493,17 @@ export const checkEnginesFromString = (ctx: CheckEnginesInput): CheckEnginesOutp
     });
 
     packageJson.engines = merge({}, packageJson.engines, { [constraintKey]: rangeToHumanized });
+
+    if ((packageLock.lockfileVersion === 2 || packageLock.lockfileVersion === 3) && packageLock.packages) {
+      packageLock.packages[''].engines = merge({}, packageLock.packages[''].engines, {
+        [constraintKey]: rangeToHumanized,
+      });
+    }
   }
 
   return {
     packageJson,
+    packageLock,
     enginesRangeToSet,
   };
 };
@@ -592,6 +602,17 @@ const checkEnginesTasks = ({
     },
   },
   {
+    title: 'Updating package.json...',
+    skip: () => (!options.update ? 'Update is disabled by default.' : !options.update),
+    task: (ctx: CheckEnginesContext) => {
+      debug(`${chalk.white(`Write JSON to`)} ${chalk.blue('package.json')}`);
+      return Promise.all([
+        fs.writeFile(options.packageJsonPath, JSON.stringify(sortPackageJson(ctx.packageJson!), null, 2) + '\n'),
+        fs.writeFile(options.packageLockPath, JSON.stringify(ctx.packageLock, null, 2) + '\n'),
+      ]);
+    },
+  },
+  {
     title: 'Enabling engine-strict using .npmrc...',
     skip: () =>
       !options.enableEngineStrict ? 'Enabling engine-strict is disabled by default.' : !options.enableEngineStrict,
@@ -612,14 +633,6 @@ const checkEnginesTasks = ({
         await fs.writeFile(path, 'engine-strict=true\n');
         debug('.npmrc file has been created and set engine-strict=true');
       }
-    },
-  },
-  {
-    title: 'Updating package.json...',
-    skip: () => (!options.update ? 'Update is disabled by default.' : !options.update),
-    task: (ctx: CheckEnginesContext) => {
-      debug(`${chalk.white(`Write JSON to`)} ${chalk.blue('package.json')}`);
-      return fs.writeFile(options.packageJsonPath, JSON.stringify(sortPackageJson(ctx.packageJson!), null, 2));
     },
   },
 ];

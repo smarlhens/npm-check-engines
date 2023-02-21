@@ -35,10 +35,10 @@ describe('check engines from cli', () => {
         '[TITLE] \n' +
         `[TITLE] Run ${chalk.cyan('nce -u')} to upgrade package.json.\n` +
         '[SUCCESS] Output computed engines range constraints...\n' +
-        '[STARTED] Enabling engine-strict using .npmrc...\n' +
-        '[SKIPPED] Enabling engine-strict is disabled by default.\n' +
         '[STARTED] Updating package.json...\n' +
         '[SKIPPED] Update is disabled by default.\n' +
+        '[STARTED] Enabling engine-strict using .npmrc...\n' +
+        '[SKIPPED] Enabling engine-strict is disabled by default.\n' +
         '[SUCCESS] Computed engines range constraints:\n' +
         '[SUCCESS] \n' +
         '[SUCCESS]  node  *  →  ^14.17.0 || ^16.10.0 || >=17.0.0 \n' +
@@ -80,10 +80,10 @@ describe('check engines from cli', () => {
         '[TITLE] \n' +
         `[TITLE] Run ${chalk.cyan('nce -u')} to upgrade package.json.\n` +
         '[SUCCESS] Output computed engines range constraints...\n' +
-        '[STARTED] Enabling engine-strict using .npmrc...\n' +
-        '[SKIPPED] Enabling engine-strict is disabled by default.\n' +
         '[STARTED] Updating package.json...\n' +
         '[SKIPPED] Update is disabled by default.\n' +
+        '[STARTED] Enabling engine-strict using .npmrc...\n' +
+        '[SKIPPED] Enabling engine-strict is disabled by default.\n' +
         '[SUCCESS] Computed engines range constraints:\n' +
         '[SUCCESS] \n' +
         '[SUCCESS]  node  *  →  ^14.17.0 || ^16.10.0 || >=17.0.0 \n' +
@@ -125,10 +125,10 @@ describe('check engines from cli', () => {
         '[TITLE] \n' +
         `[TITLE] Run ${chalk.cyan('nce -u')} to upgrade package.json.\n` +
         '[SUCCESS] Output computed engines range constraints...\n' +
-        '[STARTED] Enabling engine-strict using .npmrc...\n' +
-        '[SKIPPED] Enabling engine-strict is disabled by default.\n' +
         '[STARTED] Updating package.json...\n' +
         '[SKIPPED] Update is disabled by default.\n' +
+        '[STARTED] Enabling engine-strict using .npmrc...\n' +
+        '[SKIPPED] Enabling engine-strict is disabled by default.\n' +
         '[SUCCESS] Computed engines range constraints:\n' +
         '[SUCCESS] \n' +
         '[SUCCESS]  node  *  →  ^14.17.0 || ^16.10.0 || >=17.0.0 \n' +
