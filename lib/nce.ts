@@ -1,7 +1,6 @@
 import Ajv, { JSONSchemaType } from 'ajv';
 import chalk from 'chalk';
 import Table from 'cli-table';
-import * as constants from 'constants';
 import Debug, { Debugger } from 'debug';
 import { Listr, ListrBaseClassOptions, ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2';
 import type { ListrDefaultRendererOptions, ListrRendererValue } from 'listr2';
@@ -263,12 +262,31 @@ export const restrictiveRange = (
     const newR1 = setToRange(applyMinVersionToRangeSet(sortedR1, minSemver));
     const newR2 = setToRange(applyMinVersionToRangeSet(sortedR2, minSemver));
 
+    if (!newR1.test(minSemver.raw)) {
+      debug(
+        `${chalk.white('Following range is not valid')}: ${chalk.red(newR1.raw)}, returning ${chalk.green(newR2.raw)}`,
+      );
+      return newR2;
+    }
+
+    if (!newR2.test(minSemver.raw)) {
+      debug(
+        `${chalk.white('Following range is not valid')}: ${chalk.red(newR2.raw)}, returning ${chalk.green(newR1.raw)}`,
+      );
+      return newR1;
+    }
+
     if (newR1.intersects(newR2, rangeOptions)) {
       return restrictiveRange(newR1, newR2, ignoredRanges, debug);
     } else if (newR2.intersects(newR1, rangeOptions)) {
       return restrictiveRange(newR2, newR1, ignoredRanges, debug);
     } else {
-      throw new Error('Not yet implemented :/');
+      debug(
+        `${chalk.white('Unable to find intersection range')}: ${chalk.blue(newR1.raw)} and ${chalk.blue(
+          newR2.raw,
+        )}, returning ${chalk.green(newR1.raw)}`,
+      );
+      return newR1;
     }
   }
 
@@ -562,7 +580,7 @@ const checkEnginesTasks = ({
   {
     title: 'Compute engines range constraints...',
     task: (ctx: CheckEnginesContext): void => {
-      Object.assign(ctx, checkEnginesFromString(ctx));
+      Object.assign(ctx, checkEnginesFromString(merge({}, ctx, { engines: options.engines })));
     },
   },
   {
@@ -620,7 +638,7 @@ const checkEnginesTasks = ({
       const path = '.npmrc' as const;
 
       try {
-        await fs.access(path, constants.F_OK | constants.R_OK);
+        await fs.access(path, fs.constants.F_OK | fs.constants.R_OK);
         const contents = await fs.readFile(path, 'utf8');
 
         if (contents.includes('engine-strict=true')) {

@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import packageJson from '../examples/package.json';
 import packageWithComplexSemverAllEngines from '../examples/with-complex-semver-node-npm-yarn/package-lock.json';
 import packageWithComplexSemverNode from '../examples/with-complex-semver-node/package-lock.json';
+import packageLockWithIncompatibleSemver from '../examples/with-incompatible-semver/package-lock.json';
+import packageJsonWithIncompatibleSemver from '../examples/with-incompatible-semver/package.json';
 import packageWithLockFileVersion1 from '../examples/with-lock-file-version-1/package-lock.json';
 import packageWithLockFileVersion2 from '../examples/with-lock-file-version-2-dependencies-packages/package-lock.json';
 import packageWithLockFileVersion2Dependencies from '../examples/with-lock-file-version-2-dependencies/package-lock.json';
@@ -181,6 +183,29 @@ describe('check engines from string', () => {
         }),
       }),
       enginesRangeToSet: [{ engine: 'node', range: '*', rangeToSet: '>=6.9.0' }],
+    });
+  });
+
+  it('should handle incompatible semver and the greatest one', async () => {
+    const params: CheckEnginesContext = {
+      packageJsonString: JSON.stringify(packageJsonWithIncompatibleSemver),
+      packageLockString: JSON.stringify(packageLockWithIncompatibleSemver),
+    };
+    const payload = checkEnginesFromString(params);
+    expect(payload).toEqual({
+      packageJson: {
+        name: 'fake',
+        private: true,
+        engines: { node: '18.14' },
+      },
+      packageLock: expect.objectContaining({
+        packages: expect.objectContaining({
+          '': expect.objectContaining({
+            engines: { node: '18.14' },
+          }),
+        }),
+      }),
+      enginesRangeToSet: [],
     });
   });
 });
