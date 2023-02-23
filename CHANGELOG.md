@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.11.0](https://github.com/smarlhens/npm-check-engines/compare/v0.10.0...v0.11.0) (2023-02-23)
+
+
+### Features
+
+* take the greatest range if no intersection ([d8c0e84](https://github.com/smarlhens/npm-check-engines/commit/d8c0e843f5e2e498782da8b9ee6c7f2c73148773))
+* update engines in lock file if relevant ([914ce08](https://github.com/smarlhens/npm-check-engines/commit/914ce087de8dabc678f27027f6f4f2fb63ae2694))
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs to v17.7.1 ([3d2c711](https://github.com/smarlhens/npm-check-engines/commit/3d2c7118e11aac0486c5336c94cffc0a60bfcd18))
+
+
+### Documentation
+
+* **README:** update options & debug output ([1f38b83](https://github.com/smarlhens/npm-check-engines/commit/1f38b8301507ddd2cb9550f1fb6d3efb569cf3d1))
+
+
+### Chores
+
+* **deps:** update commitlint monorepo to v17.4.4 ([aadb72b](https://github.com/smarlhens/npm-check-engines/commit/aadb72bd7e23692b38f3b5cffa7aca4e9f5dc6a0))
+* **deps:** update dependency @swc/core to v1.3.36 ([a717e62](https://github.com/smarlhens/npm-check-engines/commit/a717e6237162d6ac981403c3a308dc2d69b4d381))
+* **deps:** update dependency @trivago/prettier-plugin-sort-imports to v4.1.0 ([d227848](https://github.com/smarlhens/npm-check-engines/commit/d227848ff675069be74def5955ca3febae9036ca))
+* **deps:** update dependency @types/node to v18.14.0 ([bc4a7ef](https://github.com/smarlhens/npm-check-engines/commit/bc4a7efabc0007f6c5c051c10de189191d151f40))
+* **deps:** update dependency @types/node to v18.14.1 ([467a5d5](https://github.com/smarlhens/npm-check-engines/commit/467a5d54f805ae3ee80caaf0a11f3b105798eb9b))
+
 ## [0.10.0](https://github.com/smarlhens/npm-check-engines/compare/v0.9.0...v0.10.0) (2023-02-17)
 
 
