@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.12.0](https://github.com/smarlhens/npm-check-engines/compare/v0.11.0...v0.12.0) (2023-03-04)
+
+
+### Features
+
+* use package.json defined engine ranges as default for lock file ([e94689d](https://github.com/smarlhens/npm-check-engines/commit/e94689d49ef8b1f2d5476c1bd085af5a1723581d))
+
+
+### Chores
+
+* **deps:** update dependency @swc/core to v1.3.37 ([902632f](https://github.com/smarlhens/npm-check-engines/commit/902632f3322d78351003896c5758a20e8eaa7a0e))
+* **deps:** update dependency @trivago/prettier-plugin-sort-imports to v4.1.1 ([67f7068](https://github.com/smarlhens/npm-check-engines/commit/67f7068009a104f3e2c4267cf3b928e9464b00a7))
+* **deps:** update dependency @types/node to v18.14.2 ([b5ef6d5](https://github.com/smarlhens/npm-check-engines/commit/b5ef6d5653b492e97fe65a5066942ea4b80e45d2))
+* **deps:** update dependency @types/node to v18.14.6 ([fc0bf8a](https://github.com/smarlhens/npm-check-engines/commit/fc0bf8a962b833d5960fe2ea44af894a6d71762a))
+* **deps:** update dependency rimraf to v4.1.3 ([1611e3d](https://github.com/smarlhens/npm-check-engines/commit/1611e3dd455f6b0f85333ab4bb68bf8fb189b3c5))
+* **deps:** update dependency rimraf to v4.3.0 ([733b381](https://github.com/smarlhens/npm-check-engines/commit/733b381f57ced3dd9082337b02bf9ae799766d4e))
+* **deps:** update vitest monorepo to v0.29.1 ([1d81abe](https://github.com/smarlhens/npm-check-engines/commit/1d81abe8843995c9c9fcf8e1820110df89c187cf))
+* **deps:** update vitest monorepo to v0.29.2 ([074d66a](https://github.com/smarlhens/npm-check-engines/commit/074d66a068d9e68110c48cbdf929d9ae1d6df21d))
+
 ## [0.11.0](https://github.com/smarlhens/npm-check-engines/compare/v0.10.0...v0.11.0) (2023-02-23)
 
 
