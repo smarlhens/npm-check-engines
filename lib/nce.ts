@@ -496,7 +496,11 @@ export const checkEnginesFromString = (ctx: CheckEnginesInput): CheckEnginesOutp
       constraintKey,
       debug,
     });
-    const to = computeEnginesConstraint({ packages: packages!, constraintKey, debug });
+    const to = computeEnginesConstraint({
+      packages: merge({}, { '': { engines: packageJson.engines || {} } }, packages!),
+      constraintKey,
+      debug,
+    });
     const rangeToHumanized = humanizeRange(to);
     const rangeFromHumanized = humanizeRange(from);
 

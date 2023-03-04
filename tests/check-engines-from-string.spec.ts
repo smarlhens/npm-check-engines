@@ -6,6 +6,7 @@ import packageWithComplexSemverNode from '../examples/with-complex-semver-node/p
 import packageLockWithIncompatibleSemver from '../examples/with-incompatible-semver/package-lock.json';
 import packageJsonWithIncompatibleSemver from '../examples/with-incompatible-semver/package.json';
 import packageWithLockFileVersion1 from '../examples/with-lock-file-version-1/package-lock.json';
+import packageJsonWithLockFileVersion1 from '../examples/with-lock-file-version-1/package.json';
 import packageWithLockFileVersion2 from '../examples/with-lock-file-version-2-dependencies-packages/package-lock.json';
 import packageWithLockFileVersion2Dependencies from '../examples/with-lock-file-version-2-dependencies/package-lock.json';
 import packageWithLockFileVersion3 from '../examples/with-lock-file-version-3/package-lock.json';
@@ -106,7 +107,7 @@ describe('check engines from string', () => {
     });
   });
 
-  it('should return engine ranges to set using lock file version 1', async () => {
+  it('should return no engine ranges to set using lock file version 1', async () => {
     const params: CheckEnginesContext = {
       packageJsonString,
       packageLockString: JSON.stringify(packageWithLockFileVersion1),
@@ -116,10 +117,28 @@ describe('check engines from string', () => {
       packageJson: {
         name: 'fake',
         private: true,
-        engines: { node: '>=6.9.0' },
       },
       packageLock: expect.anything(),
-      enginesRangeToSet: [{ engine: 'node', range: '*', rangeToSet: '>=6.9.0' }],
+      enginesRangeToSet: [],
+    });
+  });
+
+  it('should return no engine ranges to set using lock file version 1 with engines set in package.json', async () => {
+    const params: CheckEnginesContext = {
+      packageJsonString: JSON.stringify(packageJsonWithLockFileVersion1),
+      packageLockString: JSON.stringify(packageWithLockFileVersion1),
+    };
+    const payload = checkEnginesFromString(params);
+    expect(payload).toEqual({
+      packageJson: {
+        name: 'fake',
+        private: true,
+        engines: {
+          node: '>=6.9.0',
+        },
+      },
+      packageLock: expect.anything(),
+      enginesRangeToSet: [],
     });
   });
 
