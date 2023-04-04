@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.13.0](https://github.com/smarlhens/npm-check-engines/compare/v0.12.0...v0.13.0) (2023-04-04)
+
+
+### Features
+
+* enhance range comparison ([8d024a1](https://github.com/smarlhens/npm-check-engines/commit/8d024a1ca5c48b96bd72844c1a85beacbdbefbb4))
+
+
+### Bug Fixes
+
+* **deps:** update dependency listr2 to v5.0.8 ([b2852a6](https://github.com/smarlhens/npm-check-engines/commit/b2852a65e7cbc75ed81b9fbd8cbb3c76b77e3fd9))
+
+
+### Chores
+
+* **deps:** update dependency @commitlint/cli to v17.5.0 ([9b80fd4](https://github.com/smarlhens/npm-check-engines/commit/9b80fd41152cb573580d10f337c26870582483d2))
+* **deps:** update dependency @commitlint/cli to v17.5.1 ([2e04eb7](https://github.com/smarlhens/npm-check-engines/commit/2e04eb727002885b6ac2c2b1eabe54c2daf51328))
+* **deps:** update dependency @swc/core to v1.3.38 ([4fb0003](https://github.com/smarlhens/npm-check-engines/commit/4fb000399d89c13418aae2dae01c7f7477be00ee))
+* **deps:** update dependency @swc/core to v1.3.39 ([74f68cb](https://github.com/smarlhens/npm-check-engines/commit/74f68cb588a644152b8c14880a26a1ef4b60099f))
+* **deps:** update dependency @swc/core to v1.3.40 ([b35ffe3](https://github.com/smarlhens/npm-check-engines/commit/b35ffe39164bd94b9330b6155785bf35e110e21c))
+* **deps:** update dependency @swc/core to v1.3.41 ([dd0c53c](https://github.com/smarlhens/npm-check-engines/commit/dd0c53c9e6328105932c162cb82c4a0234f2c391))
+* **deps:** update dependency @swc/core to v1.3.42 ([5244789](https://github.com/smarlhens/npm-check-engines/commit/52447897f889539d9c2999c45b2cdca1c71f287b))
+* **deps:** update dependency @swc/core to v1.3.44 ([955a964](https://github.com/smarlhens/npm-check-engines/commit/955a964fa345d42f8d07ff275a0f99226117aee9))
+* **deps:** update dependency @types/lodash-es to v4.17.7 ([c113d31](https://github.com/smarlhens/npm-check-engines/commit/c113d31c8db200e77a679961be923246d57dfbf3))
+* **deps:** update dependency @types/node to v18.15.0 ([a42f28e](https://github.com/smarlhens/npm-check-engines/commit/a42f28eedde14fd2ec94c4533967e482fc8fbeb7))
+* **deps:** update dependency @types/node to v18.15.10 ([c876f48](https://github.com/smarlhens/npm-check-engines/commit/c876f4879b2815278c02a580648beab71ea89f30))
+* **deps:** update dependency @types/node to v18.15.11 ([0dda812](https://github.com/smarlhens/npm-check-engines/commit/0dda812d82b9f13c1b2af8c98f8f6e115acc3a84))
+* **deps:** update dependency @types/node to v18.15.3 ([3e4ab37](https://github.com/smarlhens/npm-check-engines/commit/3e4ab37d2533f83e36b160ca86bf034728452300))
+* **deps:** update dependency @types/node to v18.15.5 ([d7a4aa9](https://github.com/smarlhens/npm-check-engines/commit/d7a4aa9350a9676c4b05445cdbc0878c9da4a924))
+* **deps:** update dependency @types/node to v18.15.6 ([17eada3](https://github.com/smarlhens/npm-check-engines/commit/17eada3865a5e2cc7197a41e4a788811385318d2))
+* **deps:** update dependency @types/yargs to v17.0.23 ([c7746de](https://github.com/smarlhens/npm-check-engines/commit/c7746de761216e27920626ad485720e31c3ff47b))
+* **deps:** update dependency @types/yargs to v17.0.24 ([f98120b](https://github.com/smarlhens/npm-check-engines/commit/f98120b7bec0cb61146c44f1f436130c32902541))
+* **deps:** update dependency execa to v7.1.0 ([13f8bcb](https://github.com/smarlhens/npm-check-engines/commit/13f8bcb9dbcd4a6d033834c80917132a445300f2))
+* **deps:** update dependency execa to v7.1.1 ([29f9dff](https://github.com/smarlhens/npm-check-engines/commit/29f9dffb04c7fb863d0f4c480ddf9424ffa098be))
+* **deps:** update dependency lint-staged to v13.2.0 ([9a26c46](https://github.com/smarlhens/npm-check-engines/commit/9a26c4624502da44e9f138afdbd7e05ebc72bf80))
+* **deps:** update dependency prettier to v2.8.5 ([b37e9cd](https://github.com/smarlhens/npm-check-engines/commit/b37e9cd18ff20c32fa2b1337ae5d1b37a3aea475))
+* **deps:** update dependency prettier to v2.8.6 ([91d56f6](https://github.com/smarlhens/npm-check-engines/commit/91d56f619c85f7029da7884f3ba5c9ea3edfe79f))
+* **deps:** update dependency prettier to v2.8.7 ([23a7e76](https://github.com/smarlhens/npm-check-engines/commit/23a7e762ca1a0bdfb6fba4c11f7bd977ec4de32a))
+* **deps:** update dependency rimraf to v4.3.1 ([dbc826e](https://github.com/smarlhens/npm-check-engines/commit/dbc826e6716f0f1ad73a54c7d58a0fdb6713966e))
+* **deps:** update dependency rimraf to v4.4.0 ([746279b](https://github.com/smarlhens/npm-check-engines/commit/746279be409f2c4c0e34f204c10e698f94f2ecab))
+* **deps:** update dependency rimraf to v4.4.1 ([fb2d3e0](https://github.com/smarlhens/npm-check-engines/commit/fb2d3e0b3c1913b2a6f01274edd6f28d369b4065))
+* **deps:** update dependency tsup to v6.7.0 ([a11f176](https://github.com/smarlhens/npm-check-engines/commit/a11f17674cc4666013874cad07835513e23ec448))
+* **deps:** update vitest monorepo to v0.29.3 ([056fd37](https://github.com/smarlhens/npm-check-engines/commit/056fd37c340309e7e801ed277f5171ff81cc0b95))
+* **deps:** update vitest monorepo to v0.29.7 ([c6f4c7e](https://github.com/smarlhens/npm-check-engines/commit/c6f4c7efa1c390d25e6e61ee422ec00de4a0d100))
+* **deps:** update vitest monorepo to v0.29.8 ([2584cf3](https://github.com/smarlhens/npm-check-engines/commit/2584cf36e94ac214ad4f187a37e306f51dbb5553))
+
 ## [0.12.0](https://github.com/smarlhens/npm-check-engines/compare/v0.11.0...v0.12.0) (2023-03-04)
 
 
