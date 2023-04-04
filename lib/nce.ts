@@ -234,7 +234,7 @@ export const restrictiveRange = (
   r1: semver.Range,
   r2: semver.Range,
   ignoredRanges: string[],
-  debug: Debugger,
+  debug: (str: string) => void,
 ): semver.Range => {
   debug(`${chalk.white('Compare:')} ${chalk.blue(r1.raw)} ${chalk.white('and')} ${chalk.blue(r2.raw)}`);
 
@@ -248,10 +248,37 @@ export const restrictiveRange = (
     return r2;
   }
 
-  const minVersion1 = semver.minVersion(r1, rangeOptions) || new semver.SemVer('*');
-  const minVersion2 = semver.minVersion(r2, rangeOptions) || new semver.SemVer('*');
-  const sortedR1: semver.Comparator[][] = sortRangeSet(r1.set);
-  const sortedR2: semver.Comparator[][] = sortRangeSet(r2.set);
+  if (!r1.intersects(r2, rangeOptions)) {
+    debug(
+      `${chalk.red('No intersection')} ${chalk.white('between')} ${chalk.blue(r1.raw)} ${chalk.white(
+        'and',
+      )} ${chalk.blue(r2.raw)}, ${chalk.white('returning')} ${chalk.green(r1.raw)}`,
+    );
+    return r1;
+  } else if (!r2.intersects(r1, rangeOptions)) {
+    debug(
+      `${chalk.red('No intersection')} ${chalk.white('between')} ${chalk.blue(r2.raw)} ${chalk.white(
+        'and',
+      )} ${chalk.blue(r1.raw)}, ${chalk.white('returning')} ${chalk.green(r2.raw)}`,
+    );
+    return r2;
+  }
+
+  let minVersion1 = semver.minVersion(r1, rangeOptions) || new semver.SemVer('*');
+  let minVersion2 = semver.minVersion(r2, rangeOptions) || new semver.SemVer('*');
+  let sortedR1: semver.Comparator[][] = sortRangeSet(r1.set);
+  let sortedR2: semver.Comparator[][] = sortRangeSet(r2.set);
+
+  while (minVersion1.major !== minVersion2.major) {
+    if (minVersion1.major > minVersion2.major) {
+      sortedR2 = sortedR2.slice(1);
+    } else {
+      sortedR1 = sortedR1.slice(1);
+    }
+
+    minVersion1 = semver.minVersion(setToRange(sortedR1), rangeOptions) || new semver.SemVer('*');
+    minVersion2 = semver.minVersion(setToRange(sortedR2), rangeOptions) || new semver.SemVer('*');
+  }
 
   if (!semver.eq(minVersion1, minVersion2, rangeOptions)) {
     const minSemver = semver.compare(minVersion1, minVersion2) === -1 ? minVersion2 : minVersion1;
