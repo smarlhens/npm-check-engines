@@ -69,7 +69,7 @@
     "semver": "7.5.0",
     "sort-package-json": "2.4.1",
     "update-notifier": "6.0.2",
-    "yargs": "17.7.1"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
     "@commitlint/cli": "17.6.0",
