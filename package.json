@@ -83,7 +83,7 @@
     "@types/semver": "7.5.0",
     "@types/update-notifier": "6.0.4",
     "@types/yargs": "17.0.24",
-    "@vitest/coverage-c8": "0.31.2",
+    "@vitest/coverage-c8": "0.31.3",
     "execa": "7.1.1",
     "husky": "8.0.3",
     "lint-staged": "13.2.2",
@@ -93,7 +93,7 @@
     "tslib": "2.5.2",
     "tsup": "6.7.0",
     "typescript": "4.9.5",
-    "vitest": "0.31.2"
+    "vitest": "0.31.3"
   },
   "engines": {
     "node": "^16.14.0 || ^18.0.0",
