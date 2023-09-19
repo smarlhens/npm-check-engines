@@ -64,7 +64,7 @@
     "cli-table": "0.3.11",
     "debug": "4.3.4",
     "find-up": "6.3.0",
-    "listr2": "5.0.8",
+    "listr2": "6.6.1",
     "lodash-es": "4.17.21",
     "semver": "7.5.4",
     "sort-package-json": "2.5.1",
