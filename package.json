@@ -82,7 +82,7 @@
     "@types/node": "18.18.9",
     "@types/semver": "7.5.5",
     "@types/update-notifier": "6.0.7",
-    "@types/yargs": "17.0.30",
+    "@types/yargs": "17.0.31",
     "@vitest/coverage-c8": "0.33.0",
     "execa": "7.2.0",
     "husky": "8.0.3",
