@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.13.1](https://github.com/smarlhens/npm-check-engines/compare/v0.13.0...v0.13.1) (2023-12-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency chalk to v5.3.0 ([0f0044f](https://github.com/smarlhens/npm-check-engines/commit/0f0044f62da48c99db203de9147841176e882ec8))
+* **deps:** update dependency semver to v7.4.0 ([3cbf1a5](https://github.com/smarlhens/npm-check-engines/commit/3cbf1a55f83bd64b04c6f6bc915b3e172d898039))
+* **deps:** update dependency semver to v7.5.0 ([c662fd5](https://github.com/smarlhens/npm-check-engines/commit/c662fd5c4bedce61b989ba8c3173cbe7269d23ff))
+* **deps:** update dependency semver to v7.5.1 ([a1a1b7d](https://github.com/smarlhens/npm-check-engines/commit/a1a1b7d369fe402a6261247325ce73d1f37f77ca))
+* **deps:** update dependency semver to v7.5.2 ([fe425fb](https://github.com/smarlhens/npm-check-engines/commit/fe425fbf2147de1e27e74afe35a6a61af5ec0c71))
+* **deps:** update dependency semver to v7.5.3 ([6a88089](https://github.com/smarlhens/npm-check-engines/commit/6a88089463ad59307d838ba4cdcef320cabd920d))
+* **deps:** update dependency semver to v7.5.4 ([612feb6](https://github.com/smarlhens/npm-check-engines/commit/612feb646a9c1d57d9097afe9b8daf2aa67c43d8))
+* **deps:** update dependency sort-package-json to v2.5.0 ([52921a1](https://github.com/smarlhens/npm-check-engines/commit/52921a1a8eabb3ad0a3f19c4f4fdf4210fba1a22))
+* **deps:** update dependency sort-package-json to v2.5.1 ([2c4dc43](https://github.com/smarlhens/npm-check-engines/commit/2c4dc430dbf0f84f2791aa876d79f8db5ae44583))
+* **deps:** update dependency sort-package-json to v2.6.0 ([8b4ee57](https://github.com/smarlhens/npm-check-engines/commit/8b4ee5737f035260278d6d28cbf3b5eba45c72af))
+* **deps:** update dependency yargs to v17.7.2 ([e217244](https://github.com/smarlhens/npm-check-engines/commit/e2172447883d53dade85ab193bdf4c5c0606d41c))
+
 ## [0.13.0](https://github.com/smarlhens/npm-check-engines/compare/v0.12.0...v0.13.0) (2023-04-04)
 
 
