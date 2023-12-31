@@ -1,18 +1,11 @@
 {
-  "extends": ["config:base", "schedule:daily", ":automergeMinor", ":prConcurrentLimitNone", ":prHourlyLimitNone"],
-  "labels": ["dependencies"],
-  "packageRules": [
-    {
-      "matchPackagePatterns": ["lint-staged", "prettier"],
-      "labels": ["linting"]
-    },
-    {
-      "matchPackagePatterns": ["husky", "commitizen", "^@commitlint", "cz-conventional-changelog"],
-      "labels": ["hooks"]
-    },
-    {
-      "matchDepTypes": ["optionalDependencies"],
-      "addLabels": ["optional"]
-    }
-  ]
+  "extends": [
+    "config:base",
+    "schedule:daily",
+    "group:all",
+    ":prConcurrentLimitNone",
+    ":prHourlyLimitNone",
+    ":prImmediately"
+  ],
+  "labels": ["dependencies"]
 }

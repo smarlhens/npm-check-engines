@@ -10,7 +10,7 @@ import packageJsonWithLockFileVersion1 from '../examples/with-lock-file-version-
 import packageWithLockFileVersion2 from '../examples/with-lock-file-version-2-dependencies-packages/package-lock.json';
 import packageWithLockFileVersion2Dependencies from '../examples/with-lock-file-version-2-dependencies/package-lock.json';
 import packageWithLockFileVersion3 from '../examples/with-lock-file-version-3/package-lock.json';
-import { CheckEnginesContext, checkEnginesFromString } from '../lib/nce.js';
+import { type CheckEnginesContext, checkEnginesFromString } from '../lib/nce.js';
 
 describe('check engines from string', () => {
   const packageJsonString = JSON.stringify(packageJson);

@@ -8,8 +8,9 @@ export default defineConfig({
     restoreMocks: true,
     mockReset: true,
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       clean: true,
+      all: false,
       cleanOnRerun: true,
       reporter: ['cobertura', 'text', 'html'],
       include: ['lib/*'],

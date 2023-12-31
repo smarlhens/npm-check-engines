@@ -5,14 +5,14 @@ on:
     types: [created]
 
 env:
-  NODE_VERSION: '16.14.0'
+  NODE_VERSION: '18.12.0'
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache node modules
         uses: actions/cache@v3
         with:
@@ -21,7 +21,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-${{ env.NODE_VERSION }}
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           registry-url: 'https://registry.npmjs.org'
           node-version: ${{ env.NODE_VERSION }}

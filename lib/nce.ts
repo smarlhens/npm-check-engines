@@ -1,9 +1,16 @@
-import Ajv, { JSONSchemaType } from 'ajv';
+import Ajv, { type JSONSchemaType } from 'ajv';
 import chalk from 'chalk';
 import Table from 'cli-table';
-import Debug, { Debugger } from 'debug';
-import { Listr, ListrBaseClassOptions, ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2';
-import type { ListrDefaultRendererOptions, ListrRendererValue } from 'listr2';
+import Debug, { type Debugger } from 'debug';
+import {
+  Listr,
+  type ListrBaseClassOptions,
+  type ListrRenderer,
+  type ListrRendererOptions,
+  type ListrRendererValue,
+  type ListrTask,
+  type ListrTaskWrapper,
+} from 'listr2';
 import { isArray, merge } from 'lodash-es';
 import fs from 'node:fs/promises';
 import { join, normalize } from 'node:path';
@@ -84,19 +91,22 @@ const enableNamespaces = (namespaces: string): void => Debug.enable(namespaces);
 const renderer = (
   { debug, quiet, verbose }: { debug?: boolean; quiet?: boolean; verbose?: boolean },
   env = process.env,
-): ListrDefaultRendererOptions<ListrRendererValue> => {
+): ListrRendererOptions<ListrRendererValue, ListrRendererValue> => {
   if (quiet) {
     return { renderer: 'silent' };
   }
 
   if (verbose) {
-    return { renderer: 'simple' };
+    return { renderer: 'verbose' };
   }
 
   const isDumbTerminal = env.TERM === 'dumb';
+  if (debug || isDumbTerminal) {
+    return { renderer: 'simple' };
+  }
 
-  if (debug || isDumbTerminal || env.NODE_ENV === 'test') {
-    return { renderer: 'verbose' };
+  if (env.NODE_ENV === 'test') {
+    return { renderer: 'test' };
   }
 
   return { renderer: 'default', rendererOptions: { dateFormat: false } };
@@ -582,7 +592,7 @@ const checkEnginesTasks = ({
   parent,
 }: {
   options: Options;
-  parent: Omit<ListrTaskWrapper<CheckEnginesContext, typeof ListrRenderer>, 'skip' | 'enabled'>;
+  parent: Omit<ListrTaskWrapper<CheckEnginesContext, typeof ListrRenderer, typeof ListrRenderer>, 'skip' | 'enabled'>;
 }): ListrTask<CheckEnginesContext>[] => [
   {
     title: 'Reading package-lock.json...',
@@ -691,8 +701,8 @@ const checkEnginesCommand = ({
   context,
 }: {
   options: Options;
-  context: ListrBaseClassOptions<CheckEnginesContext, ListrRendererValue>;
-}): Listr<CheckEnginesContext, ListrRendererValue> => {
+  context: ListrBaseClassOptions<CheckEnginesContext, ListrRendererValue, ListrRendererValue>;
+}): Listr<CheckEnginesContext, ListrRendererValue, ListrRendererValue> => {
   return new Listr(
     [
       {
