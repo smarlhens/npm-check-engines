@@ -38,7 +38,7 @@ jobs:
       - name: Test
         run: npm run test:ci
       - name: Prepare release
-        uses: google-github-actions/release-please-action@v4
+        uses: googleapis/release-please-action@v4
         with:
           release-type: node
           package-name: '@smarlhens/npm-check-engines'
