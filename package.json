@@ -67,7 +67,7 @@
     "debug": "4.3.4",
     "find-up": "7.0.0",
     "listr2": "8.0.1",
-    "lodash-es": "4.17.21",
+    "lodash-es": "4.17.23",
     "semver": "7.5.4",
     "sort-package-json": "2.6.0",
     "update-notifier": "7.0.0",
