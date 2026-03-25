@@ -14,12 +14,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/smarlhens/npm-check-engines.git"
+    "url": "git+https://github.com/smarlhens/npm-check-engines.git"
   },
   "license": "BlueOak-1.0.0",
   "author": {
     "name": "Samuel MARLHENS",
-    "email": "samuel.marlhens@gmail.com",
+    "email": "samuel.marlhens@proton.me",
     "url": "https://github.com/smarlhens"
   },
   "type": "module",
@@ -34,8 +34,8 @@
   "module": "./dist/lib/nce.js",
   "types": "./dist/nce.d.ts",
   "bin": {
-    "nce": "./dist/bin/nce.js",
-    "npm-check-engines": "./dist/bin/nce.js"
+    "nce": "dist/bin/nce.js",
+    "npm-check-engines": "dist/bin/nce.js"
   },
   "directories": {
     "lib": "lib"
