@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.2](https://github.com/smarlhens/npm-check-engines/compare/v0.13.1...v0.13.2) (2026-03-25)
+
+
+### Bug Fixes
+
+* apply npm pkg fix corrections to package.json ([88f5359](https://github.com/smarlhens/npm-check-engines/commit/88f53598d0d6d556648f3639460036fe73c12512))
+
 ## [0.13.1](https://github.com/smarlhens/npm-check-engines/compare/v0.13.0...v0.13.1) (2026-03-25)
 
 
