@@ -1,4 +1,4 @@
-import { execaCommand, type Options } from 'execa';
+import { execa, type Options } from 'execa';
 import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -11,7 +11,7 @@ describe('check engines from cli', () => {
       stdio: 'pipe',
       cleanup: true,
     };
-    const { stdout } = await execaCommand(`node ${resolve(process.cwd(), 'dist', 'bin', 'nce.js')}`, execaOptions);
+    const { stdout } = await execa('node', [resolve(process.cwd(), 'dist', 'bin', 'nce.js')], execaOptions);
     expect(stdout).toMatchSnapshot();
   }, 10000);
 
@@ -23,7 +23,7 @@ describe('check engines from cli', () => {
       stdio: 'pipe',
       cleanup: true,
     };
-    const { stdout } = await execaCommand(`node ${resolve(process.cwd(), 'dist', 'bin', 'nce.js')}`, execaOptions);
+    const { stdout } = await execa('node', [resolve(process.cwd(), 'dist', 'bin', 'nce.js')], execaOptions);
     expect(stdout).toMatchSnapshot();
   }, 10000);
 
@@ -35,7 +35,7 @@ describe('check engines from cli', () => {
       stdio: 'pipe',
       cleanup: true,
     };
-    const { stdout } = await execaCommand(`node ${resolve(process.cwd(), 'dist', 'bin', 'nce.js')}`, execaOptions);
+    const { stdout } = await execa('node', [resolve(process.cwd(), 'dist', 'bin', 'nce.js')], execaOptions);
     expect(stdout).toMatchSnapshot();
   }, 10000);
 });
