@@ -8,9 +8,6 @@ module.exports = {
       // following .nvmrc
       '@types/node': 'minor',
 
-      // require node 18.19
-      'execa': 'minor',
-
       // require node 20
       '@trivago/prettier-plugin-sort-imports': 'minor',
       'find-up': 'minor',
