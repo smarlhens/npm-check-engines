@@ -89,6 +89,7 @@
     "@vitest/coverage-v8": "1.6.1",
     "execa": "9.6.1",
     "husky": "9.1.7",
+    "knip": "5.53.0",
     "lint-staged": "15.5.2",
     "prettier": "3.8.1",
     "rimraf": "5.0.10",
