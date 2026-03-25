@@ -16,7 +16,7 @@
     "type": "git",
     "url": "https://github.com/smarlhens/npm-check-engines.git"
   },
-  "license": "MIT",
+  "license": "BlueOak-1.0.0",
   "author": {
     "name": "Samuel MARLHENS",
     "email": "samuel.marlhens@gmail.com",
@@ -41,7 +41,8 @@
     "lib": "lib"
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE.md"
   ],
   "scripts": {
     "prebuild": "rimraf dist",
