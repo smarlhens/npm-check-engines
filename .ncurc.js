@@ -12,7 +12,6 @@ module.exports = {
       '@trivago/prettier-plugin-sort-imports': 'minor',
       'find-up': 'minor',
       'lint-staged': 'minor',
-      rimraf: 'minor',
       'sort-package-json': 'minor',
       vitest: 'minor',
       '@vitest/': 'minor',
