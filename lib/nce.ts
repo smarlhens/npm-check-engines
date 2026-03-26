@@ -1,5 +1,4 @@
 import Ajv, { type JSONSchemaType } from 'ajv';
-import chalk from 'chalk';
 import Table from 'cli-table';
 import {
   Listr,
@@ -14,6 +13,7 @@ import { isArray, merge } from 'lodash-es';
 import fs from 'node:fs/promises';
 import { join, normalize } from 'node:path';
 import { createDebug, type Debugger, disable, enable } from 'obug';
+import pc from 'picocolors';
 import * as semver from 'semver';
 import sortPackageJson from 'sort-package-json';
 
@@ -246,30 +246,30 @@ export const restrictiveRange = (
   ignoredRanges: string[],
   debug: (str: string) => void,
 ): semver.Range => {
-  debug(`${chalk.white('Compare:')} ${chalk.blue(r1.raw)} ${chalk.white('and')} ${chalk.blue(r2.raw)}`);
+  debug(`${pc.white('Compare:')} ${pc.blue(r1.raw)} ${pc.white('and')} ${pc.blue(r2.raw)}`);
 
   if (semver.subset(r1, r2)) {
-    debug(`${chalk.white('Range')} ${chalk.green(r1.raw)} ${chalk.white('is a subset of')} ${chalk.blue(r2.raw)}`);
+    debug(`${pc.white('Range')} ${pc.green(r1.raw)} ${pc.white('is a subset of')} ${pc.blue(r2.raw)}`);
     ignoredRanges.push(r2.raw);
     return r1;
   } else if (semver.subset(r2, r1)) {
-    debug(`${chalk.white('Range')} ${chalk.green(r2.raw)} ${chalk.white('is a subset of')} ${chalk.blue(r1.raw)}`);
+    debug(`${pc.white('Range')} ${pc.green(r2.raw)} ${pc.white('is a subset of')} ${pc.blue(r1.raw)}`);
     ignoredRanges.push(r1.raw);
     return r2;
   }
 
   if (!r1.intersects(r2, rangeOptions)) {
     debug(
-      `${chalk.red('No intersection')} ${chalk.white('between')} ${chalk.blue(r1.raw)} ${chalk.white(
+      `${pc.red('No intersection')} ${pc.white('between')} ${pc.blue(r1.raw)} ${pc.white(
         'and',
-      )} ${chalk.blue(r2.raw)}, ${chalk.white('returning')} ${chalk.green(r1.raw)}`,
+      )} ${pc.blue(r2.raw)}, ${pc.white('returning')} ${pc.green(r1.raw)}`,
     );
     return r1;
   } else if (!r2.intersects(r1, rangeOptions)) {
     debug(
-      `${chalk.red('No intersection')} ${chalk.white('between')} ${chalk.blue(r2.raw)} ${chalk.white(
+      `${pc.red('No intersection')} ${pc.white('between')} ${pc.blue(r2.raw)} ${pc.white(
         'and',
-      )} ${chalk.blue(r1.raw)}, ${chalk.white('returning')} ${chalk.green(r2.raw)}`,
+      )} ${pc.blue(r1.raw)}, ${pc.white('returning')} ${pc.green(r2.raw)}`,
     );
     return r2;
   }
@@ -292,24 +292,18 @@ export const restrictiveRange = (
 
   if (!semver.eq(minVersion1, minVersion2, rangeOptions)) {
     const minSemver = semver.compare(minVersion1, minVersion2) === -1 ? minVersion2 : minVersion1;
-    debug(
-      `${chalk.white('Applying minimal version')} ${chalk.yellow(minSemver.version)} ${chalk.white('to both ranges.')}`,
-    );
+    debug(`${pc.white('Applying minimal version')} ${pc.yellow(minSemver.version)} ${pc.white('to both ranges.')}`);
 
     const newR1 = setToRange(applyMinVersionToRangeSet(sortedR1, minSemver));
     const newR2 = setToRange(applyMinVersionToRangeSet(sortedR2, minSemver));
 
     if (!newR1.test(minSemver.raw)) {
-      debug(
-        `${chalk.white('Following range is not valid')}: ${chalk.red(newR1.raw)}, returning ${chalk.green(newR2.raw)}`,
-      );
+      debug(`${pc.white('Following range is not valid')}: ${pc.red(newR1.raw)}, returning ${pc.green(newR2.raw)}`);
       return newR2;
     }
 
     if (!newR2.test(minSemver.raw)) {
-      debug(
-        `${chalk.white('Following range is not valid')}: ${chalk.red(newR2.raw)}, returning ${chalk.green(newR1.raw)}`,
-      );
+      debug(`${pc.white('Following range is not valid')}: ${pc.red(newR2.raw)}, returning ${pc.green(newR1.raw)}`);
       return newR1;
     }
 
@@ -319,9 +313,9 @@ export const restrictiveRange = (
       return restrictiveRange(newR2, newR1, ignoredRanges, debug);
     } else {
       debug(
-        `${chalk.white('Unable to find intersection range')}: ${chalk.blue(newR1.raw)} and ${chalk.blue(
+        `${pc.white('Unable to find intersection range')}: ${pc.blue(newR1.raw)} and ${pc.blue(
           newR2.raw,
-        )}, returning ${chalk.green(newR1.raw)}`,
+        )}, returning ${pc.green(newR1.raw)}`,
       );
       return newR1;
     }
@@ -401,7 +395,7 @@ const computeEnginesConstraint = ({
     const { engines } = pkg;
 
     if (!engines) {
-      debugConstraint(`${chalk.white('Package')} ${chalk.gray(pkgName)} ${chalk.white('has no engines')}`);
+      debugConstraint(`${pc.white('Package')} ${pc.gray(pkgName)} ${pc.white('has no engines')}`);
       continue;
     }
 
@@ -409,19 +403,19 @@ const computeEnginesConstraint = ({
 
     if (!constraint) {
       debugConstraint(
-        `${chalk.white('Package')} ${chalk.gray(pkgName)} ${chalk.white('has no constraints for current engine')}`,
+        `${pc.white('Package')} ${pc.gray(pkgName)} ${pc.white('has no constraints for current engine')}`,
       );
       continue;
     }
 
     const rawValidRange = semver.validRange(constraint);
     if (!rawValidRange) {
-      debugConstraint(`${chalk.red(constraint)} ${chalk.white('is not a valid semver range')}`);
+      debugConstraint(`${pc.red(constraint)} ${pc.white('is not a valid semver range')}`);
       continue;
     }
 
     if (ignoredRanges.indexOf(rawValidRange) !== -1) {
-      debugConstraint(`${chalk.white('Ignored range:')} ${chalk.gray(rawValidRange)}`);
+      debugConstraint(`${pc.white('Ignored range:')} ${pc.gray(rawValidRange)}`);
       continue;
     }
 
@@ -429,21 +423,21 @@ const computeEnginesConstraint = ({
 
     if (!mrr) {
       mrr = range;
-      debugConstraint(`${chalk.white('New most restrictive range:')} ${chalk.green(mrr.raw)}`);
+      debugConstraint(`${pc.white('New most restrictive range:')} ${pc.green(mrr.raw)}`);
       continue;
     }
 
     const newRestrictiveRange = restrictiveRange(mrr, range, ignoredRanges, debugConstraint);
     if (mrr.raw !== newRestrictiveRange.raw) {
       mrr = newRestrictiveRange;
-      debugConstraint(`${chalk.white('New most restrictive range:')} ${chalk.green(mrr.raw)}`);
+      debugConstraint(`${pc.white('New most restrictive range:')} ${pc.green(mrr.raw)}`);
     }
   }
 
   if (mrr) {
-    debugConstraint(`${chalk.white(`Final computed engine range constraint:`)} ${chalk.blue(mrr.raw)}`);
+    debugConstraint(`${pc.white(`Final computed engine range constraint:`)} ${pc.blue(mrr.raw)}`);
   } else {
-    debugConstraint(`${chalk.white(`No computed engine range constraint`)}`);
+    debugConstraint(`${pc.white(`No computed engine range constraint`)}`);
   }
 
   return mrr;
@@ -633,9 +627,7 @@ const checkEnginesTasks = ({
       let colValues: [string, string, string, string][] = [];
 
       for (const { engine, range, rangeToSet } of enginesRangeToSet) {
-        debug.extend(engine)(
-          `${chalk.white(`Simplified computed engine range constraint:`)} ${chalk.blue(rangeToSet)}`,
-        );
+        debug.extend(engine)(`${pc.white(`Simplified computed engine range constraint:`)} ${pc.blue(rangeToSet)}`);
         colWidths = [
           Math.max(colWidths[0], engine.length + 2),
           Math.max(colWidths[1], range.length + 2),
@@ -646,14 +638,14 @@ const checkEnginesTasks = ({
       }
 
       if (0 === enginesRangeToSet.length) {
-        parent.title = `All computed engines range constraints are up-to-date ${chalk.green(':)')}`;
+        parent.title = `All computed engines range constraints are up-to-date ${pc.green(':)')}`;
       } else {
         const table: Table = createOutputTable(colWidths);
         table.push(...colValues);
         let title = `Computed engines range constraints:\n\n${table.toString()}`;
 
         if (!options.update) {
-          title += `\n\nRun ${chalk.cyan(generateUpdateCommandFromContext(options))} to upgrade package.json.`;
+          title += `\n\nRun ${pc.cyan(generateUpdateCommandFromContext(options))} to upgrade package.json.`;
         }
 
         parent.title = title;
@@ -664,7 +656,7 @@ const checkEnginesTasks = ({
     title: 'Updating package.json...',
     skip: () => (!options.update ? 'Update is disabled by default.' : !options.update),
     task: (ctx: CheckEnginesContext) => {
-      debug(`${chalk.white(`Write JSON to`)} ${chalk.blue('package.json')}`);
+      debug(`${pc.white(`Write JSON to`)} ${pc.blue('package.json')}`);
       return Promise.all([
         fs.writeFile(options.packageJsonPath, JSON.stringify(sortPackageJson(ctx.packageJson!), null, 2) + '\n'),
         fs.writeFile(options.packageLockPath, JSON.stringify(ctx.packageLock, null, 2) + '\n'),
