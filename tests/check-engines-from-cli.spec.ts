@@ -10,6 +10,7 @@ describe('check engines from cli', () => {
       cwd: resolve(process.cwd(), 'examples', 'without-engines-without-npmrc'),
       stdio: 'pipe',
       cleanup: true,
+      env: { NO_COLOR: '1' },
     };
     const { stdout } = await execa('node', [resolve(process.cwd(), 'dist', 'bin', 'nce.js')], execaOptions);
     expect(stdout).toMatchSnapshot();
@@ -22,6 +23,7 @@ describe('check engines from cli', () => {
       cwd: resolve(process.cwd(), 'examples', 'without-engines-with-npmrc-without-engine-strict'),
       stdio: 'pipe',
       cleanup: true,
+      env: { NO_COLOR: '1' },
     };
     const { stdout } = await execa('node', [resolve(process.cwd(), 'dist', 'bin', 'nce.js')], execaOptions);
     expect(stdout).toMatchSnapshot();
@@ -34,6 +36,7 @@ describe('check engines from cli', () => {
       cwd: resolve(process.cwd(), 'examples', 'without-engines-with-npmrc-with-engine-strict'),
       stdio: 'pipe',
       cleanup: true,
+      env: { NO_COLOR: '1' },
     };
     const { stdout } = await execa('node', [resolve(process.cwd(), 'dist', 'bin', 'nce.js')], execaOptions);
     expect(stdout).toMatchSnapshot();
