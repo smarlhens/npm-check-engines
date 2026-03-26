@@ -70,7 +70,7 @@
     "listr2": "8.3.3",
     "lodash-es": "4.17.23",
     "semver": "7.7.4",
-    "sort-package-json": "2.15.1",
+    "sort-package-json": "3.6.1",
     "update-notifier": "7.3.1",
     "yargs": "17.7.2"
   },
