@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.14.1](https://github.com/smarlhens/npm-check-engines/compare/v0.14.0...v0.14.1) (2026-03-26)
+
+
+### Chores
+
+* bump npm engines constraint to &gt;=10.0.0 ([0bdd916](https://github.com/smarlhens/npm-check-engines/commit/0bdd916ff26d20c9d35836ad61249e9bcabbfbb8))
+* update @trivago/prettier-plugin-sort-imports to v6 ([8f9a57a](https://github.com/smarlhens/npm-check-engines/commit/8f9a57a6011f00e508a7a10ace56eb4ae31a84b5))
+* update find-up to v8 ([28e5fd5](https://github.com/smarlhens/npm-check-engines/commit/28e5fd5437b7369273cf5986e5bfed658e67ab78))
+* update knip to v6 ([d73ab1c](https://github.com/smarlhens/npm-check-engines/commit/d73ab1c829631391d9714355d6d7aec383702bd0))
+* update lint-staged to v16 ([dac1325](https://github.com/smarlhens/npm-check-engines/commit/dac1325ff295be8c4e5f28ee5f630190e82ffc5d))
+* update rimraf to v6 ([1770733](https://github.com/smarlhens/npm-check-engines/commit/17707334c564ed5da29ab11fbd3ac6e1136ecd48))
+* update sort-package-json to v3 ([1180bb3](https://github.com/smarlhens/npm-check-engines/commit/1180bb33ea1f08355e3c99b8d03d35a10abf42f1))
+* update vitest to v4 ([8612abd](https://github.com/smarlhens/npm-check-engines/commit/8612abd063f47308c571d192c630828718c033ff))
+* update yargs to v18 ([109d479](https://github.com/smarlhens/npm-check-engines/commit/109d479b0b9f9a5b0fde271f220223b019985c6c))
+
+
+### Continuous Integration
+
+* add release-please manifest & fix config ([263a562](https://github.com/smarlhens/npm-check-engines/commit/263a56235f0f830caf85dc5206cee65c73786ca6))
+* add typecheck step to npm scripts and CI workflows ([e25afca](https://github.com/smarlhens/npm-check-engines/commit/e25afca63ba648653d1c5e5b9313cce84bf2152a))
+
+
+### Bug Fixes
+
+* update dependencies ([85610af](https://github.com/smarlhens/npm-check-engines/commit/85610af066c7b41182f1f6e8b852ca31b0c89d37))
+
 ## [0.14.0](https://github.com/smarlhens/npm-check-engines/compare/v0.13.3...v0.14.0) (2026-03-26)
 
 
