@@ -8,9 +8,6 @@ module.exports = {
       // following .nvmrc
       '@types/node': 'minor',
 
-      // require node 20
-      'find-up': 'minor',
-
       // require node 22
       listr2: 'minor',
     };
