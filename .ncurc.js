@@ -9,7 +9,6 @@ module.exports = {
       '@types/node': 'minor',
 
       // require node 20
-      '@trivago/prettier-plugin-sort-imports': 'minor',
       'find-up': 'minor',
       vitest: 'minor',
       '@vitest/': 'minor',
