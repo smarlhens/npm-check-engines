@@ -10,7 +10,6 @@ module.exports = {
 
       // require node 20
       'find-up': 'minor',
-      yargs: 'minor',
 
       // require node 22
       listr2: 'minor',
