@@ -9,9 +9,6 @@ export default defineConfig({
     mockReset: true,
     coverage: {
       provider: 'v8',
-      clean: true,
-      all: false,
-      cleanOnRerun: true,
       reporter: ['cobertura', 'text', 'html'],
       include: ['lib/*'],
     },
