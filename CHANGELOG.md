@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.14.0](https://github.com/smarlhens/npm-check-engines/compare/v0.13.3...v0.14.0) (2026-03-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* minimum supported Node.js version is now 20.5.0
+
+### Features
+
+* drop node 18 support ([e5c2eca](https://github.com/smarlhens/npm-check-engines/commit/e5c2ecacbba9cf11fce7a0d844cfb665603fa7ce))
+
 ## [0.13.3](https://github.com/smarlhens/npm-check-engines/compare/v0.13.2...v0.13.3) (2026-03-26)
 
 
