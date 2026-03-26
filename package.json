@@ -59,7 +59,8 @@
     "test:ci": "npm run test:coverage",
     "test:coverage": "npm run test -- --coverage",
     "test:snapshot": "npm run test -- -u",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "ajv": "8.18.0",
