@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.3](https://github.com/smarlhens/npm-check-engines/compare/v0.13.2...v0.13.3) (2026-03-26)
+
+
+### Bug Fixes
+
+* loosen node 24 engines constraint from ^24.0.0 to &gt;=24.0.0 ([846dc93](https://github.com/smarlhens/npm-check-engines/commit/846dc930a99cb18aadcff6420f9f2805719c99f8))
+
 ## [0.13.2](https://github.com/smarlhens/npm-check-engines/compare/v0.13.1...v0.13.2) (2026-03-25)
 
 
