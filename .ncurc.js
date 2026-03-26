@@ -10,8 +10,6 @@ module.exports = {
 
       // require node 20
       'find-up': 'minor',
-      vitest: 'minor',
-      '@vitest/': 'minor',
       yargs: 'minor',
 
       // require node 22
