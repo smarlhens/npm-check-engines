@@ -1,7 +1,6 @@
 import Ajv, { type JSONSchemaType } from 'ajv';
 import chalk from 'chalk';
 import Table from 'cli-table';
-import Debug, { type Debugger } from 'debug';
 import {
   Listr,
   type ListrBaseClassOptions,
@@ -14,6 +13,7 @@ import {
 import { isArray, merge } from 'lodash-es';
 import fs from 'node:fs/promises';
 import { join, normalize } from 'node:path';
+import { createDebug, type Debugger, disable, enable } from 'obug';
 import * as semver from 'semver';
 import sortPackageJson from 'sort-package-json';
 
@@ -84,9 +84,9 @@ type Options = {
 const packageLockFilename = 'package-lock.json' as const;
 const packageJsonFilename = 'package.json' as const;
 const debugNamespace: string = 'nce' as const;
-const debug: Debugger = Debug(debugNamespace);
-const namespaces = () => Debug.disable();
-const enableNamespaces = (namespaces: string): void => Debug.enable(namespaces);
+const debug: Debugger = createDebug(debugNamespace);
+const namespaces = () => disable();
+const enableNamespaces = (namespaces: string): void => enable(namespaces);
 
 const renderer = (
   { debug, quiet, verbose }: { debug?: boolean; quiet?: boolean; verbose?: boolean },
