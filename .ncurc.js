@@ -8,8 +8,6 @@ module.exports = {
       // following .nvmrc
       '@types/node': 'minor',
 
-      // pin to patch: v5.54+ pulls walk-up-path@4 which requires node 20
-      knip: 'patch',
       // require node 20
       '@trivago/prettier-plugin-sort-imports': 'minor',
       'find-up': 'minor',
