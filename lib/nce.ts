@@ -1,5 +1,6 @@
 import Ajv, { type JSONSchemaType } from 'ajv';
 import Table from 'cli-table';
+import { merge } from 'es-toolkit';
 import {
   Listr,
   type ListrBaseClassOptions,
@@ -9,7 +10,6 @@ import {
   type ListrTask,
   type ListrTaskWrapper,
 } from 'listr2';
-import { isArray, merge } from 'lodash-es';
 import fs from 'node:fs/promises';
 import { join, normalize } from 'node:path';
 import { createDebug, type Debugger, disable, enable } from 'obug';
@@ -371,7 +371,7 @@ const getConstraintFromEngines = (
 ): string | undefined => {
   if (typeof engines === 'object' && constraintKey in engines) {
     return (engines as LockPackageEnginesObject)[constraintKey];
-  } else if (isArray(engines) && engines.some(constraint => constraint.includes(constraintKey))) {
+  } else if (Array.isArray(engines) && engines.some(constraint => constraint.includes(constraintKey))) {
     return engines.find(constraint => constraint.includes(constraintKey))?.replace(constraintKey, '');
   }
 
@@ -528,7 +528,7 @@ export const checkEnginesFromString = (ctx: CheckEnginesInput): CheckEnginesOutp
       debug,
     });
     const to = computeEnginesConstraint({
-      packages: merge({}, { '': { engines: packageJson.engines || {} } }, packages!),
+      packages: merge(merge({}, { '': { engines: packageJson.engines || {} } }), packages!),
       constraintKey,
       debug,
     });
@@ -545,10 +545,10 @@ export const checkEnginesFromString = (ctx: CheckEnginesInput): CheckEnginesOutp
       rangeToSet: rangeToHumanized,
     });
 
-    packageJson.engines = merge({}, packageJson.engines, { [constraintKey]: rangeToHumanized });
+    packageJson.engines = merge(merge({}, packageJson.engines ?? {}), { [constraintKey]: rangeToHumanized });
 
     if ((packageLock.lockfileVersion === 2 || packageLock.lockfileVersion === 3) && packageLock.packages) {
-      packageLock.packages[''].engines = merge({}, packageLock.packages[''].engines, {
+      packageLock.packages[''].engines = merge(merge({}, packageLock.packages[''].engines ?? {}), {
         [constraintKey]: rangeToHumanized,
       });
     }
@@ -615,7 +615,7 @@ const checkEnginesTasks = ({
   {
     title: 'Compute engines range constraints...',
     task: (ctx: CheckEnginesContext): void => {
-      Object.assign(ctx, checkEnginesFromString(merge({}, ctx, { engines: options.engines })));
+      Object.assign(ctx, checkEnginesFromString(merge(merge({}, ctx), { engines: options.engines })));
     },
   },
   {
