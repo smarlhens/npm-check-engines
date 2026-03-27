@@ -62,7 +62,7 @@
     "test:coverage": "npm run test -- --coverage",
     "test:snapshot": "npm run test -- -u",
     "test:watch": "vitest watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
     "ajv": "8.18.0",
@@ -88,6 +88,7 @@
     "@types/semver": "7.7.1",
     "@types/update-notifier": "6.0.8",
     "@types/yargs": "17.0.35",
+    "@typescript/native-preview": "7.0.0-dev.20260327.2",
     "@vitest/coverage-v8": "4.1.1",
     "husky": "9.1.7",
     "knip": "6.0.6",
