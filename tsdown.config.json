@@ -8,5 +8,7 @@
     "resolve": true,
     "entry": "lib/nce.ts"
   },
-  "format": ["cjs", "es"]
+  "format": ["cjs", "es"],
+  "publint": true,
+  "attw": true
 }
