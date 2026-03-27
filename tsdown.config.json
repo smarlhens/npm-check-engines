@@ -1,0 +1,12 @@
+{
+  "entry": ["lib/**/*.ts", "bin/nce.ts"],
+  "platform": "node",
+  "fixedExtension": false,
+  "shims": true,
+  "minify": true,
+  "dts": {
+    "resolve": true,
+    "entry": "lib/nce.ts"
+  },
+  "format": ["cjs", "es"]
+}
