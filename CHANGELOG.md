@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.14.2](https://github.com/smarlhens/npm-check-engines/compare/v0.14.1...v0.14.2) (2026-03-27)
+
+
+### Chores
+
+* enable publint and attw package validation ([797fff6](https://github.com/smarlhens/npm-check-engines/commit/797fff61f3fd103bfca49645f3bfb2126640f351))
+* use tsgo for typecheck and DTS generation ([ac19f92](https://github.com/smarlhens/npm-check-engines/commit/ac19f9230076ce2dc61262150bc91509c96c128a))
+
+
+### Code Refactoring
+
+* migrate listr2 from v8 to v9 ([4c370da](https://github.com/smarlhens/npm-check-engines/commit/4c370da932f3a9c742fc8f7050c8b511490e106b))
+* replace chalk with picocolors ([aed0c2f](https://github.com/smarlhens/npm-check-engines/commit/aed0c2fc22325f3330c1841e7aa1381c5a8f9a4f))
+* replace debug with obug ([9374b15](https://github.com/smarlhens/npm-check-engines/commit/9374b15a6b5c4d52affd7e19e0149df72cccef07))
+* replace execa with tinyexec ([51d6553](https://github.com/smarlhens/npm-check-engines/commit/51d6553c0ec71e5f304f2f297ad1f37fd992d49d))
+* replace find-up with empathic ([76eb456](https://github.com/smarlhens/npm-check-engines/commit/76eb45693980ffe1d54e1b45cb602963ef639cb6))
+* replace prettier with oxfmt ([91acfeb](https://github.com/smarlhens/npm-check-engines/commit/91acfeba2b5b25ae3f459239ad77aa9a54189b8a))
+* replace tsup with tsdown ([6682b98](https://github.com/smarlhens/npm-check-engines/commit/6682b98b39e64f536c5db1bee6510e33298afc0b))
+
 ## [0.14.1](https://github.com/smarlhens/npm-check-engines/compare/v0.14.0...v0.14.1) (2026-03-26)
 
 
