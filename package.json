@@ -3,18 +3,14 @@
   "version": "0.14.1",
   "description": "Node.JS engines constraint checker written in TypeScript.",
   "keywords": [
+    "engines",
     "node",
     "npm",
-    "engines",
     "typescript"
   ],
   "homepage": "https://github.com/smarlhens/npm-check-engines#readme",
   "bugs": {
     "url": "https://github.com/smarlhens/npm-check-engines/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/smarlhens/npm-check-engines.git"
   },
   "license": "BlueOak-1.0.0",
   "author": {
@@ -22,20 +18,10 @@
     "email": "samuel.marlhens@proton.me",
     "url": "https://github.com/smarlhens"
   },
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": {
-        "require": "./dist/lib/nce.d.cts",
-        "import": "./dist/lib/nce.d.ts"
-      },
-      "require": "./dist/lib/nce.cjs",
-      "import": "./dist/lib/nce.js"
-    }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smarlhens/npm-check-engines.git"
   },
-  "main": "./dist/lib/nce.cjs",
-  "module": "./dist/lib/nce.js",
-  "types": "./dist/lib/nce.d.ts",
   "bin": {
     "nce": "dist/bin/nce.js",
     "npm-check-engines": "dist/bin/nce.js"
@@ -47,15 +33,29 @@
     "dist",
     "LICENSE.md"
   ],
+  "type": "module",
+  "main": "./dist/lib/nce.cjs",
+  "module": "./dist/lib/nce.js",
+  "types": "./dist/lib/nce.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "require": "./dist/lib/nce.d.cts",
+        "import": "./dist/lib/nce.d.ts"
+      },
+      "require": "./dist/lib/nce.cjs",
+      "import": "./dist/lib/nce.js"
+    }
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "node --experimental-specifier-resolution=node --loader ts-node/esm ./bin/nce.ts",
-    "lint": "npm run prettier:check",
+    "fmt:check": "oxfmt --check",
+    "fmt:write": "oxfmt",
+    "lint": "npm run fmt:check",
     "lint-staged": "lint-staged",
     "pre-commit": "npm run lint-staged",
     "prepare": "husky",
-    "prettier:check": "prettier --check ./**/*.{ts,json,yml,md}",
-    "prettier:write": "prettier --write ./**/*.{ts,json,yml,md}",
     "pretest": "npm run build",
     "test": "vitest run",
     "test:ci": "npm run test:coverage",
@@ -81,7 +81,6 @@
     "@arethetypeswrong/core": "0.18.2",
     "@commitlint/cli": "20.5.0",
     "@commitlint/config-conventional": "20.5.0",
-    "@trivago/prettier-plugin-sort-imports": "6.0.2",
     "@types/cli-table": "0.3.4",
     "@types/lodash-es": "4.17.12",
     "@types/node": "20.19.37",
@@ -93,7 +92,7 @@
     "husky": "9.1.7",
     "knip": "6.0.6",
     "lint-staged": "16.4.0",
-    "prettier": "3.8.1",
+    "oxfmt": "0.42.0",
     "publint": "0.3.18",
     "tinyexec": "1.0.4",
     "ts-node": "10.9.2",
