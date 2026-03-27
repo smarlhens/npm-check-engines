@@ -8,7 +8,7 @@ module.exports = {
       // following .nvmrc
       '@types/node': 'minor',
 
-      // require node 22
+      // v10 requires node 22
       listr2: 'minor',
     };
 
