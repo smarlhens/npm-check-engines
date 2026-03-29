@@ -11,10 +11,22 @@
   "labels": ["dependencies"],
   "packageRules": [
     {
+      "enabled": false,
       "matchDatasources": ["npm"],
       "matchPackageNames": ["@types/node"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
+      "matchUpdateTypes": ["major"]
+    },
+    {
+      "enabled": false,
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["node"],
+      "matchUpdateTypes": ["major"]
+    },
+    {
+      "enabled": false,
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["listr2"],
+      "matchUpdateTypes": ["major"]
     }
   ]
 }
