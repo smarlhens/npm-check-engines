@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.14.3](https://github.com/smarlhens/npm-check-engines/compare/v0.14.2...v0.14.3) (2026-03-29)
+
+
+### Chores
+
+* update deps ([de0ddda](https://github.com/smarlhens/npm-check-engines/commit/de0dddaed83bca8f9489a893e5ec1e98f465dbd1))
+
+
+### Code Refactoring
+
+* replace lodash-es with es-toolkit ([d01ade1](https://github.com/smarlhens/npm-check-engines/commit/d01ade1af5d0b4e4f36dbc664ee188ae102a27ef))
+
 ## [0.14.2](https://github.com/smarlhens/npm-check-engines/compare/v0.14.1...v0.14.2) (2026-03-27)
 
 
