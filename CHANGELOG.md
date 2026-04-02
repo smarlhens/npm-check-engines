@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.4](https://github.com/smarlhens/npm-check-engines/compare/v0.14.3...v0.14.4) (2026-04-02)
+
+
+### Chores
+
+* fix renovate node major update datasource ([5448916](https://github.com/smarlhens/npm-check-engines/commit/5448916926533055866bfbbc8d8ab9feea6c8a7c))
+* update deps ([b0f6e7a](https://github.com/smarlhens/npm-check-engines/commit/b0f6e7a476958edb0064350e7674d393db63b6c4))
+
 ## [0.14.3](https://github.com/smarlhens/npm-check-engines/compare/v0.14.2...v0.14.3) (2026-03-29)
 
 
