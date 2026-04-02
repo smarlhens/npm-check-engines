@@ -1,6 +1,6 @@
 {
   "name": "@smarlhens/npm-check-engines",
-  "version": "0.14.3",
+  "version": "0.14.4",
   "description": "Node.JS engines constraint checker written in TypeScript.",
   "keywords": [
     "engines",
