@@ -18,7 +18,7 @@
     },
     {
       "enabled": false,
-      "matchDatasources": ["docker"],
+      "matchDatasources": ["node-version"],
       "matchPackageNames": ["node"],
       "matchUpdateTypes": ["major"]
     },
