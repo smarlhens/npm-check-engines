@@ -1,5 +1,14 @@
 # NPM check engines
 
+> [!IMPORTANT]
+> **This project has been rewritten in Rust and this repository is now archived (read-only).**
+>
+> Development continues in [smarlhens/riri-node-tools](https://github.com/smarlhens/riri-node-tools):
+> - [`riri-nce`](https://github.com/smarlhens/riri-node-tools/tree/main/crates/riri-nce) — core Rust library
+> - [`riri-napi-nce`](https://github.com/smarlhens/riri-node-tools/tree/main/crates/riri-napi-nce) — Node binding (napi)
+>
+> The npm package is still published under the same name [`@smarlhens/npm-check-engines`](https://www.npmjs.com/package/@smarlhens/npm-check-engines): `0.x` releases are the original JavaScript implementation, `>=1.x` releases are backed by the Rust rewrite.
+
 [![CodeQL](https://github.com/smarlhens/npm-check-engines/workflows/codeql/badge.svg)](https://github.com/smarlhens/npm-check-engines/actions/workflows/codeql.yml)
 [![GitHub CI](https://github.com/smarlhens/npm-check-engines/workflows/ci/badge.svg)](https://github.com/smarlhens/npm-check-engines/actions/workflows/ci.yml)
 ![node-current (scoped)](https://img.shields.io/node/v/@smarlhens/npm-check-engines)
